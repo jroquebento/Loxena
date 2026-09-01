@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Loxena.Api/Loxena.Api.csproj" Id="03d1f831-2e02-4d92-9b35-91f59dfe89d8" />
+  <Project Path="Loxena.Application/Loxena.Application.csproj" Id="f6535240-6e7a-4cf7-91e7-8c7a95ee5f87" />
+  <Project Path="Loxena.Domain/Loxena.Domain.csproj" Id="8176ebf0-8898-483c-b9a9-a5f2a770389d" />
+  <Project Path="Loxena.Infrastructure/Loxena.Infrastructure.csproj" Id="288694f5-1725-4c31-9a4b-aed5f72c726d" />
+</Solution>
