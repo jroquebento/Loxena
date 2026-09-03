@@ -18,4 +18,15 @@ public class Category
         Id = Guid.NewGuid();
         Name = name.Trim();
     }
+
+    public void UpdateName(string name) 
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name is required.", nameof(name));
+
+        if (name.Trim().Length > 100)
+            throw new ArgumentException("Name cannot exceed 100 characters.", nameof(name));
+
+        Name = name.Trim();
+    }
 }
