@@ -13,6 +13,32 @@ public class Product
 
     public Product(string name, string? description, decimal price, Guid categoryId)
     {
+        Validate(name, description, price, categoryId);
+
+        Id = Guid.NewGuid();
+        Name = name.Trim();
+        Description = description?.Trim() ?? string.Empty;
+        Price = price;
+        CategoryId = categoryId;
+        IsActive = true;
+    }
+
+    public void Update(string name, string? description, decimal price, Guid categoryId) 
+    {
+        Validate(name, description, price, categoryId);
+
+        Name = name.Trim();
+        Description = description?.Trim() ?? string.Empty;
+        Price = price;
+        CategoryId = categoryId;
+    }
+
+    private static void Validate(
+        string name,
+        string? description,
+        decimal price,
+        Guid categoryId)
+    {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Name is required.", nameof(name));
 
@@ -27,12 +53,5 @@ public class Product
 
         if (categoryId == Guid.Empty)
             throw new ArgumentException("CategoryId is required", nameof(categoryId));
-
-        Id = Guid.NewGuid();
-        Name = name.Trim();
-        Description = description?.Trim() ?? string.Empty;
-        Price = price;
-        CategoryId = categoryId;
-        IsActive = true;
     }
 }
