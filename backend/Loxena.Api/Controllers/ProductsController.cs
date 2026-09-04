@@ -1,6 +1,7 @@
 ﻿using Loxena.Application.Products.CreateProduct;
 using Loxena.Application.Products.GetProductById;
 using Loxena.Application.Products.GetProducts;
+using Loxena.Application.Products.UpdateProduct;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;
@@ -12,15 +13,18 @@ public class ProductsController : ControllerBase
     private readonly CreateProductUseCase _createProductUseCase;
     private readonly GetProductsUseCase _getProductsUseCase;
     private readonly GetProductByIdUseCase _getProductByIdUseCase;
+    private readonly UpdateProductUseCase _updateProductUseCase;
 
     public ProductsController(
         CreateProductUseCase createProductUseCase,
         GetProductsUseCase getProductsUseCase,
-        GetProductByIdUseCase getProductByIdUseCase)
+        GetProductByIdUseCase getProductByIdUseCase,
+        UpdateProductUseCase updateProductUseCase)
     {
         _createProductUseCase = createProductUseCase;
         _getProductsUseCase = getProductsUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
+        _updateProductUseCase = updateProductUseCase;
     }
 
     [HttpPost]
@@ -47,6 +51,17 @@ public class ProductsController : ControllerBase
         if (product is null)
             return NotFound();
           
+
+        return Ok(product);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, UpdateProductRequest request) 
+    {
+        var product = await _updateProductUseCase.ExecuteAsync(id, request);
+
+        if (product is null)
+            return NotFound();
 
         return Ok(product);
     }
