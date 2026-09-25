@@ -19,5 +19,14 @@ create: async (name: string, description: string ,price: number, categoryId: str
   }
 
   return resposta.json();
+  },
+
+  delete: async (id: string): Promise<void> => {
+    const resposta = await fetch(`https://localhost:7175/Products/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!resposta.ok) throw new Error('Falha ao excluir o produto')
   }
 };
+
