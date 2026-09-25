@@ -9,6 +9,8 @@ import { ProductList } from './components/ProductList';
 export default function App() {
   const [produtos, setProdutos] = useState<Product[]>([]);
   const [categorias, setCategorias] = useState<Category[]>([]);
+
+  const [produtoEmEdicao, setProdutoEmEdicao] = useState<Product | null>(null);
  
   const carregarDados = () => {
     productService.getAll().then(dados => setProdutos(dados)).catch(erro => console.error(erro));
@@ -20,17 +22,39 @@ export default function App() {
   }, []);
 
   const handleSalvarProduto = (nome: string, descricao: string, preco: number, categoryId: string) => {
-    productService.create(nome, descricao, preco, categoryId)
-      .then(() => carregarDados())
-      .catch(erro => console.error("Erro ao salvar:", erro));
+    if (produtoEmEdicao) {
+
+      productService.update(produtoEmEdicao.id, nome, descricao, preco, categoryId)
+
+        .then(() => {
+          carregarDados();
+          setProdutoEmEdicao(null);
+        })
+        .catch(erro => console.error("Erro grave no PUT:", erro));
+    } else {
+      productService.create(nome, descricao, preco, categoryId)
+        .then(() => carregarDados())
+        .catch(erro => console.error("Erro grave no POST:", erro));
+    }
   };
 
   const handleExcluirProduto = (id: string) => {
     if(window.confirm('Tem certeza que deseja excluir este produto?')){
       productService.delete(id)
-        .then(() => carregarDados())
+        .then(() => {
+          carregarDados();
+          
+          if (produtoEmEdicao && produtoEmEdicao.id === id){
+            setProdutoEmEdicao(null);
+          }
+        })
         .catch(erro => console.error("Erro ao excluir:", erro))
     }
+  };
+
+  const handleEditarProduto = (produto: Product) => {
+    setProdutoEmEdicao(produto);
+    window.scrollTo ({top: 0, behavior: 'smooth'});
   };
 
   return (
@@ -41,8 +65,18 @@ export default function App() {
           Painel Loxena
         </h1>
         
-        <ProductForm categorias={categorias} onSalvar={handleSalvarProduto} />
-        <ProductList produtos={produtos} onExcluir={handleExcluirProduto}/>
+        <ProductForm 
+          key={produtoEmEdicao ? produtoEmEdicao.id : 'novo'} 
+          categorias={categorias} 
+          onSalvar={handleSalvarProduto} 
+          produtoSelecionado={produtoEmEdicao}
+          onCancelar={() => setProdutoEmEdicao(null)} 
+        />
+        <ProductList 
+          produtos={produtos} 
+          onExcluir={handleExcluirProduto}
+          onEditar={handleEditarProduto}
+        />
 
       </div>
     </div>

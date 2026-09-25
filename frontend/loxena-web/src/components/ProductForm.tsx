@@ -1,32 +1,40 @@
 import { useState } from 'react';
 import type { Category } from '../types/Category';
+import type { Product } from '../types/Product';
 
 interface ProductFormProps {
   categorias: Category[];
   onSalvar: (nome: string, descricao: string, preco: number, categoryId: string) => void;
+  produtoSelecionado?: Product | null; 
+  onCancelar?: () => void;
 }
 
-export function ProductForm({ categorias, onSalvar }: ProductFormProps) {
-  const [nome, setNome] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [preco, setPreco] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancelar }: ProductFormProps) {
+  const [nome, setNome] = useState(produtoSelecionado?.name || '');
+  const [descricao, setDescricao] = useState(produtoSelecionado?.description || '');
+  const [preco, setPreco] = useState(produtoSelecionado ? produtoSelecionado.price.toString() : '');
+  const [categoryId, setCategoryId] = useState(produtoSelecionado?.categoryId || '');
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+
     const precoNumero = parseFloat(preco);
     
     onSalvar(nome, descricao, precoNumero, categoryId);
 
-    setNome('');
-    setDescricao('');
-    setPreco('');
-    setCategoryId('');
+    if(!produtoSelecionado) {
+      setNome('');
+      setDescricao('');
+      setPreco('');
+      setCategoryId('');
+    }
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold mb-4 text-gray-700">Novo Produto</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-700">
+        {produtoSelecionado ? 'Editar Produto' : 'Novo Produto'}
+      </h2>
       
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input 
@@ -59,9 +67,18 @@ export function ProductForm({ categorias, onSalvar }: ProductFormProps) {
           </select>
         </div>
 
-        <button type="submit" className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition mt-2">
-          Cadastrar Produto
-        </button>
+
+        <div className="flex gap-2 mt-2">
+          <button type="submit" className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition flex-1">
+            {produtoSelecionado ? 'Atualizar Produto' : 'Cadastrar Produto'}
+          </button>
+          
+          {produtoSelecionado && onCancelar && (
+            <button type="button" onClick={onCancelar} className="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md hover:bg-gray-400 transition w-1/3">
+              Cancelar
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
