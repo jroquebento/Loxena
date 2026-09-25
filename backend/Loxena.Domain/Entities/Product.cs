@@ -54,4 +54,11 @@ public class Product
         if (categoryId == Guid.Empty)
             throw new ArgumentException("CategoryId is required", nameof(categoryId));
     }
+
+    public void Inactivate() 
+    {
+        if (!IsActive)
+            throw new InvalidOperationException("The product is already inactive.");
+        IsActive = false;
+    }
 }
