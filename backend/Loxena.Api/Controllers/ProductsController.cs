@@ -1,6 +1,7 @@
 ﻿using Loxena.Application.Products.CreateProduct;
 using Loxena.Application.Products.GetProductById;
 using Loxena.Application.Products.GetProducts;
+using Loxena.Application.Products.InactivateProduct;
 using Loxena.Application.Products.UpdateProduct;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,17 +15,20 @@ public class ProductsController : ControllerBase
     private readonly GetProductsUseCase _getProductsUseCase;
     private readonly GetProductByIdUseCase _getProductByIdUseCase;
     private readonly UpdateProductUseCase _updateProductUseCase;
+    private readonly InactivateProductUseCase _inactivateProductUseCase;
 
     public ProductsController(
         CreateProductUseCase createProductUseCase,
         GetProductsUseCase getProductsUseCase,
         GetProductByIdUseCase getProductByIdUseCase,
-        UpdateProductUseCase updateProductUseCase)
+        UpdateProductUseCase updateProductUseCase,
+        InactivateProductUseCase inactivateProductUseCase)
     {
         _createProductUseCase = createProductUseCase;
         _getProductsUseCase = getProductsUseCase;
         _getProductByIdUseCase = getProductByIdUseCase;
         _updateProductUseCase = updateProductUseCase;
+        _inactivateProductUseCase = inactivateProductUseCase;
     }
 
     [HttpPost]
@@ -36,7 +40,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() 
+    public async Task<IActionResult> GetAll()
     {
         var products = await _getProductsUseCase.ExecuteAsync();
 
@@ -44,19 +48,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id) 
+    public async Task<IActionResult> GetById(Guid id)
     {
         var product = await _getProductByIdUseCase.ExecuteAsync(id);
 
         if (product is null)
             return NotFound();
-          
+
 
         return Ok(product);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, UpdateProductRequest request) 
+    public async Task<IActionResult> Update(Guid id, UpdateProductRequest request)
     {
         var product = await _updateProductUseCase.ExecuteAsync(id, request);
 
@@ -64,5 +68,16 @@ public class ProductsController : ControllerBase
             return NotFound();
 
         return Ok(product);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id) 
+    {
+        var success = await _inactivateProductUseCase.ExecuteAsync(id);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
     }
 }
