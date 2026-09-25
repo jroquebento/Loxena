@@ -21,6 +21,17 @@ create: async (name: string, description: string ,price: number, categoryId: str
   return resposta.json();
   },
 
+  update: async (id: string, name: string, description: string ,price: number, categoryId: string): Promise<Product> =>{
+    const resposta = await fetch(`https://localhost:7175/Products/${id}`,  {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({name, description, price, categoryId})
+    });
+
+    if(!resposta.ok) throw new Error('Falha ao atualizar o produto.');
+      return resposta.json();
+  },
+
   delete: async (id: string): Promise<void> => {
     const resposta = await fetch(`https://localhost:7175/Products/${id}`, {
         method: 'DELETE'
