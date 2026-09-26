@@ -42,7 +42,7 @@ export function CategoriesPage() {
         })
         .catch(erro => {
           console.error("Erro ao excluir:", erro);
-          alert(`Não foi possível excluir: ${erro.message}`);
+          alert(`Unable to delete: ${erro.message}`);
         });
     }
   };

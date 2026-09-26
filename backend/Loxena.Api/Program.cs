@@ -1,3 +1,4 @@
+using Loxena.Api.ExceptionHandlers;
 using Loxena.Application;
 using Loxena.Infrastructure;
 using Loxena.Infrastructure.Data;
@@ -28,8 +29,12 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
