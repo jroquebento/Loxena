@@ -32,15 +32,17 @@ export const categoryService = {
     delete: async (id: string): Promise<void> => {
         const resposta = await fetch(`${API_URL}/${id}` , {
             method: 'DELETE'
-        })
+        });
         if (!resposta.ok) {
             const erroData = await resposta.json().catch(() => null);
-            
-        if (erroData && erroData.mensagem){
-            throw new Error(erroData.mensagem);
-        }
-            throw new Error('Falha ao excluir categoria');
 
+            if (erroData && erroData.detail){
+                throw new Error(erroData.detail);
+            } else if (erroData && erroData.title) {
+                throw new Error(erroData.title);
+            }
+            
+            throw new Error('Falha ao excluir categoria');
         }
     }
 };
