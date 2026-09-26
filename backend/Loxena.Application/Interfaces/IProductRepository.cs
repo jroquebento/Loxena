@@ -8,4 +8,5 @@ public interface IProductRepository
     Task<Product?> GetByIdAsync(Guid id);
     Task<IReadOnlyList<Product>> GetAllAsync();
     Task UpdateAsync(Product product);
+    Task<bool> HasActiveProductsByCategoryAsync(Guid categoryId);
 }

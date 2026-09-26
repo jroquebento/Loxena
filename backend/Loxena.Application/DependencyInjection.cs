@@ -1,6 +1,7 @@
 ﻿using Loxena.Application.Categories.CreateCategory;
 using Loxena.Application.Categories.GetCategories;
 using Loxena.Application.Categories.GetCategoryById;
+using Loxena.Application.Categories.InactivateCategory;
 using Loxena.Application.Categories.UpdateCategory;
 using Loxena.Application.Products.CreateProduct;
 using Loxena.Application.Products.GetProductById;
@@ -24,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<GetProductByIdUseCase>();
         services.AddScoped<UpdateProductUseCase>();
         services.AddScoped<InactivateProductUseCase>();
+        services.AddScoped<InactivateCategoryUseCase>();
 
         return services;
     }
