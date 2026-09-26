@@ -36,4 +36,10 @@ internal class ProductRepository : IProductRepository
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> HasActiveProductsByCategoryAsync(Guid categoryId)
+    {
+        return await _context.Products
+            .AnyAsync(p => p.CategoryId == categoryId && p.IsActive);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using Loxena.Application.Categories.CreateCategory;
 using Loxena.Application.Categories.GetCategories;
 using Loxena.Application.Categories.GetCategoryById;
+using Loxena.Application.Categories.InactivateCategory;
 using Loxena.Application.Categories.UpdateCategory;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +15,26 @@ public class CategoriesController : ControllerBase
     private readonly GetCategoriesUseCase _getCategoriesUseCase;
     private readonly GetCategoryByIdUseCase _getCategoryByIdUseCase;
     private readonly UpdateCategoryUseCase _updateCategoryUseCase;
+    private readonly InactivateCategoryUseCase _inactivateCategoryUseCase;
 
     public CategoriesController(
         CreateCategoryUseCase createCategoryUseCase, 
         GetCategoriesUseCase getCategoriesUseCase,
         GetCategoryByIdUseCase getCategoryByIdUseCase,
-        UpdateCategoryUseCase updateCategoryUseCase)
+        UpdateCategoryUseCase updateCategoryUseCase,
+        InactivateCategoryUseCase inactivateCategoryUseCase)
     {
         _createCategoryUseCase = createCategoryUseCase;
         _getCategoriesUseCase = getCategoriesUseCase;
         _getCategoryByIdUseCase = getCategoryByIdUseCase;
         _updateCategoryUseCase = updateCategoryUseCase;
+        _inactivateCategoryUseCase = inactivateCategoryUseCase;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(string name) 
+    public async Task<IActionResult> Create(CreateCategoryRequest request) 
     {
-        var category = await _createCategoryUseCase.ExecuteAsync(name);
+        var category = await _createCategoryUseCase.ExecuteAsync(request);
 
         return Ok(category);
     }
@@ -55,13 +59,24 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, string name) 
+    public async Task<IActionResult> Update(Guid id, UpdateCategoryRequest request) 
     {
-        var category = await _updateCategoryUseCase.ExecuteAsync(id, name);
+        var category = await _updateCategoryUseCase.ExecuteAsync(id, request);
 
         if (category is null)
             return NotFound();
 
         return Ok(category);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id) 
+    {
+        var success = await _inactivateCategoryUseCase.ExecuteAsync(id);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
     }
 }

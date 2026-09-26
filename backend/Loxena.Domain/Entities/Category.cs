@@ -4,7 +4,7 @@ public class Category
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
-
+    public bool IsActive { get; private set; } = true;
     private Category() { }
 
     public Category(string name)
@@ -17,6 +17,7 @@ public class Category
 
         Id = Guid.NewGuid();
         Name = name.Trim();
+        IsActive = true;
     }
 
     public void UpdateName(string name) 
@@ -28,5 +29,10 @@ public class Category
             throw new ArgumentException("Name cannot exceed 100 characters.", nameof(name));
 
         Name = name.Trim();
+    }
+
+    public void Inactivate() 
+    {
+        IsActive = false;
     }
 }

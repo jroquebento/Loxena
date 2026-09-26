@@ -12,9 +12,9 @@ public class CreateCategoryUseCase
         _repository = repository;
     }
 
-    public async Task<Category> ExecuteAsync(string name) 
+    public async Task<Category> ExecuteAsync(CreateCategoryRequest request) 
     {
-        var category = new Category(name);
+        var category = new Category(request.Name);
         await _repository.AddAsync(category);
 
         return category;
