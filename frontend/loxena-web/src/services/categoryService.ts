@@ -1,11 +1,12 @@
 import type { Category } from "../types/Category";
+import { tratarErro } from "../utils/apiUtils";
 
 const API_URL = "https://localhost:7175/Categories";
 
 export const categoryService = {
     getAll: async () : Promise<Category[]> => {
         const resposta = await fetch(API_URL);
-        if (!resposta.ok) throw new Error('Falha ao buscar categorias');
+        await tratarErro(resposta, 'Falha ao buscar categorias');
         return resposta.json();
     },
 
@@ -15,7 +16,7 @@ export const categoryService = {
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({ name })               
         });
-       if (!resposta.ok) throw new Error('Falha ao criar categoria');
+        await tratarErro(resposta, 'Falha ao criar categoria');
         return resposta.json();
     },
 
@@ -25,24 +26,12 @@ export const categoryService = {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({name})
         });
-         if (!resposta.ok) throw new Error('Falha ao atualizar categoria');
+        await tratarErro(resposta, 'Falha ao atualizar categoria');
         return resposta.json();
     },
 
     delete: async (id: string): Promise<void> => {
-        const resposta = await fetch(`${API_URL}/${id}` , {
-            method: 'DELETE'
-        });
-        if (!resposta.ok) {
-            const erroData = await resposta.json().catch(() => null);
-
-            if (erroData && erroData.detail){
-                throw new Error(erroData.detail);
-            } else if (erroData && erroData.title) {
-                throw new Error(erroData.title);
-            }
-            
-            throw new Error('Falha ao excluir categoria');
-        }
+        const resposta = await fetch(`${API_URL}/${id}` , {method: 'DELETE'});
+        await tratarErro(resposta, 'Falha ao excluir categoria');
     }
 };

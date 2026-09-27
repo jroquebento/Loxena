@@ -10,10 +10,10 @@ public class Category
     public Category(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name is required.", nameof(name));
+            throw new ArgumentException("O nome é obrigatório.");
 
         if (name.Trim().Length > 100)
-            throw new ArgumentException("Name cannot exceed 100 characters.", nameof(name));
+            throw new ArgumentException("O nome não pode exceder 100 caracteres.");
 
         Id = Guid.NewGuid();
         Name = name.Trim();
@@ -23,10 +23,10 @@ public class Category
     public void UpdateName(string name) 
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name is required.", nameof(name));
+            throw new ArgumentException("O nome é obrigatório.");
 
         if (name.Trim().Length > 100)
-            throw new ArgumentException("Name cannot exceed 100 characters.", nameof(name));
+            throw new ArgumentException("O nome não pode exceder 100 caracteres.");
 
         Name = name.Trim();
     }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import type { Product } from '../types/Product';
 import type { Category } from '../types/Category';
 import { productService } from '../services/productService';
@@ -29,12 +30,16 @@ export function ProductsPage() {
         .then(() => {
           carregarDados();
           setProdutoEmEdicao(null);
+          toast.success("Produto atualizado com sucesso!");
         })
-        .catch(erro => console.error("Erro grave no PUT:", erro));
+        .catch(erro => toast.error(`Não foi possível atualizar: ${erro.message}`));
     } else {
       productService.create(nome, descricao, preco, categoryId)
-        .then(() => carregarDados())
-        .catch(erro => console.error("Erro grave no POST:", erro));
+        .then(() => {
+          carregarDados();
+          toast.success("Produto criado com sucesso!");
+        })
+        .catch(erro => toast.error(`Não foi possível cadastrar: ${erro.message}`));
     }
   };
 
@@ -47,8 +52,9 @@ export function ProductsPage() {
           if (produtoEmEdicao && produtoEmEdicao.id === id){
             setProdutoEmEdicao(null);
           }
+          toast.success("Produto excluído com sucesso!");
         })
-        .catch(erro => console.error("Erro ao excluir:", erro))
+        .catch(erro => toast.error(`Não foi possível excluir: ${erro.message}`))
     }
   };
 

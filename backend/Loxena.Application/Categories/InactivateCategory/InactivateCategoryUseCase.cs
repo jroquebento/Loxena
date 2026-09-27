@@ -20,7 +20,7 @@ public class InactivateCategoryUseCase
         var hasProducts = await _productRepository.HasActiveProductsByCategoryAsync(id);
         if (hasProducts) 
         {
-            throw new InvalidOperationException("It is not possible to delete a category that has active products.");
+            throw new InvalidOperationException("Esta categoria possui produtos ativos vinculados.");
         }
 
         var category = await _categoryRepository.GetByIdAsync(id);

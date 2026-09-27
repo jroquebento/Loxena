@@ -40,25 +40,25 @@ public class Product
         Guid categoryId)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name is required.", nameof(name));
+            throw new ArgumentException("O nome é obrigatório.");
 
         if (name.Trim().Length > 200)
-            throw new ArgumentException("Name cannot exceed 200 characters", nameof(name));
+            throw new ArgumentException("O nome não pode exceder 200 caracteres.");
 
         if (description?.Trim().Length > 2000)
-            throw new ArgumentException("Description cannot exceed 2000 characters", nameof(description));
+            throw new ArgumentException("A descrição não pode exceder 2000 caracteres.");
 
         if (price < 0)
-            throw new ArgumentException("Price cannot be negative", nameof(price));
+            throw new ArgumentException("O preço não pode ser negativo.");
 
         if (categoryId == Guid.Empty)
-            throw new ArgumentException("CategoryId is required", nameof(categoryId));
+            throw new ArgumentException("CategoryId é obrigatório");
     }
 
     public void Inactivate() 
     {
         if (!IsActive)
-            throw new InvalidOperationException("The product is already inactive.");
+            throw new InvalidOperationException("O produto já está inativo.");
         IsActive = false;
     }
 }

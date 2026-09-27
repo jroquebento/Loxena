@@ -14,6 +14,10 @@ public class CreateCategoryUseCase
 
     public async Task<Category> ExecuteAsync(CreateCategoryRequest request) 
     {
+        var categoryExists = await _repository.ExistsByNameAsync(request.Name);
+        if (categoryExists)
+            throw new InvalidOperationException("Já existe uma categoria cadastrada com este nome.");
+
         var category = new Category(request.Name);
         await _repository.AddAsync(category);
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import type { Category } from '../types/Category';
 import { categoryService } from '../services/categoryService';
 import { CategoryForm } from '../components/CategoryForm';
@@ -22,12 +23,19 @@ export function CategoriesPage() {
         .then(() => {
           carregarDados();
           setCategoriaEmEdicao(null);
+          toast.success("Categoria atualizada com sucesso!");
         })
-        .catch(erro => console.error("Erro ao atualizar:", erro));
+        .catch(erro => {
+          toast.error(`Não foi possível atualizar: ${erro.message}`); 
+        });
     } else {
       categoryService.create(nome)
-        .then(() => carregarDados())
-        .catch(erro => console.error("Erro ao salvar:", erro));
+        .then(() => {carregarDados();
+        toast.success("Categoria criada com sucesso!");
+        })
+        .catch(erro => {
+          toast.error(`Não foi possível cadastrar: ${erro.message}`);
+        });
     }
   };
 
@@ -39,10 +47,10 @@ export function CategoriesPage() {
           if (categoriaEmEdicao && categoriaEmEdicao.id === id) {
             setCategoriaEmEdicao(null);
           }
+          toast.success("Categoria excluída com sucesso!");
         })
         .catch(erro => {
-          console.error("Erro ao excluir:", erro);
-          alert(`Unable to delete: ${erro.message}`);
+          toast.error(`Não foi possível excluir: ${erro.message}`);
         });
     }
   };

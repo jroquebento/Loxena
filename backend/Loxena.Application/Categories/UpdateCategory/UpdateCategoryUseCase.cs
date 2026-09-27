@@ -15,9 +15,12 @@ public class UpdateCategoryUseCase
     public async Task<Category?> ExecuteAsync(Guid id, UpdateCategoryRequest request) 
     {
         var category = await _repository.GetByIdAsync(id);
-
         if (category is null)
             return null;
+
+        var nameExists = await _repository.ExistsByNameAsync(request.Name, id);
+        if (nameExists)
+            throw new InvalidOperationException("Já existe outra categoria cadastrada com este nome.");
 
         category.UpdateName(request.Name);
         await _repository.UpdateAsync(category);
