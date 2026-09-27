@@ -4,6 +4,7 @@ import type { Category } from '../types/Category';
 import { categoryService } from '../services/categoryService';
 import { CategoryForm } from '../components/CategoryForm';
 import { CategoryList } from '../components/CategoryList';
+import { confirmarExclusao } from '../utils/alertUtils';
 
 export function CategoriesPage() {
   const [categorias, setCategorias] = useState<Category[]>([]);
@@ -39,8 +40,10 @@ export function CategoriesPage() {
     }
   };
 
-  const handleExcluirCategoria = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta categoria?')) {
+  const handleExcluirCategoria = async (id: string) => {
+    const confirmou = await confirmarExclusao('esta categoria');
+    if (!confirmou) return;
+
       categoryService.delete(id)
         .then(() => {
           carregarDados();
@@ -49,10 +52,7 @@ export function CategoriesPage() {
           }
           toast.success("Categoria excluída com sucesso!");
         })
-        .catch(erro => {
-          toast.error(`Não foi possível excluir: ${erro.message}`);
-        });
-    }
+        .catch(erro => {toast.error(`Não foi possível excluir: ${erro.message}`);});
   };
 
   const handleEditarCategoria = (categoria: Category) => {

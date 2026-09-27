@@ -6,6 +6,7 @@ import { productService } from '../services/productService';
 import { categoryService } from '../services/categoryService';
 import { ProductForm } from '../components/ProductForm';
 import { ProductList } from '../components/ProductList';
+import { confirmarExclusao } from '../utils/alertUtils';
 
 export function ProductsPage() {
   const [produtos, setProdutos] = useState<Product[]>([]);
@@ -43,8 +44,9 @@ export function ProductsPage() {
     }
   };
 
-  const handleExcluirProduto = (id: string) => {
-    if(window.confirm('Tem certeza que deseja excluir este produto?')){
+  const handleExcluirProduto = async (id: string) => {
+      const confirmou = await confirmarExclusao('este produto');
+      if (!confirmou) return;
       productService.delete(id)
         .then(() => {
           carregarDados();
@@ -55,7 +57,7 @@ export function ProductsPage() {
           toast.success("Produto excluído com sucesso!");
         })
         .catch(erro => toast.error(`Não foi possível excluir: ${erro.message}`))
-    }
+    
   };
 
   const handleEditarProduto = (produto: Product) => {
