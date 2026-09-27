@@ -8,4 +8,5 @@ public interface ICategoryRepository
     Task<Category?> GetByIdAsync(Guid id);
     Task<IReadOnlyList<Category>> GetAllAsync();
     Task UpdateAsync(Category category);
+    Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null);
 }

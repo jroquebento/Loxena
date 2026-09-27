@@ -17,13 +17,13 @@ public class GlobalExceptionHandler : IExceptionHandler
         Exception exception, 
         CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "An exception was caught: {Message}", exception.Message);
+        _logger.LogError(exception, "Uma exceção foi capturada: {Message}", exception.Message);
 
         var (statusCode, title) = exception switch
         {
-            InvalidOperationException => (StatusCodes.Status400BadRequest, "Business rule violated"),
-            ArgumentException => (StatusCodes.Status400BadRequest, "Invalid data"),
-            _ => (StatusCodes.Status500InternalServerError, "Internal server error")
+            InvalidOperationException => (StatusCodes.Status400BadRequest, "Regra de negócio violada"),
+            ArgumentException => (StatusCodes.Status400BadRequest, "Dados inválidos"),
+            _ => (StatusCodes.Status500InternalServerError, "Erro Interno do Servidor")
         };
 
         var problemDetails = new ProblemDetails

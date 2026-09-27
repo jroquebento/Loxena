@@ -37,4 +37,17 @@ internal class CategoryRepository : ICategoryRepository
         _context.Categories.Update(category);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null)
+    {
+        var query = _context.Categories
+            .Where(c => c.Name.ToLower() == name.ToLower() && c.IsActive);
+
+        if (excludeId.HasValue)
+        {
+            query = query.Where(c => c.Id != excludeId.Value);
+        }
+
+        return await query.AnyAsync();
+    }
 }

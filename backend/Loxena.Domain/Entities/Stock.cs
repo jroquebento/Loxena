@@ -14,11 +14,11 @@ public class Stock
     public Stock(Guid productId, Guid locationId, int initialQuantity)
     {
         if (productId == Guid.Empty)
-            throw new ArgumentException("ProductId is required");
+            throw new ArgumentException("ProductId é obrigatório");
         if (locationId == Guid.Empty)
-            throw new ArgumentException("LocationId is required");
+            throw new ArgumentException("LocationId é obrigatório.");
         if (initialQuantity < 0)
-            throw new ArgumentException("Initial quantity cannot be negative");
+            throw new ArgumentException("A quantidade inicial não pode ser negativa.");
         Id = Guid.NewGuid();
         ProductId = productId;
         LocationId = locationId;
@@ -36,7 +36,7 @@ public class Stock
     {
         ValidatePositiveAmount(amount);
         if (AvailableQuantity < amount)
-            throw new ArgumentException("Insufficient available quantity to reserve.", nameof(amount));
+            throw new ArgumentException("Quantidade disponível insuficiente para reserva.");
         ReservedQuantity += amount;
     }
 
@@ -44,14 +44,14 @@ public class Stock
     {
         ValidatePositiveAmount(amount);
         if (ReservedQuantity < amount)
-            throw new ArgumentException("Insufficient reserved quantity to release.", nameof(amount));
+            throw new ArgumentException("Quantidade reservada insuficiente para liberação.");
         ReservedQuantity -= amount;
     }
     public void RemovePhysicalQuantity(int amount) 
     {
         ValidatePositiveAmount(amount);
         if (ReservedQuantity < amount)
-            throw new InvalidOperationException("Cannot remove physical quantity that exceeds the reserved quantity.");
+            throw new InvalidOperationException("Não é possível remover uma quantidade física que exceda a quantidade reservada.");
         PhysicalQuantity -= amount;
         ReservedQuantity -= amount;
     }
@@ -59,6 +59,6 @@ public class Stock
     private void ValidatePositiveAmount(int amount)
     {
         if (amount <= 0) 
-            throw new ArgumentException("Amount must be a positive number.", nameof(amount));
+            throw new ArgumentException("O valor deve ser um número positivo.");
     }
 }

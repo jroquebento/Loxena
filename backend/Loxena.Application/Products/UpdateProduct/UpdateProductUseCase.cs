@@ -25,7 +25,7 @@ public class UpdateProductUseCase
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
         if (category is null)
-            throw new ArgumentException("Category not found.");
+            throw new ArgumentException("Categoria não encontrada.");
 
         product.Update(
             request.Name,
