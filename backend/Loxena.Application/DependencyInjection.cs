@@ -3,6 +3,10 @@ using Loxena.Application.Categories.GetCategories;
 using Loxena.Application.Categories.GetCategoryById;
 using Loxena.Application.Categories.InactivateCategory;
 using Loxena.Application.Categories.UpdateCategory;
+using Loxena.Application.Locations.CreateLocation;
+using Loxena.Application.Locations.GetLocationById;
+using Loxena.Application.Locations.GetLocations;
+using Loxena.Application.Locations.UpdateLocation;
 using Loxena.Application.Products.CreateProduct;
 using Loxena.Application.Products.GetProductById;
 using Loxena.Application.Products.GetProducts;
@@ -26,6 +30,10 @@ public static class DependencyInjection
         services.AddScoped<UpdateProductUseCase>();
         services.AddScoped<InactivateProductUseCase>();
         services.AddScoped<InactivateCategoryUseCase>();
+        services.AddScoped<CreateLocationUseCase>();
+        services.AddScoped<GetLocationsUseCase>();
+        services.AddScoped<GetLocationByIdUseCase>();
+        services.AddScoped<UpdateLocationUseCase>();
 
         return services;
     }
