@@ -1,933 +1,551 @@
 # Loxena — Project Context
 
-> Documento interno de contexto e continuidade do projeto.  
-> Não é a documentação pública principal do GitHub.
+> Contexto técnico e histórico para outra IA continuar o desenvolvimento do projeto sem depender do histórico da conversa original.
 
-**Projeto:** Loxena  
-**Tipo:** Full Stack — Gestão de Operações Logísticas  
-**Status:** Planejamento aprovado / Desenvolvimento ainda não iniciado  
-**Versão do contexto:** 1.0
+## 1. Identidade do projeto
 
----
+**Nome:** Loxena  
+**Tipo:** aplicação Full Stack de gestão de operações logísticas / centro de distribuição  
+**Objetivo:** projeto de portfólio para complementar o projeto anterior TaskManager.
 
-# 1. Objetivo do projeto
-
-O Loxena é o segundo grande projeto de portfólio do desenvolvedor.
-
-O projeto deve complementar o TaskManager API, que teve foco principalmente em backend.
-
-### TaskManager
-
-Principalmente:
-
-- C#
-- .NET
-- ASP.NET Core
-- REST API
-- SQL Server
-- autenticação
-- testes
-- Docker
-- CI/CD
-- GitHub Actions
-
-### Loxena
-
-Principalmente:
+O Loxena foi escolhido para demonstrar competências que não aparecem tanto no TaskManager, principalmente:
 
 - React
 - TypeScript
 - JavaScript moderno
 - HTML/CSS
-- consumo de API REST
-- desenvolvimento de interfaces
+- consumo de API
 - integração frontend/backend
 - CRUD Full Stack
 - autenticação no frontend
 - dashboards
-- filtros e buscas
-- uso consciente de IA durante o desenvolvimento
+- filtros e busca
+- regras de negócio mais próximas de um sistema operacional real
+- desenvolvimento assistido por IA, mas com entendimento do código
+- testes estratégicos
+- Docker/CI/CD posteriormente
 
-O objetivo não é competir com sistemas logísticos reais em complexidade.
-
-O objetivo é demonstrar que o desenvolvedor consegue construir uma aplicação Full Stack funcional baseada em um problema de negócio plausível.
-
----
-
-# 2. Princípio principal
-
-> **Fluxo completo, regras suficientes para parecer real, poucas exceções.**
-
-O projeto deve começar em nível médio e crescer gradualmente.
-
-A prioridade é:
-
-> **terminar um projeto bom > criar um projeto enorme e não terminar.**
-
-O Loxena não deve virar um WMS completo.
-
-Sempre que surgir uma possível funcionalidade ou tecnologia nova, devemos perguntar:
-
-1. É necessária para o funcionamento?
-2. Resolve um problema real do projeto?
-3. Traz aprendizado relevante?
-4. Aumenta significativamente a complexidade?
-5. Existe uma solução mais simples?
-
-Se uma funcionalidade não for necessária, ela deve permanecer fora do MVP.
+O projeto é inspirado genericamente em experiências anteriores do autor em logística, mas **não deve reproduzir processos, nomes, regras internas ou informações de empresas reais**.
 
 ---
 
-# 3. Contexto do negócio
+# 2. Objetivo de portfólio
 
-O Loxena representa uma empresa fictícia distribuidora de produtos eletrônicos.
+O TaskManager já demonstra principalmente:
 
-A operação possui um ambiente de armazenagem e distribuição.
+- C#/.NET
+- ASP.NET Core
+- REST API
+- EF Core
+- SQL Server
+- autenticação JWT
+- autorização
+- Argon2
+- testes unitários e de integração
+- Docker
+- GitHub Actions
+- arquitetura em camadas
 
-O projeto foi inspirado em experiências reais de operação logística, mas não deve reproduzir as regras ou convenções específicas de nenhuma empresa real.
+O Loxena deve complementar isso demonstrando:
 
-No MVP:
-
-- existe uma única unidade operacional;
-- existe um estoque operacional;
-- existem fornecedores;
-- existem clientes;
-- existem funcionários internos;
-- os produtos entram através do recebimento;
-- produtos são armazenados em localizações;
-- clientes possuem pedidos;
-- pedidos percorrem o fluxo operacional até entrega ou retirada.
-
----
-
-# 4. Problemas que o sistema resolve
-
-O sistema busca centralizar:
-
-- informações de produtos;
-- informações de clientes;
+- frontend moderno;
+- React + TypeScript;
+- integração real com API;
+- fluxo operacional;
+- regras de negócio;
+- CRUD;
 - estoque;
-- localização física dos produtos;
-- recebimentos;
 - pedidos;
-- andamento das operações;
-- movimentações de estoque.
+- operações de picking/conferência/embalagem/expedição;
+- interface de usuário;
+- eventualmente dashboard, filtros e relatórios.
 
-Problemas considerados:
-
-- informações espalhadas;
-- dificuldade para saber o estoque disponível;
-- dificuldade para localizar produtos;
-- perda de rastreabilidade;
-- dificuldade para acompanhar pedidos;
-- divergência entre estoque físico e sistema.
+**Não transformar o Loxena em um projeto gigantesco.** O objetivo é demonstrar amplitude e qualidade suficiente para portfólio, não reproduzir um WMS empresarial completo.
 
 ---
 
-# 5. Usuários
+# 3. Perfil do desenvolvedor
 
-## Usuário operacional
+O autor é estudante de ADS e está buscando estágio em desenvolvimento de software.
 
-Executa atividades dos setores operacionais.
+Experiência e conhecimentos relevantes:
 
-## Encarregado / líder
+- C#
+- .NET / ASP.NET Core
+- SQL / SQL Server
+- Entity Framework Core
+- REST APIs
+- POO
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- jQuery
+- Git/GitHub
+- testes com xUnit e Moq
+- Docker
+- GitHub Actions
 
-Acompanha e coordena atividades operacionais.
+O foco atual é consolidar desenvolvimento backend/full-stack e aprender React/TypeScript através do próprio projeto.
 
-## Gerente
+O autor prefere:
 
-Acompanha informações operacionais e gerenciais.
-
-## Administrador
-
-Administra usuários, permissões e configurações administrativas.
-
-## Cliente
-
-Representa quem realiza um pedido.
-
-No MVP, cliente não precisa possuir acesso ao sistema interno.
-
----
-
-# 6. Fluxo logístico principal
-
-```text
-RECEBIMENTO
-     ↓
-ARMAZENAGEM
-     ↓
-ESTOQUE
-     ↓
-PEDIDO
-     ↓
-PAGAMENTO CONFIRMADO
-     ↓
-SEPARAÇÃO
-     ↓
-CONFERÊNCIA
-     ↓
-EMBALAGEM
-     ↓
-EXPEDIÇÃO
-     ↓
-ENTREGA / RETIRADA
-```
+- explicações didáticas;
+- implementação gradual;
+- entender o motivo das decisões;
+- arquitetura simples e realista;
+- código que possa explicar em entrevista;
+- projetos práticos em vez de cursos intermináveis;
+- evitar "tutorial hell";
+- evitar overengineering;
+- avançar o projeto continuamente.
 
 ---
 
-# 7. Estados do pedido
+# 4. Princípios de desenvolvimento
 
-Fluxo definido:
+## 4.1 Não fazer overengineering
 
-```text
-CRIADO
-   ↓
-PAGAMENTO_CONFIRMADO
-   ↓
-SEPARANDO
-   ↓
-CONFERENCIA
-   ↓
-EMBALAGEM
-   ↓
-EXPEDICAO
-   ↓
-ENTREGUE / RETIRADO
-```
+Não introduzir abstrações, padrões, bibliotecas ou camadas apenas porque "seria mais profissional".
 
-O pedido pode ser cancelado antes da expedição.
+Antes de adicionar algo, perguntar:
 
-Pedidos já expedidos não poderão ser cancelados no MVP.
+1. Existe um problema real?
+2. O projeto precisa disso agora?
+3. Isso melhora significativamente a manutenção?
+4. O autor conseguirá explicar essa decisão em uma entrevista?
 
----
+Se a resposta for não, manter simples.
 
-# 8. Regras de negócio aprovadas
+## 4.2 Implementação incremental
 
-## Produtos
+Não criar toda a arquitetura futura antecipadamente.
 
-- Todo produto pertence a uma categoria.
-- Produto possui propriedades básicas.
-- Produto pode ser ativado/desativado.
-- Produto desativado não pode ser utilizado em novos pedidos.
-- Produto com estoque existente não deve ser excluído fisicamente.
+A estrutura deve crescer conforme as funcionalidades aparecem.
 
-## Estoque
+Exemplo:
 
-- Um produto pode estar em várias localizações.
-- Uma localização pode possuir diferentes produtos.
-- Estoque possui quantidade física.
-- Estoque possui quantidade reservada.
-- Estoque disponível = físico - reservado.
-- Reserva acontece somente após confirmação do pagamento.
-- Cancelamento libera a reserva.
-- Saída física ocorre na expedição.
-- Alterações relevantes devem gerar movimentação.
+Não criar dezenas de pastas React vazias apenas porque existe um planejamento futuro.
 
-## Recebimento
+## 4.3 Entendimento antes da implementação
 
-- Recebimento possui fornecedor.
-- Recebimento possui vários itens.
-- Item representa um produto e quantidade.
-- O estoque físico aumenta quando o produto é efetivamente armazenado.
+Quando uma tecnologia ou conceito novo aparecer, explicar brevemente:
 
-## Pedidos
+- o que é;
+- por que está sendo usado;
+- como se encaixa no Loxena;
+- só então implementar.
 
-- Pedido pertence a um cliente.
-- Pedido possui vários itens.
-- Item representa um produto e quantidade.
-- Pedido possui estado.
-- Pedido pode ser cancelado antes da expedição.
-- Pedido pago reserva estoque.
+Não entregar grandes blocos de código sem contexto.
 
-## Operação
+## 4.4 IA como ferramenta
 
-- Separação utiliza produto, quantidade e localização.
-- Conferência verifica produto e quantidade.
-- Divergências não devem criar um subsistema complexo no MVP.
-- Embalagem é uma etapa operacional simples.
-- Expedição representa a saída física.
-- Entrega ou retirada conclui o pedido.
+O autor usa IA como ferramenta de desenvolvimento, mas não quer simplesmente copiar código.
+
+Fluxo desejado:
+
+> problema → conceito → documentação/explicação → implementação pequena → teste → entendimento → commit → próximo passo
+
+Quando houver uma decisão relevante, pode ser útil comparar uma segunda opinião de Gemini/Copilot, mas isso não deve virar burocracia.
 
 ---
 
-# 9. Estoque e rastreabilidade
+# 5. Domínio do Loxena
 
-O sistema deve evitar alterações silenciosas.
+O sistema representa operações de um centro de distribuição.
 
-Tipos iniciais de movimentação:
+Fluxo geral:
 
-```text
-ENTRADA
-SAIDA
-RESERVA
-LIBERACAO_RESERVA
-AJUSTE_POSITIVO
-AJUSTE_NEGATIVO
-```
-
-Motivos de ajuste podem incluir:
-
-```text
-INVENTARIO
-AVARIA
-```
-
-Avarias não terão um módulo próprio no MVP.
+1. Recebimento
+2. Armazenamento
+3. Estoque
+4. Pedido
+5. Separação (picking)
+6. Conferência
+7. Embalagem
+8. Expedição
+9. Entrega ou retirada
 
 ---
 
-# 10. Inventário
+# 6. Fluxo do pedido
 
-O MVP terá inventário simplificado.
-
-Fluxo:
+Estado planejado:
 
 ```text
-Quantidade no sistema
-        ↓
-Contagem física
-        ↓
-Comparação
-        ↓
-Diferença
-        ↓
-Ajuste
-        ↓
-Movimentação registrada
+Criado
+  ↓
+Pagamento confirmado
+  ↓
+Separando
+  ↓
+Conferência
+  ↓
+Embalagem
+  ↓
+Expedição
+  ↓
+Entrega
 ```
 
-Não será criado inicialmente um sistema avançado de inventário, contagens cíclicas ou planejamento de inventário.
+Regras importantes:
+
+- pedido precisa ter pagamento confirmado antes da reserva de estoque;
+- cancelamento é permitido antes da expedição;
+- cancelamento antes da expedição deve liberar a reserva de estoque;
+- depois da expedição o pedido não deve simplesmente voltar ao estoque;
+- estoque insuficiente deve impedir operações que dependam daquela quantidade;
+- futuramente, as transições de estado devem ser controladas por regras de negócio.
+
+Essas regras são mais importantes para testes do que validar cada propriedade trivial de cada classe.
 
 ---
 
-# 11. Localização
+# 7. Funcionalidades
 
-Não utilizar o formato específico:
+## Essenciais
 
-```text
-715-34-0-101
-```
-
-Esse formato pertence à experiência real que serviu como inspiração.
-
-O Loxena utilizará uma entidade genérica:
-
-```text
-Location
-```
-
-O código da localização pode seguir um formato simples definido pelo próprio sistema.
-
-Exemplos:
-
-```text
-A-01-03
-A-02-05
-B-01-02
-```
-
-O formato exato ainda não é uma decisão arquitetural importante.
-
----
-
-# 12. Entidades iniciais
-
-## Acesso
-
-```text
-User
-```
-
-## Catálogo
-
-```text
-Product
-Category
-```
-
-## Pessoas externas
-
-```text
-Customer
-Supplier
-```
-
-## Armazém
-
-```text
-Location
-```
-
-## Estoque
-
-```text
-Inventory
-StockMovement
-```
-
-## Recebimento
-
-```text
-Receiving
-ReceivingItem
-```
-
-## Pedidos
-
-```text
-Order
-OrderItem
-```
-
-Total inicial:
-
-**12 entidades.**
-
----
-
-# 13. Relacionamentos principais
-
-```text
-Category 1 ─── N Product
-
-Customer 1 ─── N Order
-
-Order 1 ─── N OrderItem
-
-Product 1 ─── N OrderItem
-
-Supplier 1 ─── N Receiving
-
-Receiving 1 ─── N ReceivingItem
-
-Product 1 ─── N ReceivingItem
-
-Product 1 ─── N Inventory
-
-Location 1 ─── N Inventory
-
-Product 1 ─── N StockMovement
-```
-
-Os processos de:
-
-- separação;
+- usuários e acesso;
+- produtos;
+- categorias;
+- estoque;
+- frontend;
+- pedidos;
+- picking;
 - conferência;
 - embalagem;
 - expedição;
+- recebimento;
+- armazenamento.
 
-não serão automaticamente transformados em entidades.
+## Importantes
 
-Primeiro devemos verificar se o estado do pedido e registros existentes são suficientes.
+- dashboard;
+- relatórios;
+- alertas;
+- estrutura do armazém;
+- funcionalidades técnicas/infrastrutura.
+
+## Futuras
+
+- inteligência/IA.
+
+A parte de IA **não é prioridade do MVP**.
 
 ---
 
-# 14. Arquitetura planejada
+# 8. Usuários e papéis
 
-Backend:
+Papéis planejados:
+
+- Administrator
+- Operator
+- Coordinator
+
+Todos terão login/senha.
+
+As permissões determinarão quais operações cada papel pode realizar.
+
+A autenticação completa pode ser implementada mais adiante; não deve bloquear o desenvolvimento atual do domínio.
+
+---
+
+# 9. Entidades planejadas
+
+## Product
+
+Representa o produto comercializado.
+
+Campos atuais:
 
 ```text
-backend/
-├── Loxena.Api
-├── Loxena.Application
-├── Loxena.Domain
-└── Loxena.Infrastructure
+Id: Guid
+Name: string
+Description: string
+Price: decimal
+CategoryId: Guid
+IsActive: bool
 ```
 
-Frontend:
+Quantidade **não pertence ao Product**.
+
+Quantidade e localização pertencem ao domínio de Stock.
+
+## Category
+
+Representa a categoria do produto.
 
 ```text
-frontend/
-└── Loxena.Web
+Id: Guid
+Name: string
 ```
 
-A arquitetura deve permanecer pragmática.
+## Stock
 
-Não devemos copiar automaticamente todas as abstrações utilizadas no TaskManager.
-
----
-
-# 15. Stack aprovada
-
-## Backend
-
-- C#
-- .NET 10
-- ASP.NET Core
-- Entity Framework Core
-- SQL Server
-- REST API
-- JWT
-- Swagger/OpenAPI
-- xUnit
-- Moq
-
-## Frontend
-
-- React
-- TypeScript
-- JavaScript
-- HTML
-- CSS
-- React Router
-
-## Infraestrutura
-
-- Git
-- GitHub
-- Docker
-- Docker Compose
-- GitHub Actions
-
----
-
-# 16. Tecnologias ainda não decididas
-
-Não adicionar por obrigação:
-
-- Axios;
-- Tailwind;
-- biblioteca de componentes;
-- Redux/Zustand;
-- React Query;
-- React Hook Form;
-- bibliotecas de validação;
-- bibliotecas de gráficos.
-
-Cada uma deverá ser avaliada quando surgir uma necessidade real.
-
----
-
-# 17. Idioma
-
-Padrão definido:
-
-### Código
-
-Inglês.
-
-Exemplos:
+Planejado para representar:
 
 ```text
 Product
-Order
-Customer
-Inventory
-StockMovement
-ConfirmPayment()
-Cancel()
+Location
+Quantity
 ```
 
-### Commits e branches
+Também poderá receber regras de estoque mínimo/máximo conforme o desenvolvimento avançar.
 
-Inglês.
+## Order
 
-Exemplos:
+Pertence a um Customer e possui vários OrderItems.
+
+## OrderItem
+
+Representa um Product dentro de um Order, incluindo quantidade.
+
+## Customer
+
+Representa o cliente do pedido.
+
+## Receiving
+
+Representa o recebimento de mercadorias.
+
+## ReceivingItem
+
+Representa os produtos/quantidades recebidos.
+
+## Location
+
+Representa uma localização dentro do centro de distribuição.
+
+O MVP trabalha com um único centro de distribuição.
+
+## Histórico/auditoria
+
+Pode ser adicionado posteriormente para rastreabilidade.
+
+Não antecipar essa funcionalidade sem necessidade.
+
+---
+
+# 10. Estrutura atual do repositório
+
+Raiz:
 
 ```text
-feature/create-product
-feature/order-stock-reservation
-fix/order-cancellation
+C:\Projetos\Loxena\
+├── backend\
+│   └── Loxena.slnx
+├── tests\
+│   └── UnitTests\
+├── frontend\
+│   └── loxena-web\
+├── README.md
+├── PROJECT_CONTEXT.md
+└── .gitignore
 ```
 
-### README
-
-Inglês.
-
-### PROJECT_CONTEXT
-
-Português.
-
-### Comunicação e explicações
-
-Português.
-
-Objetivo:
-
-> O projeto segue convenções profissionais internacionais, enquanto o aprendizado e as decisões são discutidos em português.
-
 ---
 
-# 18. Git
-
-O projeto será versionado desde o início.
-
-Não é obrigatório reproduzir exatamente o fluxo do TaskManager.
-
-Branches serão utilizadas quando agregarem organização.
-
-Commits devem representar mudanças compreensíveis.
-
-Pull Requests poderão ser utilizados para funcionalidades relevantes, mesmo sendo um projeto individual, quando isso ajudar a simular um fluxo profissional ou revisar uma mudança importante.
-
----
-
-# 19. IA durante o desenvolvimento
-
-IA é considerada ferramenta de desenvolvimento.
-
-Pode ser utilizada para:
-
-- pesquisa;
-- explicação;
-- código repetitivo;
-- debugging;
-- testes;
-- revisão;
-- documentação;
-- comparação de soluções.
-
-Ferramentas possíveis:
-
-- ChatGPT;
-- Gemini;
-- GitHub Copilot.
-
-### Regra
-
-Nenhum código deve ser incorporado apenas porque uma IA o produziu.
-
-O desenvolvedor precisa compreender o código e a decisão.
-
-### Uso de segunda opinião
-
-Quando houver uma decisão relevante ou dúvida que possa se beneficiar de uma perspectiva independente, o orientador deverá indicar explicitamente:
-
-> **"Preciso de uma segunda opinião do Gemini."**
-
-ou:
-
-> **"Use o Copilot para gerar somente o boilerplate desta parte."**
-
-Também deve explicar:
-
-- por que a ferramenta está sendo utilizada;
-- o que perguntar;
-- o que não pedir;
-- como avaliar a resposta.
-
----
-
-# 20. MVP
-
-O MVP precisa permitir que o sistema execute um fluxo completo.
-
-### Fluxo mínimo
+# 11. Arquitetura atual
 
 ```text
-Cadastrar categoria
-        ↓
-Cadastrar produto
-        ↓
-Cadastrar localização
-        ↓
-Receber produto
-        ↓
-Armazenar produto
-        ↓
-Consultar estoque
-        ↓
-Cadastrar cliente
-        ↓
-Criar pedido
-        ↓
-Confirmar pagamento
-        ↓
-Reservar estoque
-        ↓
-Separar
-        ↓
-Conferir
-        ↓
-Embalar
-        ↓
-Expedir
-        ↓
-Entregar / Retirar
+React/TypeScript (Tailwind, SweetAlert2)
+       ↓
+HTTP/JSON (Fetch API utilitária)
+       ↓
+ASP.NET Core API (GlobalExceptionHandler -> ProblemDetails)
+       ↓
+Application (UseCases)
+       ↓
+Domain (Validações Core)
+       ↑
+Infrastructure (Repositories)
+       ↓
+EF Core
+       ↓
+SQL Server
 ```
 
-Também deve existir:
+Dependências:
 
 ```text
-Inventário
-    ↓
-Diferença
-    ↓
-Ajuste de estoque
+Api → Application
+Api → Infrastructure
+Application → Domain
+Infrastructure → Application
+Infrastructure → Domain
 ```
 
----
+## Domain
 
-# 21. Fora do MVP
+Contém regras centrais do negócio. Não deve depender de HTTP, banco, React, controllers ou infraestrutura.
 
-Explicitamente fora do escopo inicial:
+## Application
 
-- múltiplos centros de distribuição;
-- múltiplas unidades;
-- gestão avançada de transportadoras;
-- cálculo de frete;
-- emissão real de nota fiscal;
-- integração fiscal;
-- cubagem;
-- gestão avançada de embalagens;
-- etiquetas;
-- trocas;
-- devoluções complexas;
-- recicláveis;
-- quarentena;
-- validade;
-- lotes avançados;
-- compras;
-- contratos;
-- integrações externas;
-- IA como funcionalidade do produto.
+Contém casos de uso e orquestração. Validações de duplicidade de banco (ex: `ExistsByNameAsync`) ocorrem aqui.
 
-Esses itens só poderão voltar à discussão depois do MVP.
+## Infrastructure
+
+Contém implementações de persistência e integração. Usa Entity Framework Core e SQL Server.
+
+## Api
+
+Responsável por HTTP/controllers/OpenAPI/Swagger e tratamento global de erros.
 
 ---
 
-# 22. Roadmap
+# 12. Convenções de idioma
 
-## Fase 0 — Fundação
+Código:
 
-- repositório;
-- solução;
-- backend;
-- frontend;
-- banco;
-- configuração inicial;
-- Git.
+- Inglês (ex: `Product`, `Category`, `CreateProductUseCase`).
 
-## Fase 1 — Acesso e catálogo
+Conteúdo para o Usuário Final (Frontend / Mensagens de Erro):
 
-- autenticação;
-- usuários;
-- categorias;
-- produtos;
-- primeira interface.
+- Português (ex: `throw new Exception("Categoria não encontrada.");`).
 
-## Fase 2 — Estoque
+Documentação de negócio e explicações:
 
-- localização;
-- inventory;
-- stock movements;
-- consulta;
-- inventário;
-- ajustes.
-
-## Fase 3 — Recebimento
-
-- supplier;
-- receiving;
-- receiving items;
-- armazenagem;
-- entrada de estoque.
-
-## Fase 4 — Pedidos
-
-- customer;
-- order;
-- order items;
-- pagamento;
-- reserva;
-- cancelamento.
-
-## Fase 5 — Operação
-
-- picking;
-- checking;
-- packing;
-- shipping;
-- saída de estoque.
-
-## Fase 6 — Entrega / retirada
-
-- tipos de entrega;
-- confirmação;
-- conclusão.
-
-## Fase 7 — Dashboard
-
-- indicadores;
-- filtros;
-- buscas;
-- gráficos quando justificáveis.
-
-## Fase 8 — Qualidade
-
-- testes;
-- tratamento de erros;
-- autorização;
-- Docker;
-- Docker Compose;
-- GitHub Actions;
-- responsividade;
-- UX;
-- documentação.
+- Português.
 
 ---
 
-# 23. Ordem de implementação
+# 13. Category — estado atual
 
-O desenvolvimento deverá seguir uma lógica de **incrementos utilizáveis**.
+Category CRUD concluído com validações de domínio.
 
-Não devemos construir todo o backend primeiro e deixar o frontend para o final.
+Entity:
 
-Sempre que possível:
+```csharp
+public class Category
+{
+    public Guid Id { get; private set; }
+    public string Name { get; private set; } = string.Empty;
+    public bool IsActive { get; private set; }
+}
+```
+
+Repository possui verificação de duplicidade:
+
+```csharp
+Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null);
+```
+
+Regras de negócio adicionadas:
+- O nome da Categoria deve ser único. O `CreateCategoryUseCase` e o `UpdateCategoryUseCase` validam isso com o banco.
+- Exclusão (Delete) foi implementada, mas é bloqueada caso a categoria possua produtos ativos vinculados.
+
+---
+
+# 14. Product — estado atual
+
+Product CRUD concluído e integrado ao frontend.
+
+A validação estrutural (tamanho de string, preço negativo) está propositalmente dentro da própria entidade. A validação de relacionamento (Categoria existe?) está no UseCase.
+
+---
+
+# 15. Frontend React — estado atual
+
+O desenvolvimento do frontend (loxena-web) foi iniciado e possui uma base limpa e escalável.
+
+Tecnologias utilizadas:
+- React + TypeScript (Vite)
+- Tailwind CSS (Estilização sem CSS externo)
+- React-Toastify (Notificações de sucesso e erro)
+- SweetAlert2 (Modais de confirmação de exclusão padronizados via utils)
+- Fetch API (com função utilitária `tratarErro` para ler ProblemDetails)
+
+Páginas atuais:
+- `CategoriesPage`
+- `ProductsPage`
+
+A UI prioriza código limpo (sem poluição de estados de modais) e delega tratamento de erros e respostas visuais para funções utilitárias. O formulário de produto utiliza um `<select>` nativo para listar e vincular categorias.
+
+---
+
+# 16. Tratamento de Erros
+
+O projeto implementa um fluxo Full Stack padronizado para erros:
+1. **Backend:** As exceções lançadas nos UseCases ou Entidades são interceptadas por um `GlobalExceptionHandler` no C#.
+2. **ProblemDetails:** O erro é convertido para o padrão RFC `ProblemDetails`, enviando a mensagem traduzida (em Português) para o frontend.
+3. **Frontend:** O utilitário `apiUtils.ts` do React lê a resposta, identifica o `ProblemDetails` e exibe o erro em um Toast vermelho amigável para o usuário.
+
+---
+
+# 17. Testes — decisão atual
+
+Criar uma suíte **enxuta e estratégica**, cobrindo comportamentos importantes. Não testar exaustivamente cada linha ou cada validação de cada Use Case no CRUD inicial.
+
+As regras de negócio mais interessantes aparecerão em:
+- Stock;
+- Orders;
+- Picking;
+- Packing;
+
+---
+
+# 18. Estado atual exato
+
+No momento da transferência:
+
+- Category CRUD: Concluído (Frontend e Backend integrados).
+- Product CRUD: Concluído (Frontend e Backend integrados).
+- Global Exception Handler: Concluído.
+- UI/UX: Padronizada com Toasts e SweetAlert2.
+- Validação de Nomes Únicos: Concluída (Categorias).
+- Product tests: Iniciados e estáveis.
+- Stock: Ainda não implementado.
+- Orders: Ainda não implementado.
+- Operações de Armazém: Ainda não implementadas.
+- Autenticação frontend/backend: Ainda não implementada.
+
+---
+
+# 19. Próxima rota
+
+Sequência planejada:
 
 ```text
-Backend mínimo
-      ↓
-Endpoint
-      ↓
-Frontend correspondente
-      ↓
-Integração
-      ↓
-Teste
-      ↓
-Próximo incremento
+CRUD Base (Produtos e Categorias) - CONCLUÍDO
+        ↓
+Início do Frontend (React + Integração Base) - CONCLUÍDO
+        ↓
+Módulo de Estoque (Stock) - PRÓXIMO PASSO
+        ↓
+Módulo de Pedidos (Orders)
+        ↓
+Operações Logísticas (Picking, Checking, Packing, Shipping)
+        ↓
+Autenticação
+        ↓
+Integração frontend completa e Dashboard
 ```
 
-O objetivo é que o sistema se torne utilizável progressivamente.
+O Stock (Estoque) é a evolução natural do Produto, transformando o Loxena de um simples cadastro para um sistema operacional que responde: "Quanto desse produto existe e onde ele está?".
 
 ---
 
-# 24. Critérios para adicionar complexidade
+# 20. Decisões que não devem ser revertidas sem motivo
 
-Antes de adicionar uma abstração, biblioteca, padrão ou entidade, perguntar:
-
-> **Qual problema concreto isso resolve?**
-
-Exemplos:
-
-Não criar uma entidade `PickingOperation` apenas porque existe um setor chamado separação.
-
-Não criar `PackagingServiceFactoryStrategy` se uma implementação simples resolve o problema.
-
-Não adicionar Redux se o estado da aplicação ainda puder ser administrado de forma simples.
-
-Não adicionar Axios apenas porque outros projetos utilizam.
-
-Não adicionar Clean Architecture extremamente detalhada apenas por ser considerada "boa prática".
-
-A arquitetura deve servir ao sistema e ao aprendizado.
+1. Não transformar Product em responsável por quantidade.
+2. Manter as mensagens de exceção do C# em português para facilitar o envio via Toast no Frontend.
+3. Manter a extração de funções utilitárias no Frontend (como `apiUtils` e `alertUtils`) para não poluir as páginas com boilerplates do SweetAlert2 ou Fetch.
+4. Não introduzir bibliotecas complexas de estado no React (Redux) sem necessidade.
+5. Não abandonar as regras de negócio simples em favor de arquitetura excessivamente abstrata.
 
 ---
 
-# 25. Estado atual
+# 21. Como continuar a conversa
 
-```text
-[████████████████████] Planejamento
+A próxima IA deve primeiro considerar este documento como a fonte de contexto do projeto.
 
-[                    ] Implementação
-```
+Antes de propor código:
 
-### Já decidido
-
-- nome: Loxena;
-- domínio;
-- problema;
-- usuários;
-- fluxo;
-- MVP;
-- principais regras;
-- entidades iniciais;
-- arquitetura geral;
-- stack base;
-- idioma;
-- estratégia de IA;
-- roadmap.
-
-### Ainda não implementado
-
-Tudo relacionado ao código.
-
----
-
-# 26. Próxima etapa
-
-A próxima etapa é:
-
-**Preparar o repositório GitHub e iniciar a Fase 0.**
-
-Ordem:
-
-```text
-GitHub
-   ↓
-README.md
-   ↓
-PROJECT_CONTEXT.md
-   ↓
-.gitignore
-   ↓
-Primeiro commit
-   ↓
-Criar solução
-   ↓
-Criar backend
-   ↓
-Criar frontend
-```
-
-Nenhuma funcionalidade de negócio deve ser implementada antes da fundação estar funcionando.
-
----
-
-# 27. Regra para continuidade entre conversas
-
-Quando uma nova conversa for iniciada para continuar o projeto, o `PROJECT_CONTEXT.md` deve ser considerado a fonte principal das decisões do projeto.
-
-Ao final de uma etapa importante, o documento deverá ser atualizado com:
-
-- decisões novas;
-- mudanças de escopo;
-- tecnologias adicionadas/removidas;
-- regras alteradas;
-- progresso;
-- problemas conhecidos;
-- próximo passo.
-
-O arquivo deve permanecer enxuto e atualizado.
-
----
-
-# 28. Filosofia final
-
-O Loxena é um projeto de portfólio e aprendizado.
-
-Não precisa demonstrar que o desenvolvedor sabe implementar todas as tecnologias existentes.
-
-Precisa demonstrar que sabe:
-
-```text
-Entender um problema
-      ↓
-Modelar uma solução
-      ↓
-Criar uma API
-      ↓
-Persistir dados
-      ↓
-Aplicar regras de negócio
-      ↓
-Construir uma interface
-      ↓
-Consumir uma API
-      ↓
-Integrar Frontend + Backend
-      ↓
-Testar
-      ↓
-Versionar
-      ↓
-Fazer deploy / automatizar
-      ↓
-Entregar
-```
-
-> **O objetivo não é construir o maior sistema possível.**
->
-> **É construir um sistema suficientemente real para demonstrar competência Full Stack.**
+1. identificar o estado atual;
+2. confirmar qual é o próximo pequeno passo;
+3. explicar por que ele existe;
+4. implementar somente o necessário;
+5. testar;
+6. revisar o resultado;
+7. fazer commit quando fizer sentido;
+8. só então avançar.
