@@ -50,10 +50,11 @@ public class Stock
     public void RemovePhysicalQuantity(int amount) 
     {
         ValidatePositiveAmount(amount);
-        if (ReservedQuantity < amount)
-            throw new InvalidOperationException("Não é possível remover uma quantidade física que exceda a quantidade reservada.");
+
+        if (AvailableQuantity < amount)
+            throw new InvalidOperationException("Não é possível remover uma quantidade física que comprometa o saldo já reservado.");
+
         PhysicalQuantity -= amount;
-        ReservedQuantity -= amount;
     }
 
     private void ValidatePositiveAmount(int amount)

@@ -10,6 +10,7 @@ public class LoxenaDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Location> Locations { get; set; }
+    public DbSet<Stock> Stocks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
     {
@@ -58,6 +59,31 @@ public class LoxenaDbContext : DbContext
 
             entity.Property(l => l.IsActive)
                 .IsRequired();
-        }); 
+        });
+
+        modelBuilder.Entity<Stock>(entity =>
+        { 
+            entity.HasKey(s => s.Id);
+
+            entity.Property(s => s.PhysicalQuantity)
+                .IsRequired();
+
+            entity.Property(s => s.ReservedQuantity)
+                .IsRequired();
+
+            entity.Ignore(s => s.AvailableQuantity);
+
+            entity.HasOne<Product>()
+                .WithMany()
+                .HasForeignKey(s => s.ProductId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne<Location>()
+                .WithMany()
+                .HasForeignKey(s => s.LocationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 }
