@@ -12,6 +12,11 @@ using Loxena.Application.Products.GetProductById;
 using Loxena.Application.Products.GetProducts;
 using Loxena.Application.Products.InactivateProduct;
 using Loxena.Application.Products.UpdateProduct;
+using Loxena.Application.Stocks.AddStock;
+using Loxena.Application.Stocks.GetStockById;
+using Loxena.Application.Stocks.GetStockByProductId;
+using Loxena.Application.Stocks.GetStocks;
+using Loxena.Application.Stocks.RemoveStock;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Loxena.Application;
@@ -34,6 +39,11 @@ public static class DependencyInjection
         services.AddScoped<GetLocationsUseCase>();
         services.AddScoped<GetLocationByIdUseCase>();
         services.AddScoped<UpdateLocationUseCase>();
+        services.AddScoped<AddStockUseCase>();
+        services.AddScoped<RemoveStockUseCase>();
+        services.AddScoped<GetStocksUseCase>();
+        services.AddScoped<GetStockByIdUseCase>();
+        services.AddScoped<GetStockByProductIdUseCase>();
 
         return services;
     }
