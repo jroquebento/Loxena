@@ -8,6 +8,7 @@ public class Stock
     public int PhysicalQuantity { get; private set; }
     public int ReservedQuantity { get; private set; }
     public int AvailableQuantity => PhysicalQuantity - ReservedQuantity;
+    public byte[] RowVersion { get; private set; } = null!;
 
     private Stock() { }
 

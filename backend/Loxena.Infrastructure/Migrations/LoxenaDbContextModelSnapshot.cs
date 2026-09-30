@@ -116,13 +116,30 @@ namespace Loxena.Infrastructure.Migrations
                     b.Property<int>("ReservedQuantity")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Stock_SingleActiveProduct_PerLocation")
+                        .HasFilter("[PhysicalQuantity] > 0");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId", "LocationId")
+                        .IsUnique();
 
-                    b.ToTable("Stocks");
+                    b.ToTable("Stocks", t =>
+                        {
+                            t.HasCheckConstraint("CK_Stock_PhysicalQuantity_NotNegative", "[PhysicalQuantity] >= 0");
+
+                            t.HasCheckConstraint("CK_Stock_ReservedQuantity_NotNegative", "[ReservedQuantity] >= 0");
+
+                            t.HasCheckConstraint("CK_Stock_ReservedQuantity_Valid", "[ReservedQuantity] <= [PhysicalQuantity]");
+                        });
                 });
 
             modelBuilder.Entity("Loxena.Domain.Entities.Product", b =>
