@@ -1,5 +1,5 @@
 ﻿using Loxena.Application.Interfaces;
-using Loxena.Application.Products.UpdateProduct;
+using Loxena.Application.Products.UseCases.UpdateProduct;
 using Loxena.Domain.Entities;
 using Moq;
 

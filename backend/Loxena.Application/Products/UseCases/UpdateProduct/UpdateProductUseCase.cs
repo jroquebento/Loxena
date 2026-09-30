@@ -17,7 +17,7 @@ public class UpdateProductUseCase
         _productRepository = productRepository;
     }
 
-    public async Task<ProductResponse?> ExecuteAsync(Guid id, UpdateProductRequest request) 
+    public async Task<ProductResponse?> ExecuteAsync(Guid id, UpdateProductRequest request)
     {
         var product = await _productRepository.GetByIdAsync(id);
 
@@ -26,8 +26,8 @@ public class UpdateProductUseCase
 
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
-        if (category is null)
-            throw new ArgumentException("Categoria não encontrada.");
+        if (category is null || !category.IsActive)
+            throw new ArgumentException("Categoria inexistente ou inativa.");
 
         product.Update(
             request.Name,

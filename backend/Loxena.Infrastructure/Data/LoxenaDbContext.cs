@@ -73,7 +73,7 @@ public class LoxenaDbContext : DbContext
 
             entity.Ignore(s => s.AvailableQuantity);
 
-            entity.Property(s => s.RowVersion)
+            entity.Property<byte[]>("RowVersion")
                 .IsRowVersion();
 
             entity.ToTable(t =>

@@ -27,6 +27,7 @@ internal class ProductRepository : IProductRepository
     public async Task<IReadOnlyList<Product>> GetAllAsync()
     {
         return await _context.Products
+            .AsNoTracking()
             .Where(p => p.IsActive)
             .ToListAsync();
     }

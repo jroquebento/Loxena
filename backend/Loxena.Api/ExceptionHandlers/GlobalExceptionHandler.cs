@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Loxena.Api.ExceptionHandlers;
 
@@ -13,24 +14,25 @@ public class GlobalExceptionHandler : IExceptionHandler
     }
 
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext, 
-        Exception exception, 
+        HttpContext httpContext,
+        Exception exception,
         CancellationToken cancellationToken)
     {
         _logger.LogError(exception, "Uma exceção foi capturada: {Message}", exception.Message);
 
-        var (statusCode, title) = exception switch
+        var (statusCode, title, detail) = exception switch
         {
-            InvalidOperationException => (StatusCodes.Status400BadRequest, "Regra de negócio violada"),
-            ArgumentException => (StatusCodes.Status400BadRequest, "Dados inválidos"),
-            _ => (StatusCodes.Status500InternalServerError, "Erro Interno do Servidor")
+            InvalidOperationException ex => (StatusCodes.Status400BadRequest, "Regra de negócio violada", ex.Message),
+            ArgumentException ex => (StatusCodes.Status400BadRequest, "Dados inválidos", ex.Message),
+            DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, "Conflito de Concorrência", "O registro foi alterado por outra operação simultânea. Recarregue os dados e tente novamente."),
+            _ => (StatusCodes.Status500InternalServerError, "Erro Interno do Servidor", "Ocorreu um erro interno inesperado.")
         };
 
         var problemDetails = new ProblemDetails
         {
             Status = statusCode,
             Title = title,
-            Detail = exception.Message,
+            Detail = detail, 
             Instance = httpContext.Request.Path
         };
 

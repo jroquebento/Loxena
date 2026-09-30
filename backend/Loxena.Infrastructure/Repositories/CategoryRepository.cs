@@ -28,6 +28,7 @@ internal class CategoryRepository : ICategoryRepository
     public async Task<IReadOnlyList<Category>> GetAllAsync()
     {
         return await _context.Categories
+            .AsNoTracking()
             .Where(c => c.IsActive)
             .ToListAsync();
     }
