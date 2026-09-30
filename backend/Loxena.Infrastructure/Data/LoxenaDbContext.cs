@@ -73,6 +73,24 @@ public class LoxenaDbContext : DbContext
 
             entity.Ignore(s => s.AvailableQuantity);
 
+            entity.Property(s => s.RowVersion)
+                .IsRowVersion();
+
+            entity.ToTable(t =>
+            {
+                t.HasCheckConstraint("CK_Stock_PhysicalQuantity_NotNegative", "[PhysicalQuantity] >= 0");
+                t.HasCheckConstraint("CK_Stock_ReservedQuantity_NotNegative", "[ReservedQuantity] >= 0");
+                t.HasCheckConstraint("CK_Stock_ReservedQuantity_Valid", "[ReservedQuantity] <= [PhysicalQuantity]");
+            });
+
+            entity.HasIndex(s => new { s.ProductId, s.LocationId })
+                .IsUnique();
+
+            entity.HasIndex(s => s.LocationId)
+                .IsUnique()
+                .HasFilter("[PhysicalQuantity] > 0")
+                .HasDatabaseName("IX_Stock_SingleActiveProduct_PerLocation");
+
             entity.HasOne<Product>()
                 .WithMany()
                 .HasForeignKey(s => s.ProductId)
