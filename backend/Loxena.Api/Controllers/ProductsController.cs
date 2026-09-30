@@ -1,8 +1,8 @@
-﻿using Loxena.Application.Products.CreateProduct;
-using Loxena.Application.Products.GetProductById;
-using Loxena.Application.Products.GetProducts;
-using Loxena.Application.Products.InactivateProduct;
-using Loxena.Application.Products.UpdateProduct;
+﻿using Loxena.Application.Products.UseCases.CreateProduct;
+using Loxena.Application.Products.UseCases.GetProductById;
+using Loxena.Application.Products.UseCases.GetProducts;
+using Loxena.Application.Products.UseCases.InactivateProduct;
+using Loxena.Application.Products.UseCases.UpdateProduct;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;

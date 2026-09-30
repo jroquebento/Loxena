@@ -1,7 +1,7 @@
-﻿using Loxena.Application.Locations.CreateLocation;
-using Loxena.Application.Locations.GetLocationById;
-using Loxena.Application.Locations.GetLocations;
-using Loxena.Application.Locations.UpdateLocation;
+﻿using Loxena.Application.Locations.UseCases.CreateLocation;
+using Loxena.Application.Locations.UseCases.GetLocationById;
+using Loxena.Application.Locations.UseCases.GetLocations;
+using Loxena.Application.Locations.UseCases.UpdateLocation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;
