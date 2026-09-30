@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Products.DTOs;
+using Loxena.Application.Products.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Products.GetProductById;
@@ -11,8 +13,13 @@ public class GetProductByIdUseCase
         _repository = repository;
     }
 
-    public async Task<Product?> ExecuteAsync(Guid id) 
+    public async Task<ProductResponse?> ExecuteAsync(Guid id) 
     {
-        return await _repository.GetByIdAsync(id);
+        var product = await _repository.GetByIdAsync(id);
+
+        if (product is null)
+            return null;
+
+        return product.ToResponse();
     }
 }

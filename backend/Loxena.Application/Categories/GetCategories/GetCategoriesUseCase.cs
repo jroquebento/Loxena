@@ -1,4 +1,6 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.DTOs;
+using Loxena.Application.Categories.Mappings;
+using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Categories.GetCategories;
@@ -12,9 +14,11 @@ public class GetCategoriesUseCase
         _repository = repository;
     }
 
-    public async Task<IReadOnlyList<Category>> ExecuteAsync() 
+    public async Task<IEnumerable<CategoryResponse>> ExecuteAsync() 
     {
-        return await _repository.GetAllAsync();
+        var categories = await _repository.GetAllAsync();
+
+        return categories.Select(c => c.ToResponse());
     }
 }
 

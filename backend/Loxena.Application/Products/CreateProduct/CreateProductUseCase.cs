@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Products.DTOs;
+using Loxena.Application.Products.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Products.CreateProduct;
@@ -16,7 +18,7 @@ public class CreateProductUseCase
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Product> ExecuteAsync(CreateProductRequest request) 
+    public async Task<ProductResponse> ExecuteAsync(CreateProductRequest request) 
     {
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
         
@@ -31,6 +33,6 @@ public class CreateProductUseCase
 
         await _productRepository.AddAsync(product);
 
-        return product;
+        return product.ToResponse();
     }
 }
