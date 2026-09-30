@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Locations.DTOs;
+using Loxena.Application.Locations.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Locations.CreateLocation;
@@ -12,7 +14,7 @@ public class CreateLocationUseCase
         _locationRepository = locationRepository;
     }
 
-    public async Task<Location> ExecuteAsync(CreateLocationRequest request)
+    public async Task<LocationResponse> ExecuteAsync(CreateLocationRequest request)
     {
         var codeExists = await _locationRepository.ExistsByCodeAsync(request.Code);
 
@@ -23,6 +25,6 @@ public class CreateLocationUseCase
 
         await _locationRepository.AddAsync(location);
 
-        return location;
+        return location.ToResponse();
     }
 }

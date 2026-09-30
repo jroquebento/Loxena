@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Stocks.DTOs;
+using Loxena.Application.Stocks.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Stocks.AddStock;
@@ -19,7 +21,7 @@ public class AddStockUseCase
         _locationRepository = locationRepository;
     }
 
-    public async Task<Stock> ExecuteAsync(AddStockRequest request) 
+    public async Task<StockResponse> ExecuteAsync(AddStockRequest request) 
     {
         if (request.Amount <= 0) 
         {
@@ -51,6 +53,6 @@ public class AddStockUseCase
             await _stockRepository.UpdateAsync(stock);
         }
 
-        return stock;
+        return stock.ToResponse();
     }
 }

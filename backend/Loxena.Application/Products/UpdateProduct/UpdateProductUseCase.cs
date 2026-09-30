@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Products.DTOs;
+using Loxena.Application.Products.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Products.UpdateProduct;
@@ -15,7 +17,7 @@ public class UpdateProductUseCase
         _productRepository = productRepository;
     }
 
-    public async Task<Product?> ExecuteAsync(Guid id, UpdateProductRequest request) 
+    public async Task<ProductResponse?> ExecuteAsync(Guid id, UpdateProductRequest request) 
     {
         var product = await _productRepository.GetByIdAsync(id);
 
@@ -35,6 +37,6 @@ public class UpdateProductUseCase
 
         await _productRepository.UpdateAsync(product);
 
-        return product;
+        return product.ToResponse();
     }
 }

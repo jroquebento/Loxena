@@ -1,4 +1,6 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.DTOs;
+using Loxena.Application.Categories.Mappings;
+using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Categories.CreateCategory;
@@ -12,7 +14,7 @@ public class CreateCategoryUseCase
         _repository = repository;
     }
 
-    public async Task<Category> ExecuteAsync(CreateCategoryRequest request) 
+    public async Task<CategoryResponse> ExecuteAsync(CreateCategoryRequest request) 
     {
         var categoryExists = await _repository.ExistsByNameAsync(request.Name);
         if (categoryExists)
@@ -21,6 +23,6 @@ public class CreateCategoryUseCase
         var category = new Category(request.Name);
         await _repository.AddAsync(category);
 
-        return category;
+        return category.ToResponse();
     }
 }

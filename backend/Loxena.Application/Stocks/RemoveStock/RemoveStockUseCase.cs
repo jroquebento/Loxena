@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Stocks.DTOs;
+using Loxena.Application.Stocks.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Stocks.RemoveStock;
@@ -12,7 +14,7 @@ public class RemoveStockUseCase
         _stockRepository = stockRepository;
     }
 
-    public async Task<Stock> ExecuteAsync(RemoveStockRequest request) 
+    public async Task<StockResponse> ExecuteAsync(RemoveStockRequest request) 
     {
         if (request.Amount <= 0)
             throw new ArgumentException("A quantidade a ser removida deve ser maior que zero.");
@@ -26,7 +28,7 @@ public class RemoveStockUseCase
 
         await _stockRepository.UpdateAsync(stock);
 
-        return stock;
+        return stock.ToResponse();
     }
 }
 

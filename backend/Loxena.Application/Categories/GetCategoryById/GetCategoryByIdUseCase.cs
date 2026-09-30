@@ -1,4 +1,6 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.DTOs;
+using Loxena.Application.Categories.Mappings;
+using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Categories.GetCategoryById;
@@ -11,8 +13,12 @@ public class GetCategoryByIdUseCase
         _repository = repository;
     }
 
-    public async Task<Category?> ExecuteAsync(Guid id) 
+    public async Task<CategoryResponse?> ExecuteAsync(Guid id) 
     {
-        return await _repository.GetByIdAsync(id);
+        var category = await _repository.GetByIdAsync(id);
+        if (category == null)
+            return null;
+
+        return category.ToResponse();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Stocks.DTOs;
+using Loxena.Application.Stocks.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Stocks.GetStockById;
@@ -12,8 +14,14 @@ public class GetStockByIdUseCase
 		_stockRepository = stockRepository;
 	}
 
-	public async Task<Stock?> ExecuteAsync(Guid id) 
+	public async Task<StockResponse?> ExecuteAsync(Guid id) 
 	{
-		return await _stockRepository.GetByIdAsync(id);
-	}
+		var stock = await _stockRepository.GetByIdAsync(id);
+
+		if (stock is null)
+			return null;
+
+		return stock.ToResponse();
+
+    }
 }

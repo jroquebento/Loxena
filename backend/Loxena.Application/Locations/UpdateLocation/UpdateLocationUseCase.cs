@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Locations.DTOs;
+using Loxena.Application.Locations.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Locations.UpdateLocation;
@@ -12,7 +14,7 @@ public class UpdateLocationUseCase
         _locationRepository = locationRepository;
     }
 
-    public async Task<Location?> ExecuteAsync(Guid id, UpdateLocationRequest request)
+    public async Task<LocationResponse?> ExecuteAsync(Guid id, UpdateLocationRequest request)
     {
         var location = await _locationRepository.GetByIdAsync(id);
         if (location is null)
@@ -26,6 +28,6 @@ public class UpdateLocationUseCase
 
         await _locationRepository.UpdateAsync(location);
 
-        return location;
+        return location.ToResponse();
     }
 }

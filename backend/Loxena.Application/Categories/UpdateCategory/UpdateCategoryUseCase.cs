@@ -1,4 +1,6 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.DTOs;
+using Loxena.Application.Categories.Mappings;
+using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Categories.UpdateCategory;
@@ -12,7 +14,7 @@ public class UpdateCategoryUseCase
         _repository = repository;
     }
 
-    public async Task<Category?> ExecuteAsync(Guid id, UpdateCategoryRequest request) 
+    public async Task<CategoryResponse?> ExecuteAsync(Guid id, UpdateCategoryRequest request) 
     {
         var category = await _repository.GetByIdAsync(id);
         if (category is null)
@@ -25,6 +27,6 @@ public class UpdateCategoryUseCase
         category.UpdateName(request.Name);
         await _repository.UpdateAsync(category);
 
-        return category;
+        return category.ToResponse();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
+using Loxena.Application.Locations.DTOs;
+using Loxena.Application.Locations.Mappings;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Locations.GetLocations;
@@ -11,8 +13,10 @@ public class GetLocationsUseCase
         _locationRepository = locationRepository;
     }
 
-    public async Task<IReadOnlyList<Location>> ExecuteAsync() 
+    public async Task<IEnumerable<LocationResponse>> ExecuteAsync() 
     {
-        return await _locationRepository.GetAllAsync();
+        var locations = await _locationRepository.GetAllAsync();
+
+        return locations.Select(l => l.ToResponse());
     }
 }
