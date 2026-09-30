@@ -22,8 +22,8 @@ public class CreateProductUseCase
     {
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
         
-        if (category is null)
-            throw new ArgumentException("Categoria não encontrada.");
+        if (category is null || !category.IsActive)
+            throw new InvalidOperationException("Categoria inexistente ou inativa.");
 
         var product = new Product(
             request.Name,

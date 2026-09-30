@@ -27,7 +27,10 @@ internal class LocationRepository : ILocationRepository
 
     public async Task<IReadOnlyList<Location>> GetAllAsync()
     {
-        return await _context.Locations.ToListAsync();        
+        return await _context.Locations 
+            .AsNoTracking()
+            .Where(l => l.IsActive)
+            .ToListAsync();
     }
 
     public async Task UpdateAsync(Location location)
@@ -47,5 +50,5 @@ internal class LocationRepository : ILocationRepository
         }
 
         return await query.AnyAsync();
-    } 
+    }
 }

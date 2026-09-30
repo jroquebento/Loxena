@@ -3,6 +3,7 @@ using Loxena.Application.Stocks.UseCases.GetStockById;
 using Loxena.Application.Stocks.UseCases.GetStockByProductId;
 using Loxena.Application.Stocks.UseCases.GetStocks;
 using Loxena.Application.Stocks.UseCases.RemoveStock;
+using Loxena.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;
@@ -35,7 +36,7 @@ public class StocksController : ControllerBase
     public async Task<IActionResult> AddStock(AddStockRequest request)
     {
         var stock = await _addStockUseCase.ExecuteAsync(request);
-        return Ok(stock);
+        return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
     }
 
     [HttpPost("remove")]

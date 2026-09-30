@@ -21,6 +21,8 @@ public class LoxenaDbContext : DbContext
             entity.Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            entity.HasIndex(c => c.Name).IsUnique();
         });
 
         modelBuilder.Entity<Product>(entity => 
@@ -43,7 +45,8 @@ public class LoxenaDbContext : DbContext
             entity.HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Location>(entity =>
@@ -59,6 +62,8 @@ public class LoxenaDbContext : DbContext
 
             entity.Property(l => l.IsActive)
                 .IsRequired();
+
+            entity.HasIndex(l => l.Code).IsUnique();
         });
 
         modelBuilder.Entity<Stock>(entity =>
@@ -73,7 +78,7 @@ public class LoxenaDbContext : DbContext
 
             entity.Ignore(s => s.AvailableQuantity);
 
-            entity.Property(s => s.RowVersion)
+            entity.Property<byte[]>("RowVersion")
                 .IsRowVersion();
 
             entity.ToTable(t =>

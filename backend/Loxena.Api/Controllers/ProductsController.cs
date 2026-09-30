@@ -35,8 +35,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Create(CreateProductRequest request)
     {
         var product = await _createProductUseCase.ExecuteAsync(request);
-
-        return Ok(product);
+        return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
 
     [HttpGet]

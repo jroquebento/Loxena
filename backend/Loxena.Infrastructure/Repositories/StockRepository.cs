@@ -31,11 +31,14 @@ public class StockRepository : IStockRepository
     }
     public async Task<IReadOnlyList<Stock>> GetAllAsync()
     {
-        return await _context.Stocks.ToListAsync();
+        return await _context.Stocks
+            .AsNoTracking()
+            .ToListAsync();
     }
     public async Task<IReadOnlyList<Stock>> GetByProductIdAsync(Guid productId)
     {
         return await _context.Stocks
+            .AsNoTracking()
             .Where(s => s.ProductId == productId)
             .ToListAsync();
     }
@@ -51,5 +54,12 @@ public class StockRepository : IStockRepository
             .AnyAsync(s => s.LocationId == locationId
                         && s.ProductId != currentProductId
                         && s.PhysicalQuantity > 0);
+    }
+    public async Task<IEnumerable<Stock>> GetByLocationIdAsync(Guid locationId)
+    {
+        return await _context.Stocks
+            .AsNoTracking()
+            .Where(s => s.LocationId == locationId)
+            .ToListAsync();
     }
 }
