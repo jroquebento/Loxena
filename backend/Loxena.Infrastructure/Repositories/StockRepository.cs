@@ -55,4 +55,11 @@ public class StockRepository : IStockRepository
                         && s.ProductId != currentProductId
                         && s.PhysicalQuantity > 0);
     }
+    public async Task<IEnumerable<Stock>> GetByLocationIdAsync(Guid locationId)
+    {
+        return await _context.Stocks
+            .AsNoTracking()
+            .Where(s => s.LocationId == locationId)
+            .ToListAsync();
+    }
 }

@@ -26,6 +26,10 @@ public class Location
         Code = code.Trim().ToUpper();
         Description = description?.Trim() ?? string.Empty;
     }
+    public void Inactivate() 
+    {
+        IsActive = false;
+    }
 
     private static void Validate(string code, string? description) 
     {

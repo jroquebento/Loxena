@@ -35,8 +35,7 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> Create(CreateCategoryRequest request) 
     {
         var category = await _createCategoryUseCase.ExecuteAsync(request);
-
-        return Ok(category);
+        return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
     }
 
     [HttpGet]

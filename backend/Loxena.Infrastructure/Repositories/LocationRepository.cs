@@ -50,5 +50,5 @@ internal class LocationRepository : ILocationRepository
         }
 
         return await query.AnyAsync();
-    } 
+    }
 }

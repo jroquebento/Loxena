@@ -1,6 +1,8 @@
-﻿using Loxena.Application.Locations.UseCases.CreateLocation;
+﻿using Loxena.Application.Categories.UseCases.InactivateCategory;
+using Loxena.Application.Locations.UseCases.CreateLocation;
 using Loxena.Application.Locations.UseCases.GetLocationById;
 using Loxena.Application.Locations.UseCases.GetLocations;
+using Loxena.Application.Locations.UseCases.InactivateLocation;
 using Loxena.Application.Locations.UseCases.UpdateLocation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,23 +17,27 @@ public class LocationsController : ControllerBase
     private readonly GetLocationByIdUseCase _getLocationByIdUseCase;
     private readonly UpdateLocationUseCase _updateLocationUseCase;
 
+    private readonly InactivateLocationUseCase _inactivateLocationUseCase;
+
     public LocationsController(
         CreateLocationUseCase createLocationUseCase,
         GetLocationsUseCase getLocationsUseCase,
         GetLocationByIdUseCase getLocationByIdUseCase,
-        UpdateLocationUseCase updateLocationUseCase)
+        UpdateLocationUseCase updateLocationUseCase,
+        InactivateLocationUseCase inactivateLocationUseCase)
     {
         _createLocationUseCase = createLocationUseCase;
         _getLocationsUseCase = getLocationsUseCase;
         _getLocationByIdUseCase = getLocationByIdUseCase;
         _updateLocationUseCase = updateLocationUseCase;
+        _inactivateLocationUseCase = inactivateLocationUseCase;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateLocationRequest request) 
     {
         var location = await _createLocationUseCase.ExecuteAsync(request);
-        return Ok(location);
+        return CreatedAtAction(nameof(GetById), new { id = location.Id }, location);
     }
 
     [HttpGet]
@@ -61,5 +67,13 @@ public class LocationsController : ControllerBase
             return NotFound();
 
         return Ok(location);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Inactivate(Guid id) 
+    {
+        await _inactivateLocationUseCase.ExecuteAsync(id);
+
+        return NoContent();
     }
 }
