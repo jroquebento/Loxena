@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ProductsPage } from './pages/ProductsPage';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { LocationsPage } from './pages/LocationsPage'; 
+import { StocksPage } from './pages/StocksPage';
 
 function Sidebar() {
   const location = useLocation(); 
@@ -28,13 +29,18 @@ function Sidebar() {
         >
           🏷️ Categorias
         </Link>
-    
         <Link 
           to="/localizacoes" 
           className={`p-3 rounded-md transition ${isActive('/localizacoes') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800'}`}
         >
           📍 Localizações
         </Link>
+        <Link 
+        to="/estoque" 
+        className={`p-3 rounded-md transition ${isActive('/estoque') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800'}`}
+      >
+        📊 Saldo de Estoque
+      </Link>
       </nav>
     </aside>
   );
@@ -52,6 +58,7 @@ export default function App() {
             <Route path="/" element={<ProductsPage />} />
             <Route path="/categorias" element={<CategoriesPage />} />
             <Route path="/localizacoes" element={<LocationsPage />} />
+            <Route path="/estoque" element={<StocksPage />} />
           </Routes>
         </main>
         
