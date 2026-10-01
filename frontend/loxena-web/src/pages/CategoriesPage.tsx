@@ -1,68 +1,26 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import type { Category } from '../types/Category';
-import { categoryService } from '../services/categoryService';
+import { categoryService , type CategoryPayload} from '../services/categoryService';
 import { CategoryForm } from '../components/CategoryForm';
 import { CategoryList } from '../components/CategoryList';
-import { confirmarExclusao } from '../utils/alertUtils';
+import { useCrud } from '../hooks/useCrud';
 
 export function CategoriesPage() {
-  const [categorias, setCategorias] = useState<Category[]>([]);
-  const [categoriaEmEdicao, setCategoriaEmEdicao] = useState<Category | null>(null);
+  const {
+    items: categorias,
+    itemEmEdicao: categoriaEmEdicao,
+    salvar,
+    excluir,
+    editar,
+    cancelarEdicao
+  } = useCrud<Category, CategoryPayload>(categoryService, 'Categoria', 'F');
 
-  const carregarDados = () => {
-    categoryService.getAll().then(setCategorias).catch(console.error);
-  };
-
-  useEffect(() => {
-    carregarDados();
-  }, []);
-
-  const handleSalvarCategoria = (nome: string) => {
-    if (categoriaEmEdicao) {
-      categoryService.update(categoriaEmEdicao.id, nome)
-        .then(() => {
-          carregarDados();
-          setCategoriaEmEdicao(null);
-          toast.success("Categoria atualizada com sucesso!");
-        })
-        .catch(erro => {
-          toast.error(`Não foi possível atualizar: ${erro.message}`); 
-        });
-    } else {
-      categoryService.create(nome)
-        .then(() => {carregarDados();
-        toast.success("Categoria criada com sucesso!");
-        })
-        .catch(erro => {
-          toast.error(`Não foi possível cadastrar: ${erro.message}`);
-        });
-    }
-  };
-
-  const handleExcluirCategoria = async (id: string) => {
-    const confirmou = await confirmarExclusao('esta categoria');
-    if (!confirmou) return;
-
-      categoryService.delete(id)
-        .then(() => {
-          carregarDados();
-          if (categoriaEmEdicao && categoriaEmEdicao.id === id) {
-            setCategoriaEmEdicao(null);
-          }
-          toast.success("Categoria excluída com sucesso!");
-        })
-        .catch(erro => {toast.error(`Não foi possível excluir: ${erro.message}`);});
-  };
-
-  const handleEditarCategoria = (categoria: Category) => {
-    setCategoriaEmEdicao(categoria);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const handleSalvarCategoria = (name: string) => {
+    salvar( {name});
+  }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold text-blue-800 text-center mb-8">
+      <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
         Gestão de Categorias
       </h1>
       
@@ -70,13 +28,13 @@ export function CategoriesPage() {
         key={categoriaEmEdicao ? categoriaEmEdicao.id : 'novo'} 
         onSalvar={handleSalvarCategoria} 
         categoriaSelecionada={categoriaEmEdicao}
-        onCancelar={() => setCategoriaEmEdicao(null)} 
+        onCancelar={cancelarEdicao} 
       />
       
       <CategoryList 
         categorias={categorias} 
-        onExcluir={handleExcluirCategoria}
-        onEditar={handleEditarCategoria}
+        onExcluir={excluir}
+        onEditar={editar}
       />
     </div>
   );
