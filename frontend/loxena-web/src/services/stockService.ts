@@ -9,6 +9,13 @@ export type StockMovementPayload = {
   amount: number;
 };
 
+export type StockTransferPayload = {
+  productId: string;
+  sourceLocationId: string;
+  targetLocationId: string;
+  amount: number;
+};
+
 export const stockService = {
   getAll: async (): Promise<Stock[]> => {
     const resposta = await fetch(API_URL);
@@ -34,5 +41,14 @@ export const stockService = {
     });
     await tratarErro(resposta, 'Falha ao remover saldo do estoque');
     return resposta.json();
+  },
+
+  transfer: async (data: StockTransferPayload): Promise<void> => {
+    const resposta = await fetch(`${API_URL}/transfer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    await tratarErro(resposta, 'Falha ao transferir saldo entre localizações');
   }
 };

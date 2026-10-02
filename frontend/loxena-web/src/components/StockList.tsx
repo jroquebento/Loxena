@@ -7,9 +7,10 @@ interface StockListProps {
   produtos: Product[];
   localizacoes: Location[];
   onSelecionarParaMovimento: (productId: string, locationId: string) => void;
+  onSelecionarParaTransferencia: (productId: string, locationId: string, maxQuantity: number) => void;
 }
 
-export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovimento }: StockListProps) {
+export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovimento, onSelecionarParaTransferencia }: StockListProps) {
   const getProdutoNome = (id: string) => produtos.find(p => p.id === id)?.name || 'Desconhecido';
   const getLocalizacaoCodigo = (id: string) => localizacoes.find(l => l.id === id)?.code || 'Desconhecido';
 
@@ -54,6 +55,15 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
                       className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
                     >
                       Movimentar
+                    </button>
+                    <button
+                      onClick = {() => {
+                        onSelecionarParaTransferencia(stock.productId, stock.locationId, stock.physicalQuantity);
+
+                      }}
+                      className="text-purple-600 hover:text-purple-900 bg-purple-50 px-3 py-1 rounded-md"
+                    >
+                      Transferir
                     </button>
                   </td>
                 </tr>
