@@ -1,7 +1,6 @@
-﻿using Loxena.Application.Products.DTOs;
-using Loxena.Domain.Entities;
+﻿using Loxena.Domain.Entities;
 
-namespace Loxena.Application.Products.Mappings;
+namespace Loxena.Application.Products.Shared;
 
 public static class ProductMappers
 {

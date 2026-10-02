@@ -1,4 +1,5 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.Interfaces;
+using Loxena.Application.Products.Interfaces;
 using Loxena.Application.Products.UseCases.CreateProduct;
 using Loxena.Domain.Entities;
 
@@ -73,10 +74,10 @@ public class CreateProductUseCaseTests
             productRepository.Object,
             categoryRepository.Object);
 
-        var exception = await Assert.ThrowsAsync<ArgumentException>(
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
             () => useCase.ExecuteAsync(request));
 
-        Assert.Equal("Category not found.", exception.Message);
+        Assert.Equal("Categoria inexistente ou inativa.", exception.Message);
 
         productRepository.Verify(
           x => x.AddAsync(It.IsAny<Product>()),

@@ -1,6 +1,5 @@
-﻿using Loxena.Application.Interfaces;
-using Loxena.Application.Stocks.DTOs;
-using Loxena.Application.Stocks.Mappings;
+﻿using Loxena.Application.Stocks.Interfaces;
+using Loxena.Application.Stocks.Shared;
 
 namespace Loxena.Application.Stocks.UseCases.RemoveStock;
 

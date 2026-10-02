@@ -1,6 +1,5 @@
-﻿using Loxena.Application.Interfaces;
-using Loxena.Application.Locations.DTOs;
-using Loxena.Application.Locations.Mappings;
+﻿using Loxena.Application.Locations.Interfaces;
+using Loxena.Application.Locations.Shared;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Locations.UseCases.GetLocationById;

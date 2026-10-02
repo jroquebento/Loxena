@@ -1,4 +1,4 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Products.Interfaces;
 using Loxena.Domain.Entities;
 using Loxena.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

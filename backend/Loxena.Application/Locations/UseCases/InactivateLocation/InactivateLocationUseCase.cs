@@ -1,4 +1,5 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Locations.Interfaces;
+using Loxena.Application.Stocks.Interfaces;
 
 namespace Loxena.Application.Locations.UseCases.InactivateLocation;
 

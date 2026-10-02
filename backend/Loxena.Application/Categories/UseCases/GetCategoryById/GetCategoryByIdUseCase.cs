@@ -1,6 +1,5 @@
-﻿using Loxena.Application.Categories.DTOs;
-using Loxena.Application.Categories.Mappings;
-using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.Interfaces;
+using Loxena.Application.Categories.Shared;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Categories.UseCases.GetCategoryById;

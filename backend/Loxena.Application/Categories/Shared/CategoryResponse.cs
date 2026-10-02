@@ -1,4 +1,4 @@
-﻿namespace Loxena.Application.Categories.DTOs;
+﻿namespace Loxena.Application.Categories.Shared;
 
 public record CategoryResponse(
     Guid Id,

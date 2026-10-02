@@ -1,7 +1,6 @@
-﻿using Loxena.Application.Categories.DTOs;
-using Loxena.Domain.Entities;
+﻿using Loxena.Domain.Entities;
 
-namespace Loxena.Application.Categories.Mappings;
+namespace Loxena.Application.Categories.Shared;
 
 public static class CategoryMappers
 {

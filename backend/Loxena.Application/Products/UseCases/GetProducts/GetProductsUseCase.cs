@@ -1,6 +1,5 @@
-﻿using Loxena.Application.Interfaces;
-using Loxena.Application.Products.DTOs;
-using Loxena.Application.Products.Mappings;
+﻿using Loxena.Application.Products.Interfaces;
+using Loxena.Application.Products.Shared;
 using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Products.UseCases.GetProducts;

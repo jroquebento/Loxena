@@ -1,6 +1,6 @@
 ﻿using Loxena.Domain.Entities;
 
-namespace Loxena.Application.Interfaces;
+namespace Loxena.Application.Categories.Interfaces;
 
 public interface ICategoryRepository
 {

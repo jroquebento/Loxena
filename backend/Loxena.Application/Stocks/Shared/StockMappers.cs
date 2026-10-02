@@ -1,7 +1,6 @@
-﻿using Loxena.Application.Stocks.DTOs;
-using Loxena.Domain.Entities;
+﻿using Loxena.Domain.Entities;
 
-namespace Loxena.Application.Stocks.Mappings;
+namespace Loxena.Application.Stocks.Shared;
 
 public static class StockMappers
 {

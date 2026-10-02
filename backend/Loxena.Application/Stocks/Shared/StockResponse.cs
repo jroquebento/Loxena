@@ -1,4 +1,4 @@
-﻿namespace Loxena.Application.Stocks.DTOs;
+﻿namespace Loxena.Application.Stocks.Shared;
 
 public record StockResponse(
     Guid Id,

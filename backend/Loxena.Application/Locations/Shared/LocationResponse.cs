@@ -1,4 +1,4 @@
-﻿namespace Loxena.Application.Locations.DTOs;
+﻿namespace Loxena.Application.Locations.Shared;
 
 public record LocationResponse(
     Guid Id,

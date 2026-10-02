@@ -1,7 +1,6 @@
-﻿using Loxena.Application.Locations.DTOs;
-using Loxena.Domain.Entities;
+﻿using Loxena.Domain.Entities;
 
-namespace Loxena.Application.Locations.Mappings;
+namespace Loxena.Application.Locations.Shared;
 
 public static class LocationMappers
 {

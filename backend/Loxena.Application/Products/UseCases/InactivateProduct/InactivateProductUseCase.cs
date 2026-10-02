@@ -1,4 +1,4 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Products.Interfaces;
 
 namespace Loxena.Application.Products.UseCases.InactivateProduct;
 

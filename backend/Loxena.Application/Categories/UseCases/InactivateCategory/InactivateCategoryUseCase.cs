@@ -1,4 +1,5 @@
-﻿using Loxena.Application.Interfaces;
+﻿using Loxena.Application.Categories.Interfaces;
+using Loxena.Application.Products.Interfaces;
 
 namespace Loxena.Application.Categories.UseCases.InactivateCategory;
 

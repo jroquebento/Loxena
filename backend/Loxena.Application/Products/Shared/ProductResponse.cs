@@ -1,4 +1,4 @@
-﻿namespace Loxena.Application.Products.DTOs;
+﻿namespace Loxena.Application.Products.Shared;
 
 public record ProductResponse(
     Guid Id,
