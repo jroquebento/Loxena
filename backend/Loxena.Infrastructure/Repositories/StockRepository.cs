@@ -52,8 +52,7 @@ public class StockRepository : IStockRepository
     {
         return await _context.Stocks
             .AnyAsync(s => s.LocationId == locationId
-                        && s.ProductId != currentProductId
-                        && s.PhysicalQuantity > 0);
+                        && s.ProductId != currentProductId);
     }
     public async Task<IEnumerable<Stock>> GetByLocationIdAsync(Guid locationId)
     {
@@ -61,5 +60,11 @@ public class StockRepository : IStockRepository
             .AsNoTracking()
             .Where(s => s.LocationId == locationId)
             .ToListAsync();
+    }
+
+    public async Task DeleteAsync(Stock stock)
+    {
+        _context.Stocks.Remove(stock);
+        await _context.SaveChangesAsync();
     }
 }

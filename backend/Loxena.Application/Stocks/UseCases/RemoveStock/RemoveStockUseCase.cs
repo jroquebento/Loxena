@@ -1,7 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Application.Stocks.DTOs;
 using Loxena.Application.Stocks.Mappings;
-using Loxena.Domain.Entities;
 
 namespace Loxena.Application.Stocks.UseCases.RemoveStock;
 
@@ -26,7 +25,14 @@ public class RemoveStockUseCase
 
         stock.RemovePhysicalQuantity(request.Amount);
 
-        await _stockRepository.UpdateAsync(stock);
+        if (stock.PhysicalQuantity == 0 && stock.ReservedQuantity == 0)
+        {
+            await _stockRepository.DeleteAsync(stock);
+        }
+        else 
+        {
+            await _stockRepository.UpdateAsync(stock);
+        }
 
         return stock.ToResponse();
     }

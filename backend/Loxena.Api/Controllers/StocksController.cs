@@ -3,6 +3,7 @@ using Loxena.Application.Stocks.UseCases.GetStockById;
 using Loxena.Application.Stocks.UseCases.GetStockByProductId;
 using Loxena.Application.Stocks.UseCases.GetStocks;
 using Loxena.Application.Stocks.UseCases.RemoveStock;
+using Loxena.Application.Stocks.UseCases.TransferStock;
 using Loxena.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,19 +18,22 @@ public class StocksController : ControllerBase
     private readonly GetStocksUseCase _getStocksUseCase;
     private readonly GetStockByIdUseCase _getStockByIdUseCase;
     private readonly GetStockByProductIdUseCase _getStockByProductIdUseCase;
+    private readonly TransferStockUseCase _transferStockUseCase;
 
     public StocksController(
         AddStockUseCase addStockUseCase,
         RemoveStockUseCase removeStockUseCase,
         GetStocksUseCase getStocksUseCase,
         GetStockByIdUseCase getStockByIdUseCase,
-        GetStockByProductIdUseCase getStockByProductIdUseCase)
+        GetStockByProductIdUseCase getStockByProductIdUseCase,
+        TransferStockUseCase transferStockUseCase)
     {
         _addStockUseCase = addStockUseCase;
         _removeStockUseCase = removeStockUseCase;
         _getStocksUseCase = getStocksUseCase;
         _getStockByIdUseCase = getStockByIdUseCase;
         _getStockByProductIdUseCase = getStockByProductIdUseCase;
+        _transferStockUseCase = transferStockUseCase;
     }
 
     [HttpPost("add")]
@@ -44,6 +48,13 @@ public class StocksController : ControllerBase
     {
         var stock = await _removeStockUseCase.ExecuteAsync(request);
         return Ok(stock);
+    }
+
+    [HttpPost("transfer")]
+    public async Task<IActionResult> TransferStock(TransferStockRequest request) 
+    {
+        await _transferStockUseCase.ExecuteAsync(request);
+        return Ok(new { message = "Transferência realizada com sucesso." });
     }
 
     [HttpGet]

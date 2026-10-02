@@ -18,6 +18,7 @@ using Loxena.Application.Stocks.UseCases.GetStockById;
 using Loxena.Application.Stocks.UseCases.GetStockByProductId;
 using Loxena.Application.Stocks.UseCases.GetStocks;
 using Loxena.Application.Stocks.UseCases.RemoveStock;
+using Loxena.Application.Stocks.UseCases.TransferStock;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Loxena.Application;
@@ -46,6 +47,7 @@ public static class DependencyInjection
         services.AddScoped<GetStocksUseCase>();
         services.AddScoped<GetStockByIdUseCase>();
         services.AddScoped<GetStockByProductIdUseCase>();
+        services.AddScoped<TransferStockUseCase>();
 
         return services;
     }
