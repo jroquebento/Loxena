@@ -1,5 +1,4 @@
-﻿using Loxena.Application.Categories.Interfaces;
-using Loxena.Application.Products.Interfaces;
+﻿using Loxena.Application.Interfaces;
 using Loxena.Application.Products.UseCases.CreateProduct;
 using Loxena.Domain.Entities;
 

@@ -1,9 +1,9 @@
-﻿using Loxena.Application.Stocks.UseCases.AddStock;
-using Loxena.Application.Stocks.UseCases.GetStockById;
-using Loxena.Application.Stocks.UseCases.GetStockByProductId;
-using Loxena.Application.Stocks.UseCases.GetStocks;
-using Loxena.Application.Stocks.UseCases.RemoveStock;
-using Loxena.Application.Stocks.UseCases.TransferStock;
+﻿using Loxena.Application.Stocks.AddStock;
+using Loxena.Application.Stocks.GetStockById;
+using Loxena.Application.Stocks.GetStockByProductId;
+using Loxena.Application.Stocks.GetStocks;
+using Loxena.Application.Stocks.RemoveStock;
+using Loxena.Application.Stocks.TransferStock;
 using Loxena.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,7 +1,4 @@
-﻿using Loxena.Application.Categories.Interfaces;
-using Loxena.Application.Locations.Interfaces;
-using Loxena.Application.Products.Interfaces;
-using Loxena.Application.Stocks.Interfaces;
+﻿using Loxena.Application.Interfaces;
 using Loxena.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 

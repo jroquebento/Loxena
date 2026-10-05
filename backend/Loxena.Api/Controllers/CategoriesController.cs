@@ -1,8 +1,8 @@
-﻿using Loxena.Application.Categories.UseCases.CreateCategory;
-using Loxena.Application.Categories.UseCases.GetCategories;
-using Loxena.Application.Categories.UseCases.GetCategoryById;
-using Loxena.Application.Categories.UseCases.InactivateCategory;
-using Loxena.Application.Categories.UseCases.UpdateCategory;
+﻿using Loxena.Application.Categories.CreateCategory;
+using Loxena.Application.Categories.GetCategories;
+using Loxena.Application.Categories.GetCategoryById;
+using Loxena.Application.Categories.InactivateCategory;
+using Loxena.Application.Categories.UpdateCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;
