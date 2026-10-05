@@ -12,5 +12,6 @@ public interface IStockRepository
     Task UpdateAsync(Stock stock);
     Task DeleteAsync(Stock stock);
     Task<bool> HasStockForOtherProductAsync(Guid locationId, Guid currentProductId);
-    Task<IEnumerable<Stock>> GetByLocationIdAsync(Guid locationId);
+    Task<bool> HasStockByProductIdAsync(Guid productId);
+    Task<IReadOnlyList<Stock>> GetByLocationIdAsync(Guid locationId);
 }

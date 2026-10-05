@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Locations.CreateLocation;
 
@@ -23,6 +24,6 @@ public class CreateLocationUseCase
 
         await _locationRepository.AddAsync(location);
 
-        return location.ToResponse();
+        return location.Adapt<LocationResponse>();
     }
 }

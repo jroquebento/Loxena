@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Products.UpdateProduct;
 
@@ -35,6 +36,6 @@ public class UpdateProductUseCase
 
         await _productRepository.UpdateAsync(product);
 
-        return product.ToResponse();
+        return product.Adapt<ProductResponse>();
     }
 }

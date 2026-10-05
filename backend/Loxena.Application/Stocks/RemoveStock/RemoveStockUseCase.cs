@@ -1,4 +1,5 @@
 ﻿using Loxena.Application.Interfaces;
+using Mapster;
 
 namespace Loxena.Application.Stocks.RemoveStock;
 
@@ -32,7 +33,7 @@ public class RemoveStockUseCase
             await _stockRepository.UpdateAsync(stock);
         }
 
-        return stock.ToResponse();
+        return stock.Adapt<StockResponse>();
     }
 }
 

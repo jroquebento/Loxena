@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Locations.GetLocationById;
 
@@ -19,6 +20,6 @@ public class GetLocationByIdUseCase
         if (location == null)
             return null;
 
-        return location.ToResponse();
+        return location.Adapt<LocationResponse>();
     }
 }

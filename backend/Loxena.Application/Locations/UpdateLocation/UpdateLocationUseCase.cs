@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Locations.UpdateLocation;
 
@@ -26,6 +27,6 @@ public class UpdateLocationUseCase
 
         await _locationRepository.UpdateAsync(location);
 
-        return location.ToResponse();
+        return location.Adapt<LocationResponse>();
     }
 }

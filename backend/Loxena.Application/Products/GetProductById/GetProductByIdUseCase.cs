@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Products.GetProductById;
 
@@ -18,6 +19,6 @@ public class GetProductByIdUseCase
         if (product is null)
             return null;
 
-        return product.ToResponse();
+        return product.Adapt<ProductResponse>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Stocks.GetStockById;
 
@@ -19,7 +20,7 @@ public class GetStockByIdUseCase
 		if (stock is null)
 			return null;
 
-		return stock.ToResponse();
+		return stock.Adapt<StockResponse>();
 
     }
 }

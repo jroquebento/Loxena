@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Products.GetProducts;
 
@@ -12,10 +13,10 @@ public class GetProductsUseCase
         _repository = productRepository;
     }
 
-    public async Task<IEnumerable<ProductResponse>> ExecuteAsync() 
+    public async Task<IReadOnlyList<ProductResponse>> ExecuteAsync() 
     {
         var products = await _repository.GetAllAsync();
 
-        return products.Select(p => p.ToResponse());
+        return products.Adapt<IReadOnlyList<ProductResponse>>();
     }
 }

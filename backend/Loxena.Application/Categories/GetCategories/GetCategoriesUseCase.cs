@@ -13,7 +13,7 @@ public class GetCategoriesUseCase
         _repository = repository;
     }
 
-    public async Task<IEnumerable<CategoryResponse>> ExecuteAsync() 
+    public async Task<IReadOnlyList<CategoryResponse>> ExecuteAsync() 
     {
         var categories = await _repository.GetAllAsync();
 

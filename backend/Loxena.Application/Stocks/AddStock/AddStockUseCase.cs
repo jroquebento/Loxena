@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Stocks.AddStock;
 
@@ -51,6 +52,6 @@ public class AddStockUseCase
             await _stockRepository.UpdateAsync(stock);
         }
 
-        return stock.ToResponse();
+        return stock.Adapt<StockResponse>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Stocks.GetStocks;
 
@@ -12,10 +13,10 @@ public class GetStocksUseCase
         _stockRepository = stockRepository;
     }
 
-    public async Task<IEnumerable<StockResponse>> ExecuteAsync() 
+    public async Task<IReadOnlyList<StockResponse>> ExecuteAsync() 
     {
         var stocks = await _stockRepository.GetAllAsync();
 
-        return stocks.Select(s => s.ToResponse());
+        return stocks.Adapt<IReadOnlyList<StockResponse>>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Mapster;
 
 namespace Loxena.Application.Products.CreateProduct;
 
@@ -31,6 +32,6 @@ public class CreateProductUseCase
 
         await _productRepository.AddAsync(product);
 
-        return product.ToResponse();
+        return product.Adapt<ProductResponse>();
     }
 }

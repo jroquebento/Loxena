@@ -1,5 +1,4 @@
-﻿using Loxena.Application.Categories.UseCases.InactivateCategory;
-using Loxena.Application.Locations.CreateLocation;
+﻿using Loxena.Application.Locations.CreateLocation;
 using Loxena.Application.Locations.GetLocationById;
 using Loxena.Application.Locations.GetLocations;
 using Loxena.Application.Locations.InactivateLocation;
