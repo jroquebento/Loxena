@@ -3,6 +3,11 @@ using Loxena.Application.Categories.GetCategories;
 using Loxena.Application.Categories.GetCategoryById;
 using Loxena.Application.Categories.InactivateCategory;
 using Loxena.Application.Categories.UpdateCategory;
+using Loxena.Application.Customers.CreateCustomer;
+using Loxena.Application.Customers.GetCustomerById;
+using Loxena.Application.Customers.GetCustomers;
+using Loxena.Application.Customers.InactivateCustomer;
+using Loxena.Application.Customers.UpdateCustomer;
 using Loxena.Application.Locations.CreateLocation;
 using Loxena.Application.Locations.GetLocationById;
 using Loxena.Application.Locations.GetLocations;
@@ -30,25 +35,34 @@ public static class DependencyInjection
         services.AddScoped<CreateCategoryUseCase>();
         services.AddScoped<GetCategoriesUseCase>();
         services.AddScoped<GetCategoryByIdUseCase>();
-        services.AddScoped<UpdateCategoryUseCase>();
-        services.AddScoped<CreateProductUseCase>();
-        services.AddScoped<GetProductsUseCase>();
-        services.AddScoped<GetProductByIdUseCase>();
-        services.AddScoped<UpdateProductUseCase>();
-        services.AddScoped<InactivateProductUseCase>();
         services.AddScoped<InactivateCategoryUseCase>();
+        services.AddScoped<UpdateCategoryUseCase>();
+      
+        services.AddScoped<CreateProductUseCase>();
+        services.AddScoped<GetProductByIdUseCase>();
+        services.AddScoped<GetProductsUseCase>();
+        services.AddScoped<InactivateProductUseCase>();
+        services.AddScoped<UpdateProductUseCase>();
+
         services.AddScoped<CreateLocationUseCase>();
-        services.AddScoped<GetLocationsUseCase>();
         services.AddScoped<GetLocationByIdUseCase>();
-        services.AddScoped<UpdateLocationUseCase>();
+        services.AddScoped<GetLocationsUseCase>();
         services.AddScoped<InactivateLocationUseCase>();
+        services.AddScoped<UpdateLocationUseCase>();
+     
         services.AddScoped<AddStockUseCase>();
-        services.AddScoped<RemoveStockUseCase>();
-        services.AddScoped<GetStocksUseCase>();
         services.AddScoped<GetStockByIdUseCase>();
         services.AddScoped<GetStockByProductIdUseCase>();
+        services.AddScoped<GetStocksUseCase>();
+        services.AddScoped<RemoveStockUseCase>();
         services.AddScoped<TransferStockUseCase>();
 
+        services.AddScoped<CreateCustomerUseCase>();
+        services.AddScoped<GetCustomerByIdUseCase>();
+        services.AddScoped<GetCustomersUseCase>();
+        services.AddScoped<InactivateCustomerUseCase>();
+        services.AddScoped<UpdateCustomerUseCase>();
+      
         return services;
     }
 }
