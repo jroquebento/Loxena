@@ -11,6 +11,7 @@ public class LoxenaDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Stock> Stocks { get; set; }
+    public DbSet<Customer> Customers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
     {
@@ -107,6 +108,35 @@ public class LoxenaDbContext : DbContext
                 .HasForeignKey(s => s.LocationId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(c => c.Id);
+
+            entity.Property(c => c.Name)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            entity.Property(c => c.Email)
+                .IsRequired()
+                .HasMaxLength(150);
+
+            entity.Property(c => c.Document)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            entity.Property(c => c.Phone)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            entity.ToTable(t =>
+            {
+                t.HasCheckConstraint("CK_Customer_Email_Format", "[Email] LIKE '%@%'");
+            });
+
+            entity.HasIndex(c => c.Email).IsUnique();
+            entity.HasIndex(c => c.Document).IsUnique();
         });
     }
 }
