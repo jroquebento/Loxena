@@ -8,16 +8,19 @@ public class CreateOrderUseCase
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IStockRepository _stockRepository;
 
     public CreateOrderUseCase(
         IOrderRepository orderRepository,
-        IProductRepository productRepository)
+        IProductRepository productRepository,
+        IStockRepository stockRepository)
     {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
+        _stockRepository = stockRepository;
     }
 
-    public async Task<CreateOrderResponse> ExecuteAsync(CreateOrderRequest request)
+    public async Task<OrderResponse> ExecuteAsync(CreateOrderRequest request)
     {
         if (request.Items == null || !request.Items.Any())
             throw new ArgumentException("O pedido deve conter pelo menos um item.");
@@ -31,13 +34,22 @@ public class CreateOrderUseCase
             if (product == null)
                 throw new ArgumentException($"Produto com ID {itemRequest.ProductId} não encontrado.");
 
-            if(!product.IsActive)
+            if (!product.IsActive)
                 throw new ArgumentException($"Produto {product.Name} está inativo e não pode ser vendido.");
+
+            var stocks = await _stockRepository.GetByProductIdAsync(product.Id);
+            var stock = stocks.FirstOrDefault();
+
+            if (stock == null)
+                throw new InvalidOperationException($"Estoque não configurado para o produto '{product.Name}'.");
+
+            stock.ReserveQuantity(itemRequest.Quantity);
+
             order.AddItem(product.Id, itemRequest.Quantity, product.Price);
         }
 
         await _orderRepository.AddAsync(order);
 
-        return order.Adapt<CreateOrderResponse>();
+        return order.Adapt<OrderResponse>();
     }
 }

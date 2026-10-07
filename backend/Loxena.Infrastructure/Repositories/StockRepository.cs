@@ -38,7 +38,6 @@ public class StockRepository : IStockRepository
     public async Task<IReadOnlyList<Stock>> GetByProductIdAsync(Guid productId)
     {
         return await _context.Stocks
-            .AsNoTracking()
             .Where(s => s.ProductId == productId)
             .ToListAsync();
     }

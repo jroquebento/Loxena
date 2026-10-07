@@ -6,7 +6,7 @@ public record OrderItemResponse(
     int Quantity,
     decimal UnitPrice);
 
-public record CreateOrderResponse(
+public record OrderResponse(
     Guid Id,
     Guid CustomerId,
     DateTime CreatedAt,
