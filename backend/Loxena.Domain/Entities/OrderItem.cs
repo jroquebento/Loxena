@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Loxena.Domain.Entities;
+﻿namespace Loxena.Domain.Entities;
 
 public class OrderItem
 {

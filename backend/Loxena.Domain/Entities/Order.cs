@@ -30,7 +30,7 @@ public class Order
         _items.Add(item);
     }
 
-    public decimal TotalAmount() => _items.Sum(i => i.CalculateTotal());
+    public decimal TotalAmount => _items.Sum(i => i.CalculateTotal());
 
     public void Cancel()
     {

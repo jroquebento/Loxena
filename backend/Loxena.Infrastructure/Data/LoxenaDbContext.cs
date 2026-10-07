@@ -12,131 +12,13 @@ public class LoxenaDbContext : DbContext
     public DbSet<Location> Locations { get; set; }
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
     {
-        modelBuilder.Entity<Category>(entity => 
-        {
-            entity.HasKey(c => c.Id);
+        base.OnModelCreating(modelBuilder);
 
-            entity.Property(c => c.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-
-            entity.HasIndex(c => c.Name).IsUnique();
-        });
-
-        modelBuilder.Entity<Product>(entity => 
-        {
-            entity.HasKey(p => p.Id);
-
-            entity.Property(p => p.Name)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            entity.Property(p => p.Description)
-                .HasMaxLength(2000);
-
-            entity.Property(p => p.Price)
-                .HasPrecision(18, 2);
-
-            entity.Property(p => p.IsActive)
-                .IsRequired();
-
-            entity.HasOne<Category>()
-                .WithMany()
-                .HasForeignKey(p => p.CategoryId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        modelBuilder.Entity<Location>(entity =>
-        {
-            entity.HasKey(l => l.Id);
-
-            entity.Property(l => l.Code)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(l => l.Description)
-                .HasMaxLength(500);
-
-            entity.Property(l => l.IsActive)
-                .IsRequired();
-
-            entity.HasIndex(l => l.Code).IsUnique();
-        });
-
-        modelBuilder.Entity<Stock>(entity =>
-        { 
-            entity.HasKey(s => s.Id);
-
-            entity.Property(s => s.PhysicalQuantity)
-                .IsRequired();
-
-            entity.Property(s => s.ReservedQuantity)
-                .IsRequired();
-
-            entity.Ignore(s => s.AvailableQuantity);
-
-            entity.Property<byte[]>("RowVersion")
-                .IsRowVersion();
-
-            entity.ToTable(t =>
-            {
-                t.HasCheckConstraint("CK_Stock_PhysicalQuantity_NotNegative", "[PhysicalQuantity] >= 0");
-                t.HasCheckConstraint("CK_Stock_ReservedQuantity_NotNegative", "[ReservedQuantity] >= 0");
-                t.HasCheckConstraint("CK_Stock_ReservedQuantity_Valid", "[ReservedQuantity] <= [PhysicalQuantity]");
-            });
-
-            entity.HasIndex(s => new { s.ProductId, s.LocationId })
-                .IsUnique();
-
-            entity.HasIndex(s => s.LocationId)
-                .IsUnique()
-                .HasFilter("[PhysicalQuantity] > 0")
-                .HasDatabaseName("IX_Stock_SingleActiveProduct_PerLocation");
-
-            entity.HasOne<Product>()
-                .WithMany()
-                .HasForeignKey(s => s.ProductId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne<Location>()
-                .WithMany()
-                .HasForeignKey(s => s.LocationId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(c => c.Id);
-
-            entity.Property(c => c.Name)
-                .IsRequired()
-                .HasMaxLength(200);
-
-            entity.Property(c => c.Email)
-                .IsRequired()
-                .HasMaxLength(150);
-
-            entity.Property(c => c.Document)
-                .IsRequired()
-                .HasMaxLength(20);
-
-            entity.Property(c => c.Phone)
-                .IsRequired()
-                .HasMaxLength(20);
-
-            entity.ToTable(t =>
-            {
-                t.HasCheckConstraint("CK_Customer_Email_Format", "[Email] LIKE '%@%'");
-            });
-
-            entity.HasIndex(c => c.Email).IsUnique();
-            entity.HasIndex(c => c.Document).IsUnique();
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(LoxenaDbContext).Assembly);
     }
 }
