@@ -4,6 +4,7 @@ public record OrderItemResponse(
     Guid Id,
     Guid ProductId,
     int Quantity,
+    int PickedQuantity,
     decimal UnitPrice);
 
 public record OrderResponse(

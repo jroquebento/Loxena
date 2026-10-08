@@ -36,6 +36,9 @@ public class Order
 
     public decimal TotalAmount => _items.Sum(i => i.CalculateTotal());
 
+    public bool IsFullyPicked =>
+        _items.All(item => item.PickedQuantity == item.Quantity);
+
     public void StartPicking()
     {
         ChangeStatus(OrderStatus.Pending, OrderStatus.Picking);
@@ -43,6 +46,10 @@ public class Order
 
     public void StartChecking()
     {
+        if (!IsFullyPicked)
+            throw new InvalidOperationException(
+            "Todos os itens do pedido precisam ser separados antes de iniciar a conferência.");
+
         ChangeStatus(OrderStatus.Picking, OrderStatus.Checking);
     }
 
