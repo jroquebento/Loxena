@@ -38,14 +38,15 @@ public class CreateOrderUseCase
                 throw new ArgumentException($"Produto {product.Name} está inativo e não pode ser vendido.");
 
             var stocks = await _stockRepository.GetByProductIdAsync(product.Id);
-            var stock = stocks.FirstOrDefault();
-
+            var stock = stocks
+                .FirstOrDefault(s => s.AvailableQuantity >= itemRequest.Quantity);
+            
             if (stock == null)
                 throw new InvalidOperationException($"Estoque não configurado para o produto '{product.Name}'.");
 
             stock.ReserveQuantity(itemRequest.Quantity);
 
-            order.AddItem(product.Id, itemRequest.Quantity, product.Price);
+            order.AddItem(product.Id, stock.Id, itemRequest.Quantity, product.Price);
         }
 
         await _orderRepository.AddAsync(order);

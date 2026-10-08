@@ -10,6 +10,9 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
         builder.HasKey(i => i.Id);
 
+        builder.Property(i => i.StockId)
+            .IsRequired();
+
         builder.Property(i => i.Quantity)
             .IsRequired();
 
