@@ -17,6 +17,8 @@ using Loxena.Application.Orders.CancelOrder;
 using Loxena.Application.Orders.CreateOrder;
 using Loxena.Application.Orders.GetOrderById;
 using Loxena.Application.Orders.PickOrderItem;
+using Loxena.Application.Orders.StartChecking;
+using Loxena.Application.Orders.StartPicking;
 using Loxena.Application.Products.CreateProduct;
 using Loxena.Application.Products.GetProductById;
 using Loxena.Application.Products.GetProducts;
@@ -71,6 +73,8 @@ public static class DependencyInjection
         services.AddScoped<GetOrderByIdUseCase>();
         services.AddScoped<CancelOrderUseCase>();
         services.AddScoped<PickOrderItemUseCase>();
+        services.AddScoped<StartPickingUseCase>();
+        services.AddScoped<StartCheckingUseCase>();
 
         return services;
     }

@@ -2,6 +2,8 @@
 using Loxena.Application.Orders.CreateOrder;
 using Loxena.Application.Orders.GetOrderById;
 using Loxena.Application.Orders.PickOrderItem;
+using Loxena.Application.Orders.StartChecking;
+using Loxena.Application.Orders.StartPicking;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loxena.Api.Controllers;
@@ -14,18 +16,23 @@ public class OrdersController : ControllerBase
     private readonly GetOrderByIdUseCase _getOrderByIdUseCase;
     private readonly CancelOrderUseCase _cancelOrderUseCase;
     private readonly PickOrderItemUseCase _pickOrderItemUseCase;
-
+    private readonly StartPickingUseCase _startPickingUseCase;
+    private readonly StartCheckingUseCase _startCheckingUseCase;
 
     public OrdersController(
         CreateOrderUseCase createOrderUseCase,
         GetOrderByIdUseCase getOrderByIdUseCase,
         CancelOrderUseCase cancelOrderUseCase,
-        PickOrderItemUseCase pickOrderItemUseCase)
+        PickOrderItemUseCase pickOrderItemUseCase,
+        StartPickingUseCase startPickingUseCase,
+        StartCheckingUseCase startCheckingUseCase)
     {
         _createOrderUseCase = createOrderUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
         _cancelOrderUseCase = cancelOrderUseCase;
         _pickOrderItemUseCase = pickOrderItemUseCase;
+        _startPickingUseCase = startPickingUseCase;
+        _startCheckingUseCase = startCheckingUseCase;
     }
 
     [HttpPost]
@@ -55,6 +62,20 @@ public class OrdersController : ControllerBase
     {
         await _pickOrderItemUseCase.ExecuteAsync(id, request);
 
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/start-picking")]
+    public async Task<IActionResult> StartPicking(Guid id)
+    { 
+        await _startPickingUseCase.ExecuteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/start-checking")]
+    public async Task<IActionResult> StartChecking(Guid id) 
+    {
+        await _startCheckingUseCase.ExecuteAsync(id);
         return NoContent();
     }
 }
