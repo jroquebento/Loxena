@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Orders.CancelOrder;
 using Loxena.Application.Orders.CreateOrder;
+using Loxena.Application.Orders.DeliverOrder;
 using Loxena.Application.Orders.GetOrderById;
 using Loxena.Application.Orders.PickOrderItem;
 using Loxena.Application.Orders.ShipOrder;
@@ -22,6 +23,7 @@ public class OrdersController : ControllerBase
     private readonly StartCheckingUseCase _startCheckingUseCase;
     private readonly StartPackingUseCase _startPackingUseCase;
     private readonly ShipOrderUseCase _shipOrderUseCase;
+    private readonly DeliverOrderUseCase _deliverOrderUseCase;
 
     public OrdersController(
         CreateOrderUseCase createOrderUseCase,
@@ -31,7 +33,8 @@ public class OrdersController : ControllerBase
         StartPickingUseCase startPickingUseCase,
         StartCheckingUseCase startCheckingUseCase,
         StartPackingUseCase startPackingUseCase,
-        ShipOrderUseCase shipOrderUseCase)
+        ShipOrderUseCase shipOrderUseCase,
+        DeliverOrderUseCase deliverOrderUseCase)
     {
         _createOrderUseCase = createOrderUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
@@ -41,6 +44,7 @@ public class OrdersController : ControllerBase
         _startCheckingUseCase = startCheckingUseCase;
         _startPackingUseCase = startPackingUseCase;
         _shipOrderUseCase = shipOrderUseCase;
+        _deliverOrderUseCase = deliverOrderUseCase;
     }
 
     [HttpPost]
@@ -98,6 +102,13 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> Ship(Guid id) 
     {
         await _shipOrderUseCase.ExecuteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/deliver")]
+    public async Task<IActionResult> Deliver(Guid id) 
+    {
+        await _deliverOrderUseCase.ExecuteAsync(id);
         return NoContent();
     }
 }
