@@ -2,6 +2,7 @@
 using Loxena.Application.Orders.CreateOrder;
 using Loxena.Application.Orders.DeliverOrder;
 using Loxena.Application.Orders.GetOrderById;
+using Loxena.Application.Orders.GetOrders;
 using Loxena.Application.Orders.PickOrderItem;
 using Loxena.Application.Orders.ShipOrder;
 using Loxena.Application.Orders.StartChecking;
@@ -17,6 +18,7 @@ public class OrdersController : ControllerBase
 {
     private readonly CreateOrderUseCase _createOrderUseCase;
     private readonly GetOrderByIdUseCase _getOrderByIdUseCase;
+    private readonly GetOrdersUseCase _getOrdersUseCase;
     private readonly CancelOrderUseCase _cancelOrderUseCase;
     private readonly PickOrderItemUseCase _pickOrderItemUseCase;
     private readonly StartPickingUseCase _startPickingUseCase;
@@ -28,16 +30,19 @@ public class OrdersController : ControllerBase
     public OrdersController(
         CreateOrderUseCase createOrderUseCase,
         GetOrderByIdUseCase getOrderByIdUseCase,
+        GetOrdersUseCase getOrdersUseCase,
         CancelOrderUseCase cancelOrderUseCase,
         PickOrderItemUseCase pickOrderItemUseCase,
         StartPickingUseCase startPickingUseCase,
         StartCheckingUseCase startCheckingUseCase,
         StartPackingUseCase startPackingUseCase,
         ShipOrderUseCase shipOrderUseCase,
-        DeliverOrderUseCase deliverOrderUseCase)
+        DeliverOrderUseCase deliverOrderUseCase
+        )
     {
         _createOrderUseCase = createOrderUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
+        _getOrdersUseCase = getOrdersUseCase;
         _cancelOrderUseCase = cancelOrderUseCase;
         _pickOrderItemUseCase = pickOrderItemUseCase;
         _startPickingUseCase = startPickingUseCase;
@@ -59,6 +64,13 @@ public class OrdersController : ControllerBase
     {
         var response = await _getOrderByIdUseCase.ExecuteAsync(id);
 
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll() 
+    {
+        var response = await _getOrdersUseCase.ExecuteAsync();
         return Ok(response);
     }
 
