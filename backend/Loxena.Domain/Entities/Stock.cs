@@ -47,6 +47,23 @@ public class Stock
             throw new ArgumentException("Quantidade reservada insuficiente para liberação.");
         ReservedQuantity -= amount;
     }
+
+    public void FulfillReservation(int amount) 
+    {
+        ValidatePositiveAmount(amount);
+
+        if(ReservedQuantity < amount)
+            throw new InvalidOperationException(
+                "Quantidade reservada insuficiente para atender à expedição.");
+
+        if(PhysicalQuantity < amount)
+            throw new InvalidOperationException(
+                "Quantidade física insuficiente para atender à expedição.");
+
+        ReservedQuantity -= amount;
+        PhysicalQuantity -= amount;
+    }
+
     public void RemovePhysicalQuantity(int amount) 
     {
         ValidatePositiveAmount(amount);

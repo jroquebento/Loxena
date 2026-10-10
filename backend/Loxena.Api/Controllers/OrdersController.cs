@@ -2,7 +2,9 @@
 using Loxena.Application.Orders.CreateOrder;
 using Loxena.Application.Orders.GetOrderById;
 using Loxena.Application.Orders.PickOrderItem;
+using Loxena.Application.Orders.ShipOrder;
 using Loxena.Application.Orders.StartChecking;
+using Loxena.Application.Orders.StartPacking;
 using Loxena.Application.Orders.StartPicking;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,8 @@ public class OrdersController : ControllerBase
     private readonly PickOrderItemUseCase _pickOrderItemUseCase;
     private readonly StartPickingUseCase _startPickingUseCase;
     private readonly StartCheckingUseCase _startCheckingUseCase;
+    private readonly StartPackingUseCase _startPackingUseCase;
+    private readonly ShipOrderUseCase _shipOrderUseCase;
 
     public OrdersController(
         CreateOrderUseCase createOrderUseCase,
@@ -25,7 +29,9 @@ public class OrdersController : ControllerBase
         CancelOrderUseCase cancelOrderUseCase,
         PickOrderItemUseCase pickOrderItemUseCase,
         StartPickingUseCase startPickingUseCase,
-        StartCheckingUseCase startCheckingUseCase)
+        StartCheckingUseCase startCheckingUseCase,
+        StartPackingUseCase startPackingUseCase,
+        ShipOrderUseCase shipOrderUseCase)
     {
         _createOrderUseCase = createOrderUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
@@ -33,6 +39,8 @@ public class OrdersController : ControllerBase
         _pickOrderItemUseCase = pickOrderItemUseCase;
         _startPickingUseCase = startPickingUseCase;
         _startCheckingUseCase = startCheckingUseCase;
+        _startPackingUseCase = startPackingUseCase;
+        _shipOrderUseCase = shipOrderUseCase;
     }
 
     [HttpPost]
@@ -76,6 +84,20 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> StartChecking(Guid id) 
     {
         await _startCheckingUseCase.ExecuteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/start-packing")]
+    public async Task<IActionResult> StartPacking(Guid id) 
+    {
+        await _startPackingUseCase.ExecuteAsync(id);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/ship")]
+    public async Task<IActionResult> Ship(Guid id) 
+    {
+        await _shipOrderUseCase.ExecuteAsync(id);
         return NoContent();
     }
 }
