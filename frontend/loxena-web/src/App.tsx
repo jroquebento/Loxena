@@ -5,6 +5,7 @@ import { ProductsPage } from './pages/ProductsPage';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { LocationsPage } from './pages/LocationsPage'; 
 import { StocksPage } from './pages/StocksPage';
+import { CustomersPage } from './pages/CustomersPage';
 
 function Sidebar() {
   const location = useLocation(); 
@@ -38,9 +39,15 @@ function Sidebar() {
         <Link 
         to="/estoque" 
         className={`p-3 rounded-md transition ${isActive('/estoque') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800'}`}
-      >
+        >
         📊 Saldo de Estoque
-      </Link>
+        </Link>
+        <Link 
+          to="/clientes" 
+          className={`p-3 rounded-md transition ${isActive('/clientes') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800'}`}
+        >
+          ⭐ Clientes
+        </Link>
       </nav>
     </aside>
   );
@@ -59,6 +66,7 @@ export default function App() {
             <Route path="/categorias" element={<CategoriesPage />} />
             <Route path="/localizacoes" element={<LocationsPage />} />
             <Route path="/estoque" element={<StocksPage />} />
+            <Route path="/clientes" element={<CustomersPage />} />
           </Routes>
         </main>
         
