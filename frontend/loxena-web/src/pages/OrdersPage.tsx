@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { useOrders } from '../hooks/useOrders';
 import { OrderList } from '../components/OrderList';
 
 export function OrdersPage() {
   const { orders, isLoading } = useOrders();
+  const navigate = useNavigate(); 
 
   const handleViewDetails = (id: string) => {
-    alert(`Preparando terreno: A tela de operação do pedido ${id} será construída na Fase 3.`);
+    
+    navigate(`/pedidos/operar/${id}`);
   };
 
   const handleNovoPedido = () => {
@@ -15,8 +18,7 @@ export function OrdersPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
-        
-        <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
+        <h1 className="text-4xl font-bold text-blue-800 text-center mb-8">
           Gestão de Pedidos
         </h1>
 
@@ -34,7 +36,6 @@ export function OrdersPage() {
           isLoading={isLoading}
           onViewDetails={handleViewDetails}
         />
-
       </div>
     </div>
   );
