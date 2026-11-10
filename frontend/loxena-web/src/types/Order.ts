@@ -25,3 +25,13 @@ export interface Order {
   totalAmount: number;
   items: OrderItem[];
 }
+
+export interface CreateOrderItemRequest {
+  productId: string;
+  quantity: number;
+}
+
+export interface CreateOrderRequest {
+  customerId: string;
+  items: CreateOrderItemRequest[];
+}

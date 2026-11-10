@@ -20,11 +20,24 @@ export function ProductList({ produtos, onExcluir , onEditar }: ProductListProps
         {produtos.map((produto) => (
           <div key={produto.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition flex justify-between items-start">
             
-            <div>
+            <div className="space-y-1">
               <h3 className="font-bold text-lg text-gray-800">{produto.name}</h3>
-              <p className="text-green-600 font-bold text-xl mt-2">
-                R$ {produto.price.toFixed(2)}
-              </p>
+              
+              {produto.description && (
+                <p className="text-xs text-gray-500 line-clamp-2">
+                  {produto.description}
+                </p>
+              )}
+
+              <div className="flex items-center gap-3 pt-2">
+                <span className="text-green-600 font-bold text-lg">
+                  R$ {produto.price.toFixed(2)}
+                </span>
+                
+                <span className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-md font-medium">
+                  {produto.categoryId ? 'Categoria Ativa' : 'Geral'}
+                </span>
+              </div>
             </div>
 
             <div className="flex gap-2">

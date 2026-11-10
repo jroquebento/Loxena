@@ -8,6 +8,7 @@ import { StocksPage } from './pages/StocksPage';
 import { CustomersPage } from './pages/CustomersPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { OrderDetailsPage } from './pages/OrderDetailsPage';
+import { CreateOrderPage } from './pages/CreateOrderPage';
 
 function Sidebar() {
   const location = useLocation(); 
@@ -77,6 +78,7 @@ export default function App() {
             <Route path="/clientes" element={<CustomersPage />} />
             <Route path="/pedidos" element={<OrdersPage />} />
             <Route path="/pedidos/operar/:id" element={<OrderDetailsPage />} />
+            <Route path="/pedidos/novo" element={<CreateOrderPage />} />
           </Routes>
         </main>
         
