@@ -43,6 +43,7 @@ export function ProductsPage() {
         />
         <ProductList 
           produtos={produtos} 
+          categorias={categorias}
           onExcluir={excluir}
           onEditar={editar}
         />
