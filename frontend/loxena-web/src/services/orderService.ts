@@ -41,8 +41,6 @@ export const orderService = {
     return resposta.json();
   },
 
-  // --- Endpoints de Operação (Maquina de Estados) ---
-
   cancel: async (id: string): Promise<void> => {
     const resposta = await fetch(`${API_URL}/${id}/cancel`, { method: 'PATCH' });
     await tratarErro(resposta, 'Falha ao cancelar pedido');

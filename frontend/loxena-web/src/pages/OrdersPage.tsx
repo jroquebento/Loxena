@@ -12,7 +12,7 @@ export function OrdersPage() {
   };
 
   const handleNovoPedido = () => {
-    alert(`Preparando terreno: A tela de criação (carrinho) será construída na Fase 2.`);
+    navigate('/pedidos/novo');
   };
 
   return (
