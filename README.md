@@ -1,278 +1,106 @@
 # Loxena
 
-**Full Stack Logistics Operations Management System**
+<p align="right"><a href="README-en.md">🇺🇸 Read in English</a></p>
 
-Loxena is a full stack web application designed to manage the main logistics operations of a distribution environment, from receiving products to order delivery or customer pickup.
+## Sistema Full Stack de Operações Logísticas e WMS
 
-The project is being developed as a portfolio application to demonstrate practical skills in **backend development with .NET and frontend development with React and TypeScript**.
+O **Loxena** é uma aplicação web de portfólio para representar operações essenciais de um centro de distribuição: cadastro de produtos e endereços, controle de saldo e reservas, atendimento de pedidos e execução das etapas de separação até a entrega.
 
-> **Project status:** 🚧 In development
+O MVP prioriza regras operacionais concretas, integração entre API e interface e uma implementação incremental, sem tentar reproduzir toda a complexidade de um WMS empresarial.
 
----
+> **Status:** em desenvolvimento. A API e o frontend já cobrem cadastros, estoque, clientes e o fluxo operacional de pedidos descrito abaixo.
 
-## About
-
-Loxena centralizes information and operations related to products, inventory, warehouse locations, receiving, orders, picking, checking, packing, and shipping.
-
-The application is designed around a simplified but realistic logistics workflow:
+## Fluxo operacional implementado
 
 ```text
-Receiving
-    ↓
-Storage
-    ↓
-Inventory
-    ↓
-Order
-    ↓
-Payment Confirmed
-    ↓
-Picking
-    ↓
-Checking
-    ↓
-Packing
-    ↓
-Shipping
-    ↓
-Delivery / Pickup
+Recebimento simplificado
+(entrada manual de estoque)
+          ↓
+Armazenamento por localização
+(estoque e transferência)
+          ↓
+Saldo físico e disponível
+          ↓
+Criação do pedido: Pending
+(reserva imediata do saldo)
+          ↓
+Picking → Checking → Packing
+          ↓
+Shipped
+(baixa física e liberação da reserva)
+          ↓
+Delivered
 ```
 
-The project intentionally focuses on a **manageable MVP**, avoiding unnecessary complexity while maintaining enough business rules to represent a realistic system.
+O recebimento não possui módulo ou registro próprio: a entrada é lançada diretamente no estoque. Também não há etapa de confirmação de pagamento; a reserva acontece ao criar o pedido. A retirada pelo cliente não está representada como estado/fluxo próprio na implementação atual.
 
----
+## Funcionalidades
 
-## Main Features
+- **Produtos e categorias:** criação, consulta, atualização e inativação.
+- **Localizações:** cadastro e manutenção de endereços do armazém; a inativação é impedida quando há saldo físico na localização.
+- **Estoque:** consulta por produto e operações de entrada, baixa e transferência entre localizações.
+- **Clientes:** criação, consulta, atualização e inativação.
+- **Pedidos:** criação com itens, consulta, cancelamento e acompanhamento operacional.
+- **Operações:** início de picking, registro da quantidade separada por item, conferência, embalagem, expedição e confirmação de entrega.
 
-### Authentication & Access
+Os itens são administrados dentro do pedido, não como módulo isolado. Cadastros com exclusão lógica são inativados, em vez de removidos fisicamente.
 
-- User authentication
-- Role-based access
-- Administrative user management
+## Regras de negócio em destaque
 
-### Products
+### Saldo de estoque
 
-- Product management
-- Category management
-- Product activation/deactivation
-
-### Warehouse & Inventory
-
-- Warehouse locations
-- Product storage locations
-- Inventory quantities
-- Stock reservations
-- Stock movements
-- Inventory counting
-- Inventory adjustments
-
-### Receiving
-
-- Supplier management
-- Receiving records
-- Received items
-- Product storage
-
-### Orders
-
-- Customer management
-- Order creation
-- Order items
-- Payment confirmation
-- Stock reservation
-- Order cancellation
-
-### Logistics Operations
-
-- Picking
-- Order checking
-- Packing
-- Shipping
-- Delivery
-- Customer pickup
-
-### Dashboard
-
-Planned operational indicators include:
-
-- Orders in progress
-- Priority orders
-- Low-stock products
-- Best-selling products
-- Least-selling products
-
----
-
-## Order Workflow
-
-The main order lifecycle is:
+Cada registro de estoque associa um produto a uma localização e mantém as quantidades física e reservada:
 
 ```text
-Created
-   ↓
-Payment Confirmed
-   ↓
-Picking
-   ↓
-Checking
-   ↓
-Packing
-   ↓
-Shipping
-   ↓
-Delivered / Picked Up
+Saldo disponível = PhysicalQuantity - ReservedQuantity
 ```
 
-Orders may be cancelled before shipping.
+Uma reserva exige saldo disponível suficiente. Uma baixa manual não pode comprometer quantidades reservadas. Ao expedir um pedido, a quantidade reservada é atendida: diminui o saldo físico e a reserva correspondente.
 
-When a paid order is cancelled, its stock reservation is released.
-
----
-
-## Technology Stack
-
-### Backend
-
-- C#
-- .NET 10
-- ASP.NET Core
-- Entity Framework Core
-- SQL Server
-- REST API
-- JWT
-- Swagger / OpenAPI
-
-### Frontend
-
-- React
-- TypeScript
-- JavaScript
-- HTML
-- CSS
-- React Router
-
-### Testing
-
-- xUnit
-- Moq
-
-### Infrastructure & Tools
-
-- Git
-- GitHub
-- Docker
-- Docker Compose
-- GitHub Actions
-
-Additional libraries will only be introduced when they solve an actual project requirement.
-
----
-
-## Architecture
-
-The application will follow a separated frontend/backend architecture.
+### Ciclo de vida do pedido
 
 ```text
-                 Loxena
-
-        ┌─────────────────────┐
-        │ React + TypeScript  │
-        │      Frontend       │
-        └──────────┬──────────┘
-                   │
-                HTTP/JSON
-                   │
-                   ▼
-        ┌─────────────────────┐
-        │     Loxena.Api      │
-        ├─────────────────────┤
-        │ Loxena.Application  │
-        ├─────────────────────┤
-        │   Loxena.Domain     │
-        ├─────────────────────┤
-        │Loxena.Infrastructure│
-        └──────────┬──────────┘
-                   │
-                   ▼
-               SQL Server
+Pending → Picking → Checking → Packing → Shipped → Delivered
+     └──────────────── Cancelado antes da expedição ──────────┘
 ```
 
-The backend will be organized around API, application, domain, and infrastructure responsibilities.
+- O pedido nasce em `Pending` e reserva estoque imediatamente.
+- A conferência só pode começar depois que todos os itens tiverem sido integralmente separados.
+- A expedição requer o estado `Packing` e consome o estoque reservado.
+- O cancelamento libera as reservas e não é permitido após `Shipped` ou `Delivered`.
 
-The architecture will remain intentionally pragmatic. Patterns and abstractions will be introduced when they provide meaningful value rather than simply increasing the number of projects, folders, or classes.
+## Tecnologias e arquitetura
 
----
+**Backend:** C#, .NET 10, ASP.NET Core Web API, Entity Framework Core, SQL Server, Mapster e injeção de dependência nativa.
 
-## Development Approach
+**Frontend:** React, TypeScript, Vite, Tailwind CSS, React Router, Fetch API, React-Toastify e SweetAlert2.
 
-Loxena is being developed incrementally.
+```text
+React + TypeScript
+        │ HTTP/JSON
+        ▼
+Loxena.Api → Loxena.Application → Loxena.Domain
+        │              ▲
+        └── Loxena.Infrastructure
+                       │ EF Core
+                       ▼
+                   SQL Server
+```
 
-The project prioritizes:
+O backend separa responsabilidades entre API, casos de uso, domínio e persistência. A API converte exceções em respostas `ProblemDetails`; o frontend apresenta mensagens de erro ao usuário. O banco configurado é `LoxenaDb`.
 
-- understanding before implementation;
-- realistic business rules;
-- small functional increments;
-- maintainable code;
-- meaningful tests;
-- practical use of modern development tools;
-- avoiding unnecessary complexity.
+## Escopo do MVP
 
-The goal is:
+**Implementado:** produtos, categorias, localizações, estoque, clientes, pedidos e etapas de picking, checking, packing, shipping e delivery.
 
-> **Finish a good project rather than start an oversized one that never gets completed.**
+**Simplificado ou fora do escopo atual:** autenticação/JWT e papéis; fornecedores e recebimentos formais; confirmação de pagamento; contagem formal de inventário; dashboard e indicadores; fluxo específico de retirada. Esses itens não devem ser interpretados como funcionalidades disponíveis na versão atual.
 
----
+Para o cenário de demonstração, o contexto atualizado registra categorias diretas (como Ferramentas e Eletrônicos), produtos cotidianos e localizações curtas, como `A1`, `B1` e `EXP`.
 
-## AI-Assisted Development
+## Executar localmente
 
-AI tools may be used throughout development for:
+O backend requer o SDK do .NET 10 e uma instância de SQL Server configurada pela connection string `DefaultConnection`. O frontend usa Vite; em `frontend/loxena-web`, instale as dependências com `npm install` e inicie o ambiente com `npm run dev`. A URL local da API configurada no frontend é `https://localhost:7175`.
 
-- research;
-- learning and explanations;
-- repetitive code generation;
-- debugging;
-- testing;
-- code review;
-- documentation;
-- comparing alternative solutions.
+## Objetivo do projeto
 
-Possible tools include ChatGPT, GitHub Copilot, and Gemini.
-
-AI-generated code will only be incorporated after its purpose and behavior are understood.
-
----
-
-## Roadmap
-
-- [ ] Project foundation
-- [ ] Authentication and users
-- [ ] Products and categories
-- [ ] Warehouse locations
-- [ ] Inventory
-- [ ] Receiving
-- [ ] Customers and orders
-- [ ] Picking and checking
-- [ ] Packing and shipping
-- [ ] Delivery / pickup
-- [ ] Dashboard
-- [ ] Testing and quality improvements
-- [ ] Docker and CI/CD
-- [ ] Documentation and portfolio preparation
-
----
-
-## Project Goal
-
-Loxena is primarily a learning and portfolio project.
-
-It aims to demonstrate the ability to build and integrate:
-
-**ASP.NET Core + REST API + SQL Server + React + TypeScript**
-
-while applying authentication, business rules, testing, Git, Docker, CI/CD, and AI-assisted development in a practical application.
-
----
-
-## License
-
-This project is developed for educational and portfolio purposes.
+Demonstrar competências de desenvolvimento full stack por meio de um domínio logístico coerente: modelagem de regras de estoque, transições de estado, API REST, persistência relacional e interface React integrada. A prioridade é manter um MVP compreensível, testável e evolutivo.

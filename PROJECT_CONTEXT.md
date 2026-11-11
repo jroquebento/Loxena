@@ -1,545 +1,235 @@
-# Loxena — Project Context
+# Loxena — Contexto Técnico do Projeto
 
-> Contexto técnico e histórico para outra IA continuar o desenvolvimento do projeto sem depender do histórico da conversa original.
+> Documento de referência para desenvolvedores e IAs continuarem o projeto com base no código atual. Quando houver divergência, considerar os controllers, casos de uso, entidades e frontend presentes no repositório como fonte de verdade; usar `contexto_do_projeto_loxena_frontend_e_backend.md` como complemento recente e este documento como contexto consolidado.
 
-## 1. Identidade do projeto
+## 1. Identidade e objetivo
 
-**Nome:** Loxena  
-**Tipo:** aplicação Full Stack de gestão de operações logísticas / centro de distribuição  
-**Objetivo:** projeto de portfólio para complementar o projeto anterior TaskManager.
+**Loxena** é uma aplicação web de portfólio para representar operações essenciais de um centro de distribuição, com foco em WMS: cadastros operacionais, controle de saldo e reservas, atendimento de pedidos e etapas de picking a delivery.
 
-O Loxena foi escolhido para demonstrar competências que não aparecem tanto no TaskManager, principalmente:
+O objetivo é demonstrar integração full stack e regras logísticas realistas em um MVP compreensível. Não ampliar o escopo para reproduzir um WMS empresarial completo sem necessidade concreta. O domínio é genérico e não deve reproduzir processos, nomes ou informações internas de empresas reais.
 
-- React
-- TypeScript
-- JavaScript moderno
-- HTML/CSS
-- consumo de API
-- integração frontend/backend
-- CRUD Full Stack
-- autenticação no frontend
-- dashboards
-- filtros e busca
-- regras de negócio mais próximas de um sistema operacional real
-- desenvolvimento assistido por IA, mas com entendimento do código
-- testes estratégicos
-- Docker/CI/CD posteriormente
+## 2. Estado atual resumido
 
-O projeto é inspirado genericamente em experiências anteriores do autor em logística, mas **não deve reproduzir processos, nomes, regras internas ou informações de empresas reais**.
+| Área | Estado observado no código |
+|---|---|
+| Products | API e tela de CRUD; inativação lógica. |
+| Categories | API e tela de CRUD; inativação lógica e validação de nome duplicado descrita no contexto recente. |
+| Locations | API e tela de CRUD; inativação bloqueada se houver quantidade física na localização. |
+| Stocks | API e tela para consulta, entrada, baixa e transferência; saldo físico, reservado e disponível. |
+| Customers | API e tela de cadastro/consulta/atualização/inativação. |
+| Orders / OrderItems | API e telas de criação, listagem, detalhes, picking, conferência, embalagem, expedição, entrega e cancelamento. Itens são geridos dentro do pedido. |
+| Autenticação e papéis | Não implementados no MVP atual. |
+| Recebimento formal / fornecedores | Não implementados; entrada de mercadoria é lançada diretamente em Stocks. |
+| Pagamento confirmado | Não implementado; o pedido reserva estoque quando criado. |
+| Dashboard / contagem formal de inventário | Não implementados no estado atual. |
 
----
+O contexto legado descrevia Orders como não implementado; isso está desatualizado. O código atual possui entidade, enum, casos de uso, controller e páginas do fluxo de pedidos. Não repetir o status antigo.
 
-# 2. Objetivo de portfólio
+## 3. Stack e estrutura do repositório
 
-O TaskManager já demonstra principalmente:
+### Backend
 
-- C#/.NET
-- ASP.NET Core
-- REST API
-- EF Core
-- SQL Server
-- autenticação JWT
-- autorização
-- Argon2
-- testes unitários e de integração
-- Docker
-- GitHub Actions
-- arquitetura em camadas
+- C# e .NET 10 (`net10.0`).
+- ASP.NET Core Web API, controllers e OpenAPI/Swagger.
+- Entity Framework Core 10 com SQL Server; banco configurado como `LoxenaDb` e connection string `DefaultConnection`.
+- Mapster para mapeamento e injeção de dependência nativa.
+- Tratamento global de exceções com `ProblemDetails`.
 
-O Loxena deve complementar isso demonstrando:
+Projetos:
 
-- frontend moderno;
-- React + TypeScript;
-- integração real com API;
-- fluxo operacional;
-- regras de negócio;
-- CRUD;
-- estoque;
-- pedidos;
-- operações de picking/conferência/embalagem/expedição;
-- interface de usuário;
-- eventualmente dashboard, filtros e relatórios.
+- `backend/Loxena.Api`: controllers, configuração HTTP, OpenAPI e handler global de exceções.
+- `backend/Loxena.Application`: casos de uso, DTOs e interfaces de repositório.
+- `backend/Loxena.Domain`: entidades, enumerações e regras de domínio.
+- `backend/Loxena.Infrastructure`: DbContext, configurações EF Core e persistência.
+- `tests/UnitTests`: projeto de testes unitários.
 
-**Não transformar o Loxena em um projeto gigantesco.** O objetivo é demonstrar amplitude e qualidade suficiente para portfólio, não reproduzir um WMS empresarial completo.
+### Frontend
 
----
+- React 19, TypeScript, Vite e Tailwind CSS 4.
+- React Router, Fetch API, React-Toastify e SweetAlert2.
+- O frontend usa serviços/utilitários para chamadas HTTP e tratamento de `ProblemDetails`; hooks como `useCrud` e `useStockMovements` mantêm lógica reutilizável fora das páginas.
+- URL local da API configurada nos serviços verificados: `https://localhost:7175`.
 
-# 3. Perfil do desenvolvedor
+Páginas/rotas observadas: `/` (produtos), `/categorias`, `/localizacoes`, `/estoque`, `/clientes`, `/pedidos`, `/pedidos/novo` e `/pedidos/operar/:id`.
 
-O autor é estudante de ADS e está buscando estágio em desenvolvimento de software.
-
-Experiência e conhecimentos relevantes:
-
-- C#
-- .NET / ASP.NET Core
-- SQL / SQL Server
-- Entity Framework Core
-- REST APIs
-- POO
-- HTML
-- CSS
-- JavaScript
-- Bootstrap
-- jQuery
-- Git/GitHub
-- testes com xUnit e Moq
-- Docker
-- GitHub Actions
-
-O foco atual é consolidar desenvolvimento backend/full-stack e aprender React/TypeScript através do próprio projeto.
-
-O autor prefere:
-
-- explicações didáticas;
-- implementação gradual;
-- entender o motivo das decisões;
-- arquitetura simples e realista;
-- código que possa explicar em entrevista;
-- projetos práticos em vez de cursos intermináveis;
-- evitar "tutorial hell";
-- evitar overengineering;
-- avançar o projeto continuamente.
-
----
-
-# 4. Princípios de desenvolvimento
-
-## 4.1 Não fazer overengineering
-
-Não introduzir abstrações, padrões, bibliotecas ou camadas apenas porque "seria mais profissional".
-
-Antes de adicionar algo, perguntar:
-
-1. Existe um problema real?
-2. O projeto precisa disso agora?
-3. Isso melhora significativamente a manutenção?
-4. O autor conseguirá explicar essa decisão em uma entrevista?
-
-Se a resposta for não, manter simples.
-
-## 4.2 Implementação incremental
-
-Não criar toda a arquitetura futura antecipadamente.
-
-A estrutura deve crescer conforme as funcionalidades aparecem.
-
-Exemplo:
-
-Não criar dezenas de pastas React vazias apenas porque existe um planejamento futuro.
-
-## 4.3 Entendimento antes da implementação
-
-Quando uma tecnologia ou conceito novo aparecer, explicar brevemente:
-
-- o que é;
-- por que está sendo usado;
-- como se encaixa no Loxena;
-- só então implementar.
-
-Não entregar grandes blocos de código sem contexto.
-
-## 4.4 IA como ferramenta
-
-O autor usa IA como ferramenta de desenvolvimento, mas não quer simplesmente copiar código.
-
-Fluxo desejado:
-
-> problema → conceito → documentação/explicação → implementação pequena → teste → entendimento → commit → próximo passo
-
-Quando houver uma decisão relevante, pode ser útil comparar uma segunda opinião de Gemini/Copilot, mas isso não deve virar burocracia.
-
----
-
-# 5. Domínio do Loxena
-
-O sistema representa operações de um centro de distribuição.
-
-Fluxo geral:
-
-1. Recebimento
-2. Armazenamento
-3. Estoque
-4. Pedido
-5. Separação (picking)
-6. Conferência
-7. Embalagem
-8. Expedição
-9. Entrega ou retirada
-
----
-
-# 6. Fluxo do pedido
-
-Estado planejado:
+### Dependências de arquitetura
 
 ```text
-Criado
-  ↓
-Pagamento confirmado
-  ↓
-Separando
-  ↓
-Conferência
-  ↓
-Embalagem
-  ↓
-Expedição
-  ↓
-Entrega
+Loxena.Api → Loxena.Application
+Loxena.Api → Loxena.Infrastructure
+Loxena.Application → Loxena.Domain
+Loxena.Infrastructure → Loxena.Application
+Loxena.Infrastructure → Loxena.Domain
 ```
 
-Regras importantes:
-
-- pedido precisa ter pagamento confirmado antes da reserva de estoque;
-- cancelamento é permitido antes da expedição;
-- cancelamento antes da expedição deve liberar a reserva de estoque;
-- depois da expedição o pedido não deve simplesmente voltar ao estoque;
-- estoque insuficiente deve impedir operações que dependam daquela quantidade;
-- futuramente, as transições de estado devem ser controladas por regras de negócio.
-
-Essas regras são mais importantes para testes do que validar cada propriedade trivial de cada classe.
-
-# 7. Funcionalidades
-
-## Essenciais
-
-- usuários e acesso;
-- produtos;
-- categorias;
-- estoque;
-- frontend;
-- pedidos;
-- picking;
-- conferência;
-- embalagem;
-- expedição;
-- recebimento;
-- armazenamento.
-
-## Importantes
-
-- dashboard;
-- relatórios;
-- alertas;
-- estrutura do armazém;
-- funcionalidades técnicas/infrastrutura.
-
-## Futuras
-
-- inteligência/IA.
-
-A parte de IA não é prioridade do MVP.
-
-# 8. Usuários e papéis
-
-**Papéis planejados:**
-
-- Administrator
-- Operator
-- Coordinator
-
-Todos terão login/senha.
-
-As permissões determinarão quais operações cada papel pode realizar.
-
-A autenticação completa pode ser implementada mais adiante; não deve bloquear o desenvolvimento atual do domínio.
-
-# 9. Entidades planejadas
-
-### Product
-
-Representa o produto comercializado.
-
-Campos atuais:
-
 ```text
-Id: Guid
-Name: string
-Description: string
-Price: decimal
-CategoryId: Guid
-IsActive: bool
-```
-
-Quantidade não pertence ao Product.
-
-Quantidade e localização pertencem ao domínio de Stock.
-
-### Category
-
-Representa a categoria do produto.
-
-```text
-Id: Guid
-Name: string
-```
-
-### Stock
-
-Implementado. Representa:
-
-```text
-Product
-Location
-Quantity
-```
-
-Possui métodos de negócio para `AddQuantity`, `RemoveQuantity` e a complexa operação de `Transfer` (que afeta saldos na origem e no destino validando disponibilidade física e limites).
-
-### Order
-
-Pertence a um Customer e possui vários OrderItems.
-
-### OrderItem
-
-Representa um Product dentro de um Order, incluindo quantidade.
-
-### Customer
-
-Representa o cliente do pedido.
-
-### Receiving
-
-Representa o recebimento de mercadorias.
-
-### ReceivingItem
-
-Representa os produtos/quantidades recebidos.
-
-### Location
-
-Representa uma localização dentro do centro de distribuição.
-
-O MVP trabalha com um único centro de distribuição.
-
-### Histórico/auditoria
-
-Pode ser adicionado posteriormente para rastreabilidade.
-
-Não antecipar essa funcionalidade sem necessidade.
-
-# 10. Estrutura atual do repositório
-
-**Raiz:**
-
-```text
-C:\Projetos\Loxena\
-├── backend\
-│   └── Loxena.slnx
-├── tests\
-│   └── UnitTests\
-├── frontend\
-│   └── loxena-web\
-├── README.md
-├── PROJECT_CONTEXT.md
-└── .gitignore
-```
-
-# 11. Arquitetura atual
-
-```text
-React/TypeScript (Tailwind, SweetAlert2)
-       ↓
-HTTP/JSON (Fetch API utilitária)
-       ↓
-ASP.NET Core API (GlobalExceptionHandler -> ProblemDetails)
-       ↓
-Application (UseCases)
-       ↓
-Domain (Validações Core)
-       ↑
-Infrastructure (Repositories)
-       ↓
-EF Core
-       ↓
+React + TypeScript
+        ↓ HTTP/JSON
+ASP.NET Core API
+        ↓
+Application (casos de uso) → Domain (regras)
+        ↑                           ↑
+Infrastructure (repositórios / EF Core)
+        ↓
 SQL Server
 ```
 
-**Dependências:**
+O Domain não deve depender de HTTP, banco de dados ou frontend. A camada Application orquestra casos de uso; Infrastructure implementa persistência; Api traduz requisições e respostas HTTP.
+
+## 4. Entidades e regras relevantes
+
+### Product
+
+Contém `Id`, `Name`, `Description`, `Price`, `CategoryId` e `IsActive`. A entidade valida campos obrigatórios, limites de tamanho e preço não negativo. Quantidade não pertence ao produto; ela é controlada por Stock.
+
+### Category
+
+Contém `Id`, `Name` e `IsActive`. O nome é obrigatório e limitado a 100 caracteres. O contexto recente registra validação de duplicidade no fluxo de criação/atualização. A inativação/exclusão não deve ser descrita como remoção física.
+
+### Location
+
+Contém `Id`, `Code`, `Description` e `IsActive`. O código é normalizado para maiúsculas; o contexto de demonstração usa códigos curtos como `A1`, `A2`, `B1`, `B2` e `EXP`. O caso de uso de inativação impede desativar uma localização que possua estoque físico maior que zero.
+
+### Stock
+
+Contém `Id`, `ProductId`, `LocationId`, `PhysicalQuantity` e `ReservedQuantity`. `AvailableQuantity` é calculado e ignorado pelo EF Core:
 
 ```text
-Api → Application
-Api → Infrastructure
-Application → Domain
-Infrastructure → Application
-Infrastructure → Domain
+AvailableQuantity = PhysicalQuantity - ReservedQuantity
 ```
 
-### Domain
+Regras: valores movimentados devem ser positivos; não reservar além do disponível; não remover estoque físico que comprometa reservas; ao cumprir uma reserva na expedição, reduzir o físico e a reserva. A configuração EF estabelece limites de não negatividade, reserva não superior ao físico, versão de linha e índices para a relação produto/localização.
 
-Contém regras centrais do negócio. Não deve depender de HTTP, banco, React, controllers ou infraestrutura.
+Operações de entrada, baixa e transferência são operações de estoque. Não criam Receiving, ReceivingItem ou histórico formal de recebimento.
 
-### Application
+### Customer
 
-Contém casos de uso e orquestração. Validações de duplicidade de banco (ex: `ExistsByNameAsync`) ocorrem aqui.
+Contém `Id`, `Name`, `Email`, `Document`, `Phone` e `IsActive`. Nome, e-mail, documento e telefone são obrigatórios conforme validações da entidade; e-mail é normalizado para minúsculas. Há criação, consulta, atualização e inativação pela API.
 
-### Infrastructure
+### Order e OrderItem
 
-Contém implementações de persistência e integração. Usa Entity Framework Core e SQL Server.
+`Order` contém cliente, data de criação, status e itens. `OrderItem` contém produto, Stock associado, quantidade pedida, preço unitário e quantidade separada (`PickedQuantity`). O total do pedido é calculado pelos itens.
 
-### Api
+Os status existentes no enum são `Pending`, `Picking`, `Checking`, `Packing`, `Shipped`, `Delivered` e `Canceled`.
 
-Responsável por HTTP/controllers/OpenAPI/Swagger e tratamento global de erros.
-
-# 12. Convenções de idioma
-
-**Código:**
-
-Inglês (ex: Product, Category, CreateProductUseCase).
-
-**Conteúdo para o Usuário Final (Frontend / Mensagens de Erro):**
-
-Português (ex: `throw new Exception("Categoria não encontrada.");`).
-
-**Documentação de negócio e explicações:**
-
-Português.
-
-# 13. Category — estado atual
-
-Category CRUD concluído com validações de domínio.
-
-**Entity:**
-
-```csharp
-public class Category
-{
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public bool IsActive { get; private set; }
-}
-```
-
-**Repository possui verificação de duplicidade:**
-
-```csharp
-Task<bool> ExistsByNameAsync(string name, Guid? excludeId = null);
-```
-
-**Regras de negócio adicionadas:**
-
-O nome da Categoria deve ser único. O CreateCategoryUseCase e o UpdateCategoryUseCase validam isso com o banco.
-
-Exclusão (Delete) foi implementada, mas é bloqueada caso a categoria possua produtos ativos vinculados.
-
-# 14. Product — estado atual
-
-Product CRUD concluído e integrado ao frontend.
-
-A validação estrutural (tamanho de string, preço negativo) está propositalmente dentro da própria entidade. A validação de relacionamento (Categoria existe?) está no UseCase.
-
-# 15. Frontend React — estado atual
-
-O desenvolvimento do frontend (loxena-web) possui uma base limpa e escalável.
-
-**Tecnologias utilizadas:**
-
-- React + TypeScript (Vite)
-- Tailwind CSS (Estilização sem CSS externo)
-- React-Toastify (Notificações de sucesso e erro)
-- SweetAlert2 (Modais e popups via utils)
-- Fetch API (com função utilitária `tratarErro` para ler ProblemDetails)
-
-**Padrão Arquitetural do Frontend:**
-
-Separation of Concerns (Custom Hooks): As regras de negócio complexas, o gerenciamento de estado (`useState`, `useEffect`) e as chamadas à API são isolados em Custom Hooks (como `useCrud` e `useStockMovements`). As páginas visuais (ex: StocksPage, CategoriesPage) permanecem enxutas, atuando apenas como "vitrines" e recebendo os dados e funções que precisam.
-
-**Dívida Técnica Consciente (Design System):**
-
-A criação de um "Design System" próprio (extrair formulários para micro-componentes genéricos como `<Input>`, `<Select>`, `<Button>`) foi adiada. Formulários com dezenas de linhas são mantidos por serem altamente coesos e claros. O foco está na entrega de valor e de regras de negócio, evitando over-engineering prematuro. A UI prioriza código limpo e delega tratamento de erros e modais (como Transferência de Estoque) para funções utilitárias isoladas (`alertUtils.ts`).
-
-**Páginas atuais:**
-
-- CategoriesPage
-- ProductsPage
-- StocksPage
-
-# 16. Tratamento de Erros
-
-O projeto implementa um fluxo Full Stack padronizado para erros:
-
-**Backend:**
-
-As exceções lançadas nos UseCases ou Entidades são interceptadas por um GlobalExceptionHandler no C#.
-
-**ProblemDetails:**
-
-O erro é convertido para o padrão RFC ProblemDetails, enviando a mensagem traduzida (em Português) para o frontend.
-
-**Frontend:**
-
-O utilitário `apiUtils.ts` do React lê a resposta, identifica o ProblemDetails e exibe o erro em um Toast vermelho amigável para o usuário.
-
-# 17. Testes — decisão atual
-
-Criar uma suíte enxuta e estratégica, cobrindo comportamentos importantes. Não testar exaustivamente cada linha ou cada validação de cada Use Case no CRUD inicial.
-
-As regras de negócio mais interessantes aparecerão em:
-
-- Stock;
-- Orders;
-- Picking;
-- Packing;
-
-# 18. Estado atual exato
-
-**No momento da transferência:**
-
-- Category CRUD: Concluído (Frontend e Backend integrados).
-- Product CRUD: Concluído (Frontend e Backend integrados).
-- Global Exception Handler: Concluído.
-- UI/UX: Padronizada com Toasts e SweetAlert2.
-- Validação de Nomes Únicos: Concluída (Categorias).
-- Módulo de Estoque (Stock): Concluído. Fluxos de Entrada, Baixa e Transferência de Estoque implementados (com modal integrado no `alertUtils.ts`). Padrão Master-Detail para entrada/baixa na UI.
-- Frontend (React): Refatorado. Hooks isolando regras de negócio (`useCrud`, `useStockMovements`).
-- Product tests: Iniciados e estáveis.
-- Orders: Ainda não implementado.
-- Operações de Armazém: Ainda não implementadas.
-- Autenticação frontend/backend: Ainda não implementada.
-
-# 19. Próxima rota
-
-Sequência planejada:
+## 5. Fluxo real de pedido e estoque
 
 ```text
-CRUD Base (Produtos e Categorias) - CONCLUÍDO
+Entrada manual em Stocks
         ↓
-Início do Frontend (React + Integração Base) - CONCLUÍDO
+Produto armazenado em uma Location
         ↓
-Módulo de Estoque (Stock) - CONCLUÍDO
+Criação do Order: Pending + reserva imediata
         ↓
-Módulo de Pedidos (Orders) - PRÓXIMO PASSO (Ou Filtros/Dashboard)
-        ↓
-Operações Logísticas (Picking, Checking, Packing, Shipping)
-        ↓
-Autenticação
-        ↓
-Integração frontend completa e Dashboard
+Picking (iniciar e registrar quantidade de cada item)
+        ↓ todos os itens integralmente separados
+Checking → Packing → Shipped → Delivered
 ```
 
-O Stock (Estoque) é a evolução natural do Produto, transformando o Loxena de um simples cadastro para um sistema operacional que responde: "Quanto desse produto existe e onde ele está?".
+Regras confirmadas no domínio/casos de uso:
 
-# 20. Decisões que não devem ser revertidas sem motivo
+1. A criação do pedido exige pelo menos um item e valida existência/atividade do produto e saldo suficiente em um registro de estoque. O sistema seleciona um Stock com disponibilidade suficiente para o item e reserva a quantidade.
+2. A reserva ocorre na criação do pedido, não após pagamento. Não há endpoint/estado de pagamento confirmado.
+3. Picking só avança de `Pending` para `Picking`; a quantidade registrada por item não pode exceder a quantidade pedida.
+4. Checking só inicia de `Picking` quando todos os itens estão completamente separados.
+5. Packing avança de `Checking`; shipping avança de `Packing`; delivery avança de `Shipped`.
+6. No shipping, cada item atende sua reserva: `PhysicalQuantity` e `ReservedQuantity` diminuem pela quantidade expedida.
+7. Cancelamento libera a reserva dos itens e só é válido antes de `Shipped`/`Delivered`. Pedido já cancelado não pode ser cancelado novamente.
 
-- Não transformar Product em responsável por quantidade.
-- Manter as mensagens de exceção do C# em português para facilitar o envio via Toast no Frontend.
-- Manter a extração de funções utilitárias no Frontend (como `apiUtils` e `alertUtils`) para não poluir as páginas com boilerplates do SweetAlert2 ou Fetch.
-- Manter as páginas React (UI) enxutas, delegando lógica pesada, transações e chamadas de rede para Custom Hooks (`useStockMovements`, `useCrud`).
-- Não criar abstração prematura de UI (micro-componentes/Design System) até que o MVP de negócio operante do Loxena esteja finalizado.
-- Não introduzir bibliotecas complexas de estado no React (Redux) sem necessidade.
-- Não abandonar as regras de negócio simples em favor de arquitetura excessivamente abstrata.
+Não documentar pagamento, retirada ou recebimento formal como parte do fluxo implementado. O fluxo operacional da interface acompanha os status do backend.
 
-# 21. Como continuar a conversa
+## 6. Endpoints confirmados
 
-A próxima IA deve primeiro considerar este documento como a fonte de contexto do projeto.
+Os controllers usam `[Route("[controller]")]`; não há prefixo `/api` nos atributos verificados. `id`, `productId` e payloads são parâmetros/DTOs conforme a ação. Respostas de erro passam pelo tratamento global e podem ser expostas em `ProblemDetails`.
 
-Antes de propor código:
+### Products
 
-1. identificar o estado atual;
-2. confirmar qual é o próximo pequeno passo;
-3. explicar por que ele existe;
-4. implementar somente o necessário;
-5. testar;
-6. revisar o resultado;
-7. fazer commit quando fizer sentido;
-8. só então avançar.
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Products` | Listar produtos |
+| GET | `/Products/{id}` | Consultar por ID |
+| POST | `/Products` | Criar |
+| PUT | `/Products/{id}` | Atualizar |
+| DELETE | `/Products/{id}` | Inativar |
+
+### Categories
+
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Categories` | Listar categorias |
+| GET | `/Categories/{id}` | Consultar por ID |
+| POST | `/Categories` | Criar |
+| PUT | `/Categories/{id}` | Atualizar |
+| DELETE | `/Categories/{id}` | Inativar |
+
+### Locations
+
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Locations` | Listar localizações |
+| GET | `/Locations/{id}` | Consultar por ID |
+| POST | `/Locations` | Criar |
+| PUT | `/Locations/{id}` | Atualizar |
+| DELETE | `/Locations/{id}` | Inativar (falha se houver estoque físico) |
+
+### Stocks
+
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Stocks` | Listar saldos |
+| GET | `/Stocks/{id}` | Consultar saldo por ID |
+| GET | `/Stocks/product/{productId}` | Consultar saldos por produto |
+| POST | `/Stocks/add` | Entrada de estoque |
+| POST | `/Stocks/remove` | Baixa de estoque |
+| POST | `/Stocks/transfer` | Transferência de estoque |
+
+### Customers
+
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Customers` | Listar clientes |
+| GET | `/Customers/{id}` | Consultar por ID |
+| POST | `/Customers` | Criar |
+| PUT | `/Customers/{id}` | Atualizar |
+| DELETE | `/Customers/{id}` | Inativar |
+
+### Orders
+
+| Método | Rota | Ação |
+|---|---|---|
+| GET | `/Orders` | Listar pedidos |
+| GET | `/Orders/{id}` | Consultar pedido e itens |
+| POST | `/Orders` | Criar pedido e reservar estoque |
+| PATCH | `/Orders/{id}/cancel` | Cancelar pedido |
+| PATCH | `/Orders/{id}/start-picking` | Iniciar picking |
+| PATCH | `/Orders/{id}/pick` | Registrar picking de item |
+| PATCH | `/Orders/{id}/start-checking` | Iniciar conferência |
+| PATCH | `/Orders/{id}/start-packing` | Iniciar embalagem |
+| PATCH | `/Orders/{id}/ship` | Expedir e cumprir reservas |
+| PATCH | `/Orders/{id}/deliver` | Registrar entrega |
+
+Não inferir rotas auxiliares, autenticação ou parâmetros que não estejam nos controllers/DTOs. Revalidar esta seção sempre que controllers forem alterados.
+
+## 7. Frontend e dados de demonstração
+
+O menu atual contém Produtos, Categorias, Localizações, Saldo de Estoque, Clientes e Pedidos. A criação de pedido calcula disponibilidade a partir de `availableQuantity`, permite adicionar itens ao carrinho e envia `customerId` e pares de `productId`/`quantity`. O backend faz sua própria validação e reserva; a validação do frontend não substitui a regra do domínio.
+
+O documento de contexto recente registra dados simplificados para demonstração: categorias diretas (Ferramentas, Eletrônicos, Suprimentos, Peças e Embalagens), produtos cotidianos e localizações curtas (`A1`, `A2`, `B1`, `B2`, `EXP`). Tratar esses itens como massa/contexto de teste documentado, sem afirmar que há seed automático sem confirmar sua implementação.
+
+## 8. Persistência, configuração e migrações
+
+`LoxenaDbContext` registra DbSets de `Products`, `Categories`, `Locations`, `Stocks`, `Customers`, `Orders` e `OrderItems`, e carrega configurações EF do assembly. Não há DbSet atual para Receiving, ReceivingItem, Supplier, User ou Role.
+
+A conexão SQL Server é lida de `ConnectionStrings:DefaultConnection`. Swagger/OpenAPI é habilitado em desenvolvimento. A política CORS configurada permite a origem local do Vite `http://localhost:5173`.
+
+O contexto recente informa reset do banco `LoxenaDb` e histórico sincronizado até `20261008150140_AddPickedQuantityToOrderItem`. Esse dado é um retrato contextual e deve ser conferido no diretório de migrações/banco atual antes de executar operações destrutivas ou assumir o estado de outro ambiente.
+
+## 9. Diretrizes para continuidade
+
+- Implementar incrementalmente e priorizar regras de negócio relevantes; evitar overengineering e bibliotecas sem necessidade concreta.
+- Manter o Domain independente de framework HTTP e persistência.
+- Respeitar contratos, rotas, DTOs e códigos de resposta existentes; não inventar endpoints para satisfazer a interface.
+- Manter mensagens voltadas ao usuário em português e alinhar o tratamento frontend ao formato `ProblemDetails`.
+- Manter quantidade no Stock, não em Product; respeitar `PhysicalQuantity - ReservedQuantity` em qualquer fluxo de disponibilidade.
+- Atualizar este contexto e o README quando contratos ou comportamento do domínio mudarem.
+- Antes de propor/implementar: verificar estado atual, explicar a decisão, fazer alteração mínima, validar/testar e relatar limitações observadas.
