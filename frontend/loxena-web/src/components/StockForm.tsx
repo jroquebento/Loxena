@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import type { Product } from '../types/Product';
 import type { Location } from '../types/Location';
 
@@ -16,8 +17,16 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
   const [amount, setAmount] = useState<number | ''>('');
 
   const validar = () => {
-    if (!productId || !locationId || !amount || amount <= 0) {
-      alert('Preencha todos os campos e use uma quantidade maior que zero.');
+    if (!productId) {
+      toast.warn('Selecione um produto.');
+      return false;
+    }
+    if (!locationId) {
+      toast.warn('Selecione uma localização.');
+      return false;
+    }
+    if (amount === '' || amount <= 0) {
+      toast.warn('Informe uma quantidade maior que zero.');
       return false;
     }
     return true;
