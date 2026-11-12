@@ -79,8 +79,8 @@ export function CreateOrderPage() {
       toast.warn("Selecione um produto.");
       return;
     }
-    if (currentQuantity <= 0) {
-      toast.warn("A quantidade deve ser maior que zero.");
+    if (!Number.isInteger(currentQuantity) || currentQuantity <= 0) {
+      toast.warn("Informe uma quantidade inteira maior que zero.");
       return;
     }
 
@@ -175,7 +175,7 @@ export function CreateOrderPage() {
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Novo Pedido (Carrinho WMS)</h2>
 
-          <form onSubmit={handleFinalizeOrder}>
+          <form onSubmit={handleFinalizeOrder} noValidate>
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Cliente</label>
               <select

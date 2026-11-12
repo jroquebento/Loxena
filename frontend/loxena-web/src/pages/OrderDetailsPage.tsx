@@ -97,8 +97,13 @@ export function OrderDetailsPage() {
     if (!order) return;
 
     const qtdParaSeparar = pickingQuantities[orderItemId];
-    if (!qtdParaSeparar || qtdParaSeparar <= 0) {
-      toast.warn("Informe uma quantidade válida para separar.");
+    const quantidadeRestante = order.items.find(item => item.id === orderItemId);
+    if (!Number.isInteger(qtdParaSeparar) || qtdParaSeparar <= 0) {
+      toast.warn("Informe uma quantidade inteira maior que zero para separar.");
+      return;
+    }
+    if (!quantidadeRestante || qtdParaSeparar > quantidadeRestante.quantity - quantidadeRestante.pickedQuantity) {
+      toast.warn("A quantidade informada excede o que falta separar.");
       return;
     }
 

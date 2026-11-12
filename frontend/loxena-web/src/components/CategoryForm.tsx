@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import type { Category } from '../types/Category';
 
 interface CategoryFormProps {
@@ -12,7 +13,17 @@ export function CategoryForm({ onSalvar, categoriaSelecionada, onCancelar }: Cat
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    onSalvar(nome);
+    const nomeLimpo = nome.trim();
+    if (!nomeLimpo) {
+      toast.warn('Informe o nome da categoria.');
+      return;
+    }
+    if (nomeLimpo.length > 100) {
+      toast.warn('O nome da categoria não pode exceder 100 caracteres.');
+      return;
+    }
+
+    onSalvar(nomeLimpo);
 
     if (!categoriaSelecionada) {
       setNome('');
@@ -25,9 +36,9 @@ export function CategoryForm({ onSalvar, categoriaSelecionada, onCancelar }: Cat
         {categoriaSelecionada ? 'Editar Categoria' : 'Nova Categoria'}
       </h2>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
-          type="text" placeholder="Nome da Categoria (ex: Eletrônicos)" required
+          type="text" placeholder="Nome da Categoria (ex: Eletrônicos)" required maxLength={100}
           value={nome} onChange={(e) => setNome(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />

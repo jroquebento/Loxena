@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import type { Location } from '../types/Location';
 
 interface LocationFormProps {
@@ -13,7 +14,26 @@ export function LocationForm({ onSalvar, locationSelecionada, onCancelar }: Loca
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    onSalvar(code, description);
+    const codeLimpo = code.trim();
+    const descriptionLimpa = description.trim();
+    if (!codeLimpo) {
+      toast.warn('Informe o código da localização.');
+      return;
+    }
+    if (codeLimpo.length > 50) {
+      toast.warn('O código da localização não pode exceder 50 caracteres.');
+      return;
+    }
+    if (!descriptionLimpa) {
+      toast.warn('Informe a descrição da localização.');
+      return;
+    }
+    if (descriptionLimpa.length > 500) {
+      toast.warn('A descrição não pode exceder 500 caracteres.');
+      return;
+    }
+
+    onSalvar(codeLimpo, descriptionLimpa);
 
     if (!locationSelecionada) {
       setCode('');
@@ -27,11 +47,12 @@ export function LocationForm({ onSalvar, locationSelecionada, onCancelar }: Loca
         {locationSelecionada ? 'Editar Localização' : 'Nova Localização'}
       </h2>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
           type="text" 
           placeholder="Código (ex: A-01)" 
           required
+          maxLength={50}
           value={code} 
           onChange={(e) => setCode(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -41,6 +62,7 @@ export function LocationForm({ onSalvar, locationSelecionada, onCancelar }: Loca
           type="text" 
           placeholder="Descrição (ex: Corredor A, Prateleira 1)" 
           required
+          maxLength={500}
           value={description} 
           onChange={(e) => setDescription(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import type { Category } from '../types/Category';
 import type { Product } from '../types/Product';
 
@@ -18,9 +19,31 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const precoNumero = parseFloat(preco);
-    
-    onSalvar(nome, descricao, precoNumero, categoryId);
+    const nomeLimpo = nome.trim();
+    const precoNumero = Number(preco);
+
+    if (!nomeLimpo) {
+      toast.warn('Informe o nome do produto.');
+      return;
+    }
+    if (nomeLimpo.length > 200) {
+      toast.warn('O nome do produto não pode exceder 200 caracteres.');
+      return;
+    }
+    if (descricao.trim().length > 2000) {
+      toast.warn('A descrição não pode exceder 2000 caracteres.');
+      return;
+    }
+    if (!preco.trim() || !Number.isFinite(precoNumero) || precoNumero < 0) {
+      toast.warn('Informe um preço válido, igual ou maior que zero.');
+      return;
+    }
+    if (!categoryId) {
+      toast.warn('Selecione uma categoria.');
+      return;
+    }
+
+    onSalvar(nomeLimpo, descricao.trim(), precoNumero, categoryId);
 
     if(!produtoSelecionado) {
       setNome('');
@@ -36,9 +59,9 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
         {produtoSelecionado ? 'Editar Produto' : 'Novo Produto'}
       </h2>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
-          type="text" placeholder="Nome do Produto" required
+          type="text" placeholder="Nome do Produto" required maxLength={200}
           value={nome} onChange={(e) => setNome(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -51,7 +74,7 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
 
         <div className="grid grid-cols-2 gap-4">
           <input 
-            type="number" placeholder="Preço (ex: 50.50)" step="0.01" required
+            type="number" placeholder="Preço (ex: 50.50)" min="0" step="0.01" required
             value={preco} onChange={(e) => setPreco(e.target.value)} 
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

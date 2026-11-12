@@ -25,8 +25,8 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
       toast.warn('Selecione uma localização.');
       return false;
     }
-    if (amount === '' || amount <= 0) {
-      toast.warn('Informe uma quantidade maior que zero.');
+    if (amount === '' || !Number.isInteger(amount) || amount <= 0) {
+      toast.warn('Informe uma quantidade inteira maior que zero.');
       return false;
     }
     return true;
@@ -81,6 +81,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
           <input 
             type="number" 
             min="1"
+            step="1"
             value={amount} 
             onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))} 
             className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"

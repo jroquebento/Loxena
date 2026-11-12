@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import type { Customer } from '../types/Customer';
 import type { CustomerPayload } from '../services/customerService';
 
@@ -17,7 +18,45 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    await onSave({ name, email, document, phone });
+    const nameLimpo = name.trim();
+    const emailLimpo = email.trim();
+    const documentLimpo = document.trim();
+    const phoneLimpo = phone.trim();
+
+    if (!nameLimpo) {
+      toast.warn('Informe o nome do cliente.');
+      return;
+    }
+    if (nameLimpo.length > 200) {
+      toast.warn('O nome do cliente não pode exceder 200 caracteres.');
+      return;
+    }
+    if (!emailLimpo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) {
+      toast.warn('Informe um e-mail válido.');
+      return;
+    }
+    if (emailLimpo.length > 150) {
+      toast.warn('O e-mail não pode exceder 150 caracteres.');
+      return;
+    }
+    if (!documentLimpo) {
+      toast.warn('Informe o documento do cliente.');
+      return;
+    }
+    if (documentLimpo.length > 20) {
+      toast.warn('O documento não pode exceder 20 caracteres.');
+      return;
+    }
+    if (!phoneLimpo) {
+      toast.warn('Informe o telefone do cliente.');
+      return;
+    }
+    if (phoneLimpo.length > 20) {
+      toast.warn('O telefone não pode exceder 20 caracteres.');
+      return;
+    }
+
+    await onSave({ name: nameLimpo, email: emailLimpo, document: documentLimpo, phone: phoneLimpo });
 
     if (!customerToEdit) {
       setName('');
@@ -33,7 +72,7 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
         {customerToEdit ? 'Editar Cliente' : 'Novo Cliente'}
       </h2>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
           type="text" placeholder="Nome da empresa ou pessoa" required maxLength={200}
           value={name} onChange={(e) => setName(e.target.value)} 
