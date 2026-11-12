@@ -113,6 +113,11 @@ export function OrderDetailsPage() {
         orderItemId,
         quantity: Number(qtdParaSeparar)
       });
+      setPickingQuantities(current => {
+        const updated = { ...current };
+        delete updated[orderItemId];
+        return updated;
+      });
       toast.success("Quantidade separada registrada com sucesso!");
       await carregarPedido();
     } catch (error: unknown) {
