@@ -68,7 +68,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
               orders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
-                    {order.id.substring(0, 8)}... {/* Mostrando apenas o início do Guid */}
+                    {order.id.substring(0, 8)}... 
                   </td>
                   <td className="px-6 py-4 max-w-xs truncate text-sm text-gray-700" title={order.customerName}>
                     {order.customerName}
