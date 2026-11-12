@@ -27,6 +27,16 @@ export interface Order {
   items: OrderItem[];
 }
 
+export interface OrderSummary {
+  id: string;
+  customerId: string;
+  customerName: string;
+  createdAt: string;
+  status: OrderStatus;
+  totalAmount: number;
+  itemCount: number;
+}
+
 export interface CreateOrderItemRequest {
   productId: string;
   quantity: number;

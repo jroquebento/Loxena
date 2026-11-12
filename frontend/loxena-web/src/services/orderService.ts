@@ -1,4 +1,4 @@
-import type { Order } from '../types/Order';
+import type { Order, OrderSummary } from '../types/Order';
 import { tratarErro } from '../utils/apiUtils';
 
 const API_URL = "https://localhost:7175/Orders"; 
@@ -19,7 +19,7 @@ export type PickOrderItemPayload = {
 };
 
 export const orderService = {
-  getAll: async (): Promise<Order[]> => {
+  getAll: async (): Promise<OrderSummary[]> => {
     const resposta = await fetch(API_URL);
     await tratarErro(resposta, 'Falha ao buscar pedidos');
     return resposta.json();

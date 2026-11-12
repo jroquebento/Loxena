@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
-import type { Order } from '../types/Order';
+import type { OrderSummary } from '../types/Order';
 import { orderService } from '../services/orderService';
 
 export function useOrders() {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const carregarPedidos = useCallback(async () => {

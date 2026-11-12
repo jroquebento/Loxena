@@ -1,5 +1,4 @@
 ﻿using Loxena.Application.Interfaces;
-using Mapster;
 
 namespace Loxena.Application.Orders.GetOrders;
 
@@ -11,10 +10,19 @@ public class GetOrdersUseCase
         _orderRepository = orderRepository;
     }
 
-    public async Task<IReadOnlyList<OrderResponse>> ExecuteAsync() 
+    public async Task<IReadOnlyList<OrderSummaryResponse>> ExecuteAsync() 
     {
         var orders = await _orderRepository.GetAllAsync();
 
-        return orders.Adapt<IReadOnlyList<OrderResponse>>();
+        return orders
+            .Select(order => new OrderSummaryResponse(
+                order.Id,
+                order.CustomerId,
+                order.Customer.Name,
+                order.CreatedAt,
+                order.Status.ToString(),
+                order.TotalAmount,
+                order.Items.Count))
+            .ToList();
     }
 }

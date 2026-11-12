@@ -1,7 +1,7 @@
-import type { Order, OrderStatus } from '../types/Order';
+import type { OrderStatus, OrderSummary } from '../types/Order';
 
 interface OrderListProps {
-  orders: Order[];
+  orders: OrderSummary[];
   isLoading: boolean;
   onViewDetails: (id: string) => void; 
 }
@@ -49,6 +49,8 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID do Pedido</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
@@ -58,7 +60,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
           <tbody className="bg-white divide-y divide-gray-200">
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                   Nenhum pedido encontrado.
                 </td>
               </tr>
@@ -67,6 +69,12 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
                 <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
                     {order.id.substring(0, 8)}... {/* Mostrando apenas o início do Guid */}
+                  </td>
+                  <td className="px-6 py-4 max-w-xs truncate text-sm text-gray-700" title={order.customerName}>
+                    {order.customerName}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
+                    {order.itemCount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString('pt-BR', {

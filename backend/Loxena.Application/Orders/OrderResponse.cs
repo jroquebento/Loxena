@@ -15,3 +15,12 @@ public record OrderResponse(
     string Status,
     decimal TotalAmount,
     List<OrderItemResponse> Items);
+
+public record OrderSummaryResponse(
+    Guid Id,
+    Guid CustomerId,
+    string CustomerName,
+    DateTime CreatedAt,
+    string Status,
+    decimal TotalAmount,
+    int ItemCount);

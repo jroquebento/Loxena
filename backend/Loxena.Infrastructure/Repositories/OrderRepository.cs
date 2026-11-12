@@ -1,5 +1,6 @@
 ﻿using Loxena.Application.Interfaces;
 using Loxena.Domain.Entities;
+using Loxena.Domain.Enums;
 using Loxena.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,8 +40,12 @@ public class OrderRepository : IOrderRepository
     public async Task<IReadOnlyList<Order>> GetAllAsync()
     {
         return await _context.Orders
+            .Include(o => o.Customer)
             .Include(o => o.Items)
             .AsNoTracking()
+            .OrderBy(o => o.Status == OrderStatus.Pending || o.Status == OrderStatus.Picking ? 0 : 1)
+            .ThenBy(o => o.CreatedAt)
+            .ThenBy(o => o.Id)
             .ToListAsync();
     }
 
