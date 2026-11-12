@@ -17,14 +17,14 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="w-full table-fixed divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+              <th className="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documento</th>
+              <th className="w-[15%] px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
+              <th className="w-1/5 px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -33,23 +33,25 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
             ) : (
               customers.map((customer) => (
                 <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{customer.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.document}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.phone}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                    <button 
-                      onClick={() => onEdit(customer)}
-                      className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md mr-2"
-                    >
-                      Editar
-                    </button>
-                    <button 
-                      onClick={() => onDelete(customer.id)}
-                      className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
-                    >
-                      Excluir
-                    </button>
+                  <td className="px-3 py-4 text-sm font-medium text-gray-900 break-words">{customer.name}</td>
+                  <td className="px-3 py-4 text-sm text-gray-500 truncate" title={customer.email}>{customer.email}</td>
+                  <td className="px-3 py-4 text-sm text-gray-500 break-words">{customer.document}</td>
+                  <td className="px-3 py-4 text-sm text-gray-500 break-words">{customer.phone}</td>
+                  <td className="px-3 py-4 text-center text-sm font-medium">
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <button 
+                        onClick={() => onEdit(customer)}
+                        className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        onClick={() => onDelete(customer.id)}
+                        className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
+                      >
+                        Excluir
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
