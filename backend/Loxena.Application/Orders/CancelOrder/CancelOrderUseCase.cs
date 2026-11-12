@@ -22,6 +22,8 @@ public class CancelOrderUseCase
         if (order is null)
             throw new InvalidOperationException("O pedido não foi encontrado.");
 
+        order.Cancel();
+
         foreach (var item in order.Items)
         {
             var stock = await _stockRepository.GetByIdAsync(item.StockId);
@@ -32,8 +34,6 @@ public class CancelOrderUseCase
 
             stock.ReleaseReservedQuantity(item.Quantity);
         }
-
-        order.Cancel();
 
         await _orderRepository.UpdateAsync(order);
     }
