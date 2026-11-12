@@ -1,5 +1,4 @@
 ﻿using Loxena.Application.Interfaces;
-using Mapster;
 
 namespace Loxena.Application.Orders.GetOrderById;
 
@@ -14,10 +13,26 @@ public class GetOrderByIdUseCase
 
     public async Task<OrderResponse?> ExecuteAsync(Guid id) 
     {
-        var order = await _orderRepository.GetByIdAsync(id);
+        var order = await _orderRepository.GetByIdForDetailsAsync(id);
         if (order is null)
             throw new InvalidOperationException("O Pedido não foi encontrado.");
 
-        return order.Adapt<OrderResponse>();
+        var items = order.Items
+            .Select(item => new OrderItemResponse(
+                item.Id,
+                item.ProductId,
+                item.Quantity,
+                item.PickedQuantity,
+                item.UnitPrice,
+                item.Product.Name))
+            .ToList();
+
+        return new OrderResponse(
+            order.Id,
+            order.CustomerId,
+            order.CreatedAt,
+            order.Status.ToString(),
+            order.TotalAmount,
+            items);
     }
 }

@@ -143,7 +143,6 @@ export function OrderDetailsPage() {
           ← Voltar para lista
         </button>
 
-        {/* Cabeçalho do Pedido */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-6 flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">Pedido {order.id.substring(0, 8)}...</h2>
@@ -238,7 +237,7 @@ export function OrderDetailsPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Solicitado</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Separado</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Preço Unit.</th>
@@ -252,7 +251,7 @@ export function OrderDetailsPage() {
                 {order.items.map((item) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
-                      {item.productId.substring(0, 8)}...
+                      {item.productName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
                       {item.quantity}

@@ -15,6 +15,7 @@ export interface OrderItem {
   quantity: number;
   pickedQuantity: number;
   unitPrice: number;
+  productName?: string;
 }
 
 export interface Order {

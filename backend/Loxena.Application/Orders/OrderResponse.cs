@@ -5,7 +5,8 @@ public record OrderItemResponse(
     Guid ProductId,
     int Quantity,
     int PickedQuantity,
-    decimal UnitPrice);
+    decimal UnitPrice,
+    string? ProductName = null);
 
 public record OrderResponse(
     Guid Id,

@@ -27,6 +27,15 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(o => o.Id == id);
     }
 
+    public async Task<Order?> GetByIdForDetailsAsync(Guid id)
+    {
+        return await _context.Orders
+            .Include(o => o.Items)
+                .ThenInclude(item => item.Product)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.Id == id);
+    }
+
     public async Task<IReadOnlyList<Order>> GetAllAsync()
     {
         return await _context.Orders
