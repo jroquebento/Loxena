@@ -46,11 +46,12 @@ export function LocationForm({ onSalvar, locationSelecionada, onCancelar }: Loca
       <h2 className="text-xl font-semibold mb-4 text-gray-700">
         {locationSelecionada ? 'Editar Localização' : 'Nova Localização'}
       </h2>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
           type="text" 
-          placeholder="Código (ex: A-01)" 
+          placeholder="Código (ex: A-01) *" 
           required
           maxLength={50}
           value={code} 
@@ -60,7 +61,7 @@ export function LocationForm({ onSalvar, locationSelecionada, onCancelar }: Loca
 
         <input 
           type="text" 
-          placeholder="Descrição (ex: Corredor A, Prateleira 1)" 
+          placeholder="Descrição (ex: Corredor A, Prateleira 1) *" 
           required
           maxLength={500}
           value={description} 

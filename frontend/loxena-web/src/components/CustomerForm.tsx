@@ -71,6 +71,7 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
       <h2 className="text-xl font-semibold mb-4 text-gray-700">
         {customerToEdit ? 'Editar Cliente' : 'Novo Cliente'}
       </h2>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 

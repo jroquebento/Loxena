@@ -50,6 +50,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8">
       <h2 className="text-xl font-semibold mb-4 text-gray-700">Movimentação de Estoque</h2>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div className="flex flex-col">

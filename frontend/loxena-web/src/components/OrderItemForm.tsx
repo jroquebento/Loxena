@@ -25,6 +25,7 @@ export function OrderItemForm({
     <div className="border-t pt-6 mb-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Adicionar Produtos</h3>
       <p className="text-xs text-gray-500 mb-4">Apenas produtos com saldo físico disponível em estoque são exibidos.</p>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
 
       <div className="flex gap-4 items-end">
         <div className="flex-1">

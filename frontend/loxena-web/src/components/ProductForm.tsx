@@ -58,6 +58,7 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
       <h2 className="text-xl font-semibold mb-4 text-gray-700">
         {produtoSelecionado ? 'Editar Produto' : 'Novo Produto'}
       </h2>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 

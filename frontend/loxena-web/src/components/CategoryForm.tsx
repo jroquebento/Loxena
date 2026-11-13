@@ -35,10 +35,11 @@ export function CategoryForm({ onSalvar, categoriaSelecionada, onCancelar }: Cat
       <h2 className="text-xl font-semibold mb-4 text-gray-700">
         {categoriaSelecionada ? 'Editar Categoria' : 'Nova Categoria'}
       </h2>
+      <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
-          type="text" placeholder="Nome da Categoria (ex: Eletrônicos)" required maxLength={100}
+          type="text" placeholder="Nome da Categoria (ex: Eletrônicos) *" required maxLength={100}
           value={nome} onChange={(e) => setNome(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
