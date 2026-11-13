@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../tests/IntegrationTests/IntegrationTests.csproj" />
   <Project Path="../tests/UnitTests/UnitTests.csproj" Id="d2e467fc-3a4d-45de-b327-6dbf2060f4a3" />
   <Project Path="Loxena.Api/Loxena.Api.csproj" Id="03d1f831-2e02-4d92-9b35-91f59dfe89d8" />
   <Project Path="Loxena.Application/Loxena.Application.csproj" Id="f6535240-6e7a-4cf7-91e7-8c7a95ee5f87" />
