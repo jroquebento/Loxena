@@ -23,15 +23,7 @@ public class RemoveStockUseCase
             throw new InvalidOperationException("Não há estoque registrado para este produto nesta localização.");
 
         stock.RemovePhysicalQuantity(request.Amount);
-
-        if (stock.PhysicalQuantity == 0 && stock.ReservedQuantity == 0)
-        {
-            await _stockRepository.DeleteAsync(stock);
-        }
-        else 
-        {
-            await _stockRepository.UpdateAsync(stock);
-        }
+        await _stockRepository.UpdateAsync(stock);
 
         return stock.Adapt<StockResponse>();
     }

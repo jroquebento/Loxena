@@ -61,12 +61,6 @@ public class StockRepository : IStockRepository
             .ToListAsync();
     }
 
-    public async Task DeleteAsync(Stock stock)
-    {
-        _context.Stocks.Remove(stock);
-        await _context.SaveChangesAsync();
-    }
-
     public async Task<bool> HasStockByProductIdAsync(Guid productId)
     {
         return await _context.Stocks.AnyAsync(s => s.ProductId == productId);

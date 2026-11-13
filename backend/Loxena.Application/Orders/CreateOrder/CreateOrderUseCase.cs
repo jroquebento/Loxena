@@ -6,15 +6,18 @@ namespace Loxena.Application.Orders.CreateOrder;
 
 public class CreateOrderUseCase
 {
+    private readonly ICustomerRepository _customerRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IStockRepository _stockRepository;
 
     public CreateOrderUseCase(
+        ICustomerRepository customerRepository,
         IOrderRepository orderRepository,
         IProductRepository productRepository,
         IStockRepository stockRepository)
     {
+        _customerRepository = customerRepository;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _stockRepository = stockRepository;
@@ -22,6 +25,11 @@ public class CreateOrderUseCase
 
     public async Task<OrderResponse> ExecuteAsync(CreateOrderRequest request)
     {
+        var customer = await _customerRepository.GetByIdAsync(request.CustomerId);
+
+        if (customer is null || !customer.IsActive)
+            throw new ArgumentException("Cliente inexistente ou inativo.");
+
         if (request.Items == null || !request.Items.Any())
             throw new ArgumentException("O pedido deve conter pelo menos um item.");
 

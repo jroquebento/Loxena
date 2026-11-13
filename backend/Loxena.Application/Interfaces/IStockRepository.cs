@@ -10,7 +10,6 @@ public interface IStockRepository
     Task<IReadOnlyList<Stock>> GetAllAsync();
     Task<IReadOnlyList<Stock>> GetByProductIdAsync(Guid productId);
     Task UpdateAsync(Stock stock);
-    Task DeleteAsync(Stock stock);
     Task<bool> HasStockForOtherProductAsync(Guid locationId, Guid currentProductId);
     Task<bool> HasStockByProductIdAsync(Guid productId);
     Task<IReadOnlyList<Stock>> GetByLocationIdAsync(Guid locationId);

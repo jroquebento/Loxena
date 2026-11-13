@@ -10,16 +10,19 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Create_Order_And_Reserve_Stock_When_All_Products_Are_Active_And_Available()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
 
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
         var firstProduct = new Product("Teclado", "Teclado compacto", 100m, Guid.NewGuid());
         var secondProduct = new Product("Mouse", "Mouse sem fio", 50m, Guid.NewGuid());
         var firstStock = new Stock(firstProduct.Id, Guid.NewGuid(), 10);
         var secondStock = new Stock(secondProduct.Id, Guid.NewGuid(), 5);
         var request = new CreateOrderRequest(
-            Guid.NewGuid(),
+            customer.Id,
             [
                 new CreateOrdemItemRequest(firstProduct.Id, 2),
                 new CreateOrdemItemRequest(secondProduct.Id, 3)
@@ -44,6 +47,7 @@ public class CreateOrderUseCaseTests
             .Returns(Task.CompletedTask);
 
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -64,11 +68,15 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Reject_Order_When_It_Has_No_Items()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
-        var request = new CreateOrderRequest(Guid.NewGuid(), []);
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
+        var request = new CreateOrderRequest(customer.Id, []);
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -84,18 +92,22 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Reject_Order_When_Product_Does_Not_Exist()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
         var productId = Guid.NewGuid();
         var request = new CreateOrderRequest(
-            Guid.NewGuid(),
+            customer.Id,
             [new CreateOrdemItemRequest(productId, 1)]);
         productRepository
             .Setup(repository => repository.GetByIdAsync(productId))
             .ReturnsAsync((Product?)null);
 
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -111,19 +123,23 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Reject_Order_When_Product_Is_Inactive()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
         var product = new Product("Produto inativo", "Descrição", 25m, Guid.NewGuid());
         product.Inactivate();
         var request = new CreateOrderRequest(
-            Guid.NewGuid(),
+            customer.Id,
             [new CreateOrdemItemRequest(product.Id, 1)]);
         productRepository
             .Setup(repository => repository.GetByIdAsync(product.Id))
             .ReturnsAsync(product);
 
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -139,12 +155,15 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Reject_Order_When_Product_Has_No_Stock_Records()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
         var product = new Product("Produto sem estoque", "Descrição", 25m, Guid.NewGuid());
         var request = new CreateOrderRequest(
-            Guid.NewGuid(),
+            customer.Id,
             [new CreateOrdemItemRequest(product.Id, 1)]);
         productRepository
             .Setup(repository => repository.GetByIdAsync(product.Id))
@@ -154,6 +173,7 @@ public class CreateOrderUseCaseTests
             .ReturnsAsync(Array.Empty<Stock>());
 
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -168,14 +188,17 @@ public class CreateOrderUseCaseTests
     [Fact]
     public async Task Should_Reject_Order_When_Available_Stock_Is_Insufficient()
     {
+        var customerRepository = new Mock<ICustomerRepository>();
         var orderRepository = new Mock<IOrderRepository>();
         var productRepository = new Mock<IProductRepository>();
         var stockRepository = new Mock<IStockRepository>();
+        var customer = CreateActiveCustomer();
+        SetupCustomer(customerRepository, customer);
         var product = new Product("Produto com saldo insuficiente", "Descrição", 25m, Guid.NewGuid());
         var stock = new Stock(product.Id, Guid.NewGuid(), 5);
         stock.ReserveQuantity(4);
         var request = new CreateOrderRequest(
-            Guid.NewGuid(),
+            customer.Id,
             [new CreateOrdemItemRequest(product.Id, 2)]);
         productRepository
             .Setup(repository => repository.GetByIdAsync(product.Id))
@@ -185,6 +208,7 @@ public class CreateOrderUseCaseTests
             .ReturnsAsync((IReadOnlyList<Stock>)new[] { stock });
 
         var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
             orderRepository.Object,
             productRepository.Object,
             stockRepository.Object);
@@ -195,5 +219,82 @@ public class CreateOrderUseCaseTests
         Assert.Equal("Estoque não configurado para o produto 'Produto com saldo insuficiente'.", exception.Message);
         Assert.Equal(4, stock.ReservedQuantity);
         orderRepository.Verify(repository => repository.AddAsync(It.IsAny<Order>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Should_Reject_Order_When_Customer_Does_Not_Exist()
+    {
+        var customerRepository = new Mock<ICustomerRepository>();
+        var orderRepository = new Mock<IOrderRepository>();
+        var productRepository = new Mock<IProductRepository>();
+        var stockRepository = new Mock<IStockRepository>();
+        var customerId = Guid.NewGuid();
+        var request = new CreateOrderRequest(
+            customerId,
+            [new CreateOrdemItemRequest(Guid.NewGuid(), 1)]);
+        customerRepository
+            .Setup(repository => repository.GetByIdAsync(customerId))
+            .ReturnsAsync((Customer?)null);
+
+        var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
+            orderRepository.Object,
+            productRepository.Object,
+            stockRepository.Object);
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => useCase.ExecuteAsync(request));
+
+        Assert.Equal("Cliente inexistente ou inativo.", exception.Message);
+        orderRepository.Verify(repository => repository.AddAsync(It.IsAny<Order>()), Times.Never);
+        productRepository.Verify(repository => repository.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        stockRepository.Verify(repository => repository.GetByProductIdAsync(It.IsAny<Guid>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Should_Reject_Order_When_Customer_Is_Inactive()
+    {
+        var customerRepository = new Mock<ICustomerRepository>();
+        var orderRepository = new Mock<IOrderRepository>();
+        var productRepository = new Mock<IProductRepository>();
+        var stockRepository = new Mock<IStockRepository>();
+        var customer = CreateActiveCustomer();
+        customer.Inactivate();
+        var request = new CreateOrderRequest(
+            customer.Id,
+            [new CreateOrdemItemRequest(Guid.NewGuid(), 1)]);
+        SetupCustomer(customerRepository, customer);
+
+        var useCase = new CreateOrderUseCase(
+            customerRepository.Object,
+            orderRepository.Object,
+            productRepository.Object,
+            stockRepository.Object);
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => useCase.ExecuteAsync(request));
+
+        Assert.Equal("Cliente inexistente ou inativo.", exception.Message);
+        orderRepository.Verify(repository => repository.AddAsync(It.IsAny<Order>()), Times.Never);
+        productRepository.Verify(repository => repository.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        stockRepository.Verify(repository => repository.GetByProductIdAsync(It.IsAny<Guid>()), Times.Never);
+    }
+
+    private static Customer CreateActiveCustomer()
+    {
+        return new Customer(
+            "Cliente de teste",
+            "cliente@exemplo.invalid",
+            "SINTETICO-001",
+            "0000000000");
+    }
+
+    private static void SetupCustomer(
+        Mock<ICustomerRepository> customerRepository,
+        Customer customer)
+    {
+        customerRepository
+            .Setup(repository => repository.GetByIdAsync(customer.Id))
+            .ReturnsAsync(customer);
     }
 }

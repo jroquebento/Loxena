@@ -47,14 +47,7 @@ public class TransferStockUseCase
 
         var targetStock = await _stockRepository.GetByProductAndLocationAsync(request.ProductId, request.TargetLocationId);
 
-        if (sourceStock.PhysicalQuantity == 0 && sourceStock.ReservedQuantity == 0)
-        {
-            await _stockRepository.DeleteAsync(sourceStock);
-        }
-        else
-        {
-            await _stockRepository.UpdateAsync(sourceStock);
-        }
+        await _stockRepository.UpdateAsync(sourceStock);
 
         if (targetStock is null)
         {
