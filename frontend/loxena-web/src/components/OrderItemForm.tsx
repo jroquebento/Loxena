@@ -28,7 +28,7 @@ export function OrderItemForm({
 
       <div className="flex gap-4 items-end">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Produto (Disponível)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Produto (Disponível) <span className="text-red-500">*</span></label>
           <select
             value={produtoAtualId}
             onChange={(evento) => definirProdutoAtualId(evento.target.value)}
@@ -48,7 +48,7 @@ export function OrderItemForm({
 
         <div className="w-36">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Quantidade {produtoAtualId && <span className="text-xs text-green-600 font-bold">(Máx: {estoqueProdutoSelecionado})</span>}
+            Quantidade <span className="text-red-500">*</span> {produtoAtualId && <span className="text-xs text-green-600 font-bold">(Máx: {estoqueProdutoSelecionado})</span>}
           </label>
           <input
             type="number"

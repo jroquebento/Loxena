@@ -74,26 +74,26 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
-          type="text" placeholder="Nome da empresa ou pessoa" required maxLength={200}
+          type="text" placeholder="Nome da empresa ou pessoa *" required maxLength={200}
           value={name} onChange={(e) => setName(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <input 
-          type="email" placeholder="email@exemplo.com" required maxLength={150}
+          type="email" placeholder="email@exemplo.com *" required maxLength={150}
           value={email} onChange={(e) => setEmail(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <div className="grid grid-cols-2 gap-4">
           <input 
-            type="text" placeholder="Documento (CPF/CNPJ)" required maxLength={20}
+            type="text" placeholder="Documento (CPF/CNPJ) *" required maxLength={20}
             value={document} onChange={(e) => setDocument(e.target.value)} 
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input 
-            type="text" placeholder="Telefone (ex: 11 99999-9999)" required maxLength={20}
+            type="text" placeholder="Telefone (ex: 11 99999-9999) *" required maxLength={20}
             value={phone} onChange={(e) => setPhone(e.target.value)} 
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />

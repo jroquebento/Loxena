@@ -31,10 +31,12 @@ export interface OrderSummary {
   id: string;
   customerId: string;
   customerName: string;
+  customerEmail: string;
   createdAt: string;
   status: OrderStatus;
   totalAmount: number;
   itemCount: number;
+  totalUnits: number;
 }
 
 export interface CreateOrderItemRequest {

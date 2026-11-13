@@ -20,7 +20,9 @@ public record OrderSummaryResponse(
     Guid Id,
     Guid CustomerId,
     string CustomerName,
+    string CustomerEmail,
     DateTime CreatedAt,
     string Status,
     decimal TotalAmount,
-    int ItemCount);
+    int ItemCount,
+    int TotalUnits);

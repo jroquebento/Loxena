@@ -53,7 +53,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div className="flex flex-col">
-          <label className="text-sm text-gray-600 font-medium mb-1">Produto</label>
+          <label className="text-sm text-gray-600 font-medium mb-1">Produto <span className="text-red-500">*</span></label>
           <select 
             value={productId} 
             onChange={(e) => setProductId(e.target.value)} 
@@ -65,7 +65,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm text-gray-600 font-medium mb-1">Localização</label>
+          <label className="text-sm text-gray-600 font-medium mb-1">Localização <span className="text-red-500">*</span></label>
           <select 
             value={locationId} 
             onChange={(e) => setLocationId(e.target.value)} 
@@ -77,7 +77,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm text-gray-600 font-medium mb-1">Quantidade</label>
+          <label className="text-sm text-gray-600 font-medium mb-1">Quantidade <span className="text-red-500">*</span></label>
           <input 
             type="number" 
             min="1"

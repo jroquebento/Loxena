@@ -13,13 +13,14 @@ interface StockListProps {
 export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovimento, onSelecionarParaTransferencia }: StockListProps) {
   const getProdutoNome = (id: string) => produtos.find(p => p.id === id)?.name || 'Desconhecido';
   const getLocalizacaoCodigo = (id: string) => localizacoes.find(l => l.id === id)?.code || 'Desconhecido';
+  const stocksComSaldo = stocks.filter(stock => stock.physicalQuantity > 0);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md overflow-hidden">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-700">Saldo de Estoque</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {stocks.length} registros
+          {stocksComSaldo.length} registros
         </span>
       </div>
 
@@ -36,10 +37,10 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {stocks.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">Estoque vazio.</td></tr>
+            {stocksComSaldo.length === 0 ? (
+              <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">Nenhum estoque com saldo físico.</td></tr>
             ) : (
-              stocks.map((stock) => (
+              stocksComSaldo.map((stock) => (
                 <tr key={stock.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{getProdutoNome(stock.productId)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getLocalizacaoCodigo(stock.locationId)}</td>

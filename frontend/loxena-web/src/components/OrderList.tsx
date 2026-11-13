@@ -50,6 +50,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID do Pedido</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -60,7 +61,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
           <tbody className="bg-white divide-y divide-gray-200">
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
                   Nenhum pedido encontrado.
                 </td>
               </tr>
@@ -68,13 +69,16 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
               orders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
-                    {order.id.substring(0, 8)}... 
+                    <span title={order.id}>{order.id.substring(0, 8)}...</span>
                   </td>
                   <td className="px-6 py-4 max-w-xs truncate text-sm text-gray-700" title={order.customerName}>
                     {order.customerName}
                   </td>
+                  <td className="px-6 py-4 max-w-xs truncate text-sm text-gray-700" title={order.customerEmail}>
+                    {order.customerEmail}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700">
-                    {order.itemCount}
+                    {order.itemCount} SKUs ({order.totalUnits} un.)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString('pt-BR', {

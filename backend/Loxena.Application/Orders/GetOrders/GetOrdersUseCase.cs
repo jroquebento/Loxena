@@ -19,10 +19,12 @@ public class GetOrdersUseCase
                 order.Id,
                 order.CustomerId,
                 order.Customer.Name,
+                order.Customer.Email,
                 order.CreatedAt,
                 order.Status.ToString(),
                 order.TotalAmount,
-                order.Items.Count))
+                order.Items.Count,
+                order.Items.Sum(item => item.Quantity)))
             .ToList();
     }
 }

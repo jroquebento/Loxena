@@ -33,7 +33,7 @@ export function OrderForm({
 
       <form onSubmit={finalizarPedido} noValidate>
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Cliente</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Cliente <span className="text-red-500">*</span></label>
           <select
             value={clienteSelecionadoId}
             onChange={(evento) => definirClienteSelecionadoId(evento.target.value)}

@@ -61,7 +61,7 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
       
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <input 
-          type="text" placeholder="Nome do Produto" required maxLength={200}
+          type="text" placeholder="Nome do Produto *" required maxLength={200}
           value={nome} onChange={(e) => setNome(e.target.value)} 
           className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -74,7 +74,7 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
 
         <div className="grid grid-cols-2 gap-4">
           <input 
-            type="number" placeholder="Preço (ex: 50.50)" min="0" step="0.01" required
+            type="number" placeholder="Preço (ex: 50.50) *" min="0" step="0.01" required
             value={preco} onChange={(e) => setPreco(e.target.value)} 
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -83,7 +83,7 @@ export function ProductForm({ categorias, onSalvar, produtoSelecionado, onCancel
             value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required
             className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
-            <option value="" disabled>Selecione uma Categoria</option>
+            <option value="" disabled>Selecione uma Categoria *</option>
             {categorias.map((cat) => (
               <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
