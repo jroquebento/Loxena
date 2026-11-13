@@ -11,6 +11,7 @@ public class RemoveStockUseCaseTests
     public async Task Should_Keep_Stock_Record_When_Removal_Reduces_Physical_Quantity_To_Zero()
     {
         var stockRepository = new Mock<IStockRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
         var stock = new Stock(Guid.NewGuid(), Guid.NewGuid(), 5);
         var request = new RemoveStockRequest
         {
@@ -24,8 +25,11 @@ public class RemoveStockUseCaseTests
         stockRepository
             .Setup(repository => repository.UpdateAsync(stock))
             .Returns(Task.CompletedTask);
+        unitOfWork
+            .Setup(work => work.CommitAsync())
+            .Returns(Task.CompletedTask);
 
-        var useCase = new RemoveStockUseCase(stockRepository.Object);
+        var useCase = new RemoveStockUseCase(stockRepository.Object, unitOfWork.Object);
 
         var result = await useCase.ExecuteAsync(request);
 
@@ -33,5 +37,6 @@ public class RemoveStockUseCaseTests
         Assert.Equal(0, result.PhysicalQuantity);
         Assert.Equal(0, result.ReservedQuantity);
         stockRepository.Verify(repository => repository.UpdateAsync(stock), Times.Once);
+        unitOfWork.Verify(work => work.CommitAsync(), Times.Once);
     }
 }

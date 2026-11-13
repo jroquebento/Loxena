@@ -8,15 +8,18 @@ public class TransferStockUseCase
     private readonly IStockRepository _stockRepository;
     private readonly IProductRepository _productRepository;
     private readonly ILocationRepository _locationRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public TransferStockUseCase(
         IStockRepository stockRepository,
         IProductRepository productRepository,
-        ILocationRepository locationRepository)
+        ILocationRepository locationRepository,
+        IUnitOfWork unitOfWork)
     {
         _stockRepository = stockRepository;
         _productRepository = productRepository;
         _locationRepository = locationRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task ExecuteAsync(TransferStockRequest request)
@@ -59,5 +62,7 @@ public class TransferStockUseCase
             targetStock.AddPhysicalQuantity(request.Amount);
             await _stockRepository.UpdateAsync(targetStock);
         }
+
+        await _unitOfWork.CommitAsync();
     }
 }

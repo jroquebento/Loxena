@@ -13,6 +13,7 @@ public class TransferStockUseCaseTests
         var stockRepository = new Mock<IStockRepository>();
         var productRepository = new Mock<IProductRepository>();
         var locationRepository = new Mock<ILocationRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
         var product = new Product("Produto de teste", "Descrição sintética", 10m, Guid.NewGuid());
         var sourceLocation = new Location("A-01", "Origem de teste");
         var targetLocation = new Location("B-01", "Destino de teste");
@@ -48,11 +49,15 @@ public class TransferStockUseCaseTests
             .Setup(repository => repository.AddAsync(It.IsAny<Stock>()))
             .Callback<Stock>(stock => addedStock = stock)
             .Returns(Task.CompletedTask);
+        unitOfWork
+            .Setup(work => work.CommitAsync())
+            .Returns(Task.CompletedTask);
 
         var useCase = new TransferStockUseCase(
             stockRepository.Object,
             productRepository.Object,
-            locationRepository.Object);
+            locationRepository.Object,
+            unitOfWork.Object);
 
         await useCase.ExecuteAsync(request);
 
@@ -67,5 +72,6 @@ public class TransferStockUseCaseTests
         Assert.Equal(targetLocation.Id, addedStock.LocationId);
         Assert.Equal(5, addedStock.PhysicalQuantity);
         stockRepository.Verify(repository => repository.AddAsync(It.IsAny<Stock>()), Times.Once);
+        unitOfWork.Verify(work => work.CommitAsync(), Times.Once);
     }
 }

@@ -6,10 +6,12 @@ namespace Loxena.Application.Stocks.RemoveStock;
 public class RemoveStockUseCase
 {
     private readonly IStockRepository _stockRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RemoveStockUseCase(IStockRepository stockRepository)
+    public RemoveStockUseCase(IStockRepository stockRepository, IUnitOfWork unitOfWork)
     {
         _stockRepository = stockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<StockResponse> ExecuteAsync(RemoveStockRequest request) 
@@ -24,6 +26,7 @@ public class RemoveStockUseCase
 
         stock.RemovePhysicalQuantity(request.Amount);
         await _stockRepository.UpdateAsync(stock);
+        await _unitOfWork.CommitAsync();
 
         return stock.Adapt<StockResponse>();
     }

@@ -14,10 +14,10 @@ public class StockRepository : IStockRepository
         _context = context;
     }
 
-    public async Task AddAsync(Stock stock)
+    public Task AddAsync(Stock stock)
     {
         _context.Stocks.Add(stock);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
     public async Task<Stock?> GetByIdAsync(Guid id)
     {
@@ -41,10 +41,10 @@ public class StockRepository : IStockRepository
             .Where(s => s.ProductId == productId)
             .ToListAsync();
     }
-    public async Task UpdateAsync(Stock stock)
+    public Task UpdateAsync(Stock stock)
     {
         _context.Stocks.Update(stock);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
     public async Task<bool> HasStockForOtherProductAsync(Guid locationId, Guid currentProductId)
