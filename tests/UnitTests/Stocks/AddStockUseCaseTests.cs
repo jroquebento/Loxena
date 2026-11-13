@@ -60,4 +60,102 @@ public class AddStockUseCaseTests
         stockRepository.Verify(repository => repository.AddAsync(It.IsAny<Stock>()), Times.Once);
         unitOfWork.Verify(work => work.CommitAsync(), Times.Once);
     }
+
+    [Fact]
+    public async Task Should_Add_Stock_When_Other_Product_Has_Zero_Physical_Quantity()
+    {
+        var stockRepository = new Mock<IStockRepository>();
+        var productRepository = new Mock<IProductRepository>();
+        var locationRepository = new Mock<ILocationRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
+        var product = new Product("Produto novo", "Descrição sintética", 10m, Guid.NewGuid());
+        var otherProduct = new Product("Produto anterior", "Descrição sintética", 12m, Guid.NewGuid());
+        var location = new Location("A-02", "Localização com estoque zerado");
+        var previousStock = new Stock(otherProduct.Id, location.Id, 0);
+        var request = new AddStockRequest
+        {
+            ProductId = product.Id,
+            LocationId = location.Id,
+            Amount = 5
+        };
+        Stock? addedStock = null;
+
+        productRepository
+            .Setup(repository => repository.GetByIdAsync(product.Id))
+            .ReturnsAsync(product);
+        locationRepository
+            .Setup(repository => repository.GetByIdAsync(location.Id))
+            .ReturnsAsync(location);
+        stockRepository
+            .Setup(repository => repository.HasStockForOtherProductAsync(location.Id, product.Id))
+            .ReturnsAsync(previousStock.PhysicalQuantity > 0);
+        stockRepository
+            .Setup(repository => repository.GetByProductAndLocationAsync(product.Id, location.Id))
+            .ReturnsAsync((Stock?)null);
+        stockRepository
+            .Setup(repository => repository.AddAsync(It.IsAny<Stock>()))
+            .Callback<Stock>(stock => addedStock = stock)
+            .Returns(Task.CompletedTask);
+        unitOfWork
+            .Setup(work => work.CommitAsync())
+            .Returns(Task.CompletedTask);
+
+        var useCase = new AddStockUseCase(
+            stockRepository.Object,
+            productRepository.Object,
+            locationRepository.Object,
+            unitOfWork.Object);
+
+        var result = await useCase.ExecuteAsync(request);
+
+        Assert.NotNull(addedStock);
+        Assert.Equal(addedStock.Id, result.Id);
+        Assert.Equal(product.Id, addedStock.ProductId);
+        Assert.Equal(location.Id, addedStock.LocationId);
+        Assert.Equal(5, addedStock.PhysicalQuantity);
+        stockRepository.Verify(repository => repository.AddAsync(It.IsAny<Stock>()), Times.Once);
+        unitOfWork.Verify(work => work.CommitAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_Other_Product_Has_Physical_Quantity()
+    {
+        var stockRepository = new Mock<IStockRepository>();
+        var productRepository = new Mock<IProductRepository>();
+        var locationRepository = new Mock<ILocationRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
+        var product = new Product("Produto novo", "Descrição sintética", 10m, Guid.NewGuid());
+        var otherProduct = new Product("Produto armazenado", "Descrição sintética", 12m, Guid.NewGuid());
+        var location = new Location("A-03", "Localização ocupada");
+        var previousStock = new Stock(otherProduct.Id, location.Id, 3);
+        var request = new AddStockRequest
+        {
+            ProductId = product.Id,
+            LocationId = location.Id,
+            Amount = 5
+        };
+
+        productRepository
+            .Setup(repository => repository.GetByIdAsync(product.Id))
+            .ReturnsAsync(product);
+        locationRepository
+            .Setup(repository => repository.GetByIdAsync(location.Id))
+            .ReturnsAsync(location);
+        stockRepository
+            .Setup(repository => repository.HasStockForOtherProductAsync(location.Id, product.Id))
+            .ReturnsAsync(previousStock.PhysicalQuantity > 0);
+
+        var useCase = new AddStockUseCase(
+            stockRepository.Object,
+            productRepository.Object,
+            locationRepository.Object,
+            unitOfWork.Object);
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+            () => useCase.ExecuteAsync(request));
+
+        Assert.Equal("Esta localização já está ocupada por outro produto.", exception.Message);
+        stockRepository.Verify(repository => repository.AddAsync(It.IsAny<Stock>()), Times.Never);
+        unitOfWork.Verify(work => work.CommitAsync(), Times.Never);
+    }
 }

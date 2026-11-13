@@ -51,7 +51,8 @@ public class StockRepository : IStockRepository
     {
         return await _context.Stocks
             .AnyAsync(s => s.LocationId == locationId
-                        && s.ProductId != currentProductId);
+                        && s.ProductId != currentProductId
+                        && s.PhysicalQuantity > 0);
     }
     public async Task<IReadOnlyList<Stock>> GetByLocationIdAsync(Guid locationId)
     {
