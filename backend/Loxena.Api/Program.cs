@@ -19,11 +19,14 @@ builder.Services.AddDbContext<LoxenaDbContext>(options =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? ["http://localhost:5173"];
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -33,6 +36,14 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<LoxenaDbContext>();
+
+if (context.Database.IsRelational())
+{
+    await context.Database.MigrateAsync();
+}
 
 app.UseExceptionHandler();
 
@@ -53,3 +64,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
