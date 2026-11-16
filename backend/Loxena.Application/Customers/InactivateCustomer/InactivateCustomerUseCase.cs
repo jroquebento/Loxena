@@ -5,10 +5,14 @@ namespace Loxena.Application.Customers.InactivateCustomer;
 public class InactivateCustomerUseCase
 {
     private readonly ICustomerRepository _customerRepository;
+    private readonly IOrderRepository _orderRepository;
 
-    public InactivateCustomerUseCase(ICustomerRepository customerRepository)
+    public InactivateCustomerUseCase(
+        ICustomerRepository customerRepository,
+        IOrderRepository orderRepository)
     {
         _customerRepository = customerRepository;
+        _orderRepository = orderRepository;
     }
 
     public async Task<bool> ExecuteAsync(Guid id)
@@ -20,6 +24,10 @@ public class InactivateCustomerUseCase
 
         if (customer.IsActive)
         {
+            var hasActiveOrders = await _orderRepository.HasActiveOrdersByCustomerIdAsync(customer.Id);
+            if (hasActiveOrders)
+                throw new InvalidOperationException("Não é possível inativar um cliente que possui pedidos ativos.");
+
             customer.Inactivate();
             await _customerRepository.UpdateAsync(customer);
         }

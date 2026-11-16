@@ -49,6 +49,13 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
+    public async Task<bool> HasActiveOrdersByCustomerIdAsync(Guid customerId)
+    {
+        return await _context.Orders
+            .AnyAsync(order => order.CustomerId == customerId
+                && order.Status != OrderStatus.Delivered
+                && order.Status != OrderStatus.Canceled);
+    }
 
     public async Task UpdateAsync(Order order)
     {
