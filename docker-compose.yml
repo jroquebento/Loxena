@@ -18,5 +18,20 @@ services:
       retries: 10
       start_period: 30s
 
+  api:
+    container_name: loxena-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=LoxenaDb;User Id=sa;Password=Loxena@123;TrustServerCertificate=True;"
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
 volumes:
   loxena_sqlserver_data:
