@@ -15,9 +15,11 @@ public class TransferStockUseCaseTests
         var locationRepository = new Mock<ILocationRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
         var product = new Product("Produto de teste", "Descrição sintética", 10m, Guid.NewGuid());
+        var otherProduct = new Product("Produto anterior", "Descrição sintética", 12m, Guid.NewGuid());
         var sourceLocation = new Location("A-01", "Origem de teste");
         var targetLocation = new Location("B-01", "Destino de teste");
         var sourceStock = new Stock(product.Id, sourceLocation.Id, 5);
+        var previousTargetStock = new Stock(otherProduct.Id, targetLocation.Id, 0);
         var request = new TransferStockRequest
         {
             ProductId = product.Id,
@@ -35,7 +37,7 @@ public class TransferStockUseCaseTests
             .ReturnsAsync(targetLocation);
         stockRepository
             .Setup(repository => repository.HasStockForOtherProductAsync(targetLocation.Id, product.Id))
-            .ReturnsAsync(false);
+            .ReturnsAsync(previousTargetStock.PhysicalQuantity > 0);
         stockRepository
             .Setup(repository => repository.GetByProductAndLocationAsync(product.Id, sourceLocation.Id))
             .ReturnsAsync(sourceStock);
