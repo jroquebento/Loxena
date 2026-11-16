@@ -31,7 +31,7 @@ export function ProductsPage() {
       <div className="max-w-4xl mx-auto">
         
         <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
-          Painel Loxena
+          Catálogo de Produtos
         </h1>
         
         <ProductForm 

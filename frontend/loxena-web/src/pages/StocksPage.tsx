@@ -17,7 +17,7 @@ export function StocksPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto"> 
       <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
-        Painel de Estoque
+        Controle de Estoque
       </h1>
       
       <StockForm 

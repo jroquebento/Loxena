@@ -19,7 +19,7 @@ export function CustomersPage() {
       <div className="max-w-4xl mx-auto">
         
         <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
-          Gestão de Clientes
+          Cadastro de Clientes
         </h1>
         
         <CustomerForm 

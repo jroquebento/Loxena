@@ -21,7 +21,7 @@ export function CategoriesPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
-        Gestão de Categorias
+        Categorias de Produtos
       </h1>
       
       <CategoryForm 
