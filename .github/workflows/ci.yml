@@ -7,7 +7,7 @@ on:
 jobs:
   backend:
     name: Backend (.NET 10)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: backend
@@ -31,7 +31,7 @@ jobs:
 
   frontend:
     name: Frontend (React)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: frontend/loxena-web
@@ -42,7 +42,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend/loxena-web/package-lock.json
 
