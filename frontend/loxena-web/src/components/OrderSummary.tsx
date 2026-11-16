@@ -1,5 +1,6 @@
 import type { OrderStatus } from '../types/Order';
 import type { Order } from '../types/Order';
+import { formatDataBrasileira } from '../utils/dateUtils';
 
 interface OrderSummaryProps {
   pedido: Order;
@@ -25,9 +26,7 @@ export function OrderSummary({ pedido }: OrderSummaryProps) {
     <div className="bg-white p-6 rounded-lg shadow-md mb-6 flex justify-between items-center">
       <div>
         <h2 className="text-2xl font-bold text-gray-800">Pedido {pedido.id.substring(0, 8)}...</h2>
-        <p className="text-gray-500 text-sm mt-1">Data: {new Date(pedido.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-        })}</p>
+        <p className="text-gray-500 text-sm mt-1">Data: {formatDataBrasileira(pedido.createdAt)}</p>
       </div>
       <div className="text-right">
         <div className="mb-2">

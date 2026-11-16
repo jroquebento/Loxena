@@ -1,4 +1,5 @@
 import type { OrderStatus, OrderSummary } from '../types/Order';
+import { formatDataBrasileira } from '../utils/dateUtils';
 
 interface OrderListProps {
   orders: OrderSummary[];
@@ -77,9 +78,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
                     {order.itemCount} SKUs ({order.totalUnits} un.)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(order.createdAt).toLocaleDateString('pt-BR', {
-                      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                    })}
+                    {formatDataBrasileira(order.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {renderStatusBadge(order.status)}
