@@ -1,7 +1,8 @@
 import type { Location } from "../types/Location";
+import { API_BASE_URL } from './apiConfig';
 import { tratarErro } from "../utils/apiUtils";
 
-const API_URL = "https://localhost:7175/Locations";
+const API_URL = `${API_BASE_URL}/Locations`;
 
 export type LocationPayload = {
     code: string;

@@ -1,7 +1,8 @@
 import type { Product } from '../types/Product';
+import { API_BASE_URL } from './apiConfig';
 import { tratarErro } from "../utils/apiUtils";
 
-const API_URL = "https://localhost:7175/Products";
+const API_URL = `${API_BASE_URL}/Products`;
 
 export type ProductPayload = {
   name: string;

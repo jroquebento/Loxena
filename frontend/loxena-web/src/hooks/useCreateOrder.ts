@@ -1,6 +1,7 @@
 import { useEffect, useState, type SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../services/apiConfig';
 import { orderService } from '../services/orderService';
 import { tratarErro } from '../utils/apiUtils';
 import type { Customer as Cliente } from '../types/Customer';
@@ -32,9 +33,9 @@ export function useCreateOrder() {
     async function carregarDados() {
       try {
         const [respostaClientes, respostaProdutos, respostaEstoques] = await Promise.all([
-          fetch('https://localhost:7175/Customers'),
-          fetch('https://localhost:7175/Products'),
-          fetch('https://localhost:7175/Stocks')
+          fetch(`${API_BASE_URL}/Customers`),
+          fetch(`${API_BASE_URL}/Products`),
+          fetch(`${API_BASE_URL}/Stocks`)
         ]);
 
         await tratarErro(respostaClientes, 'Falha ao buscar clientes');

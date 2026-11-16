@@ -27,11 +27,26 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: "8080"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=LoxenaDb;User Id=sa;Password=Loxena@123;TrustServerCertificate=True;"
+      Cors__AllowedOrigins__0: "http://localhost:5173"
+      Cors__AllowedOrigins__1: "http://localhost:3000"
     ports:
       - "8080:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
+
+  frontend:
+    container_name: loxena-frontend
+    build:
+      context: ./frontend/loxena-web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: "http://localhost:8080"
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_started
 
 volumes:
   loxena_sqlserver_data:

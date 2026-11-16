@@ -1,7 +1,8 @@
 import type { Stock } from '../types/Stock';
+import { API_BASE_URL } from './apiConfig';
 import { tratarErro } from '../utils/apiUtils';
 
-const API_URL = "https://localhost:7175/Stocks"; 
+const API_URL = `${API_BASE_URL}/Stocks`;
 
 export type StockMovementPayload = {
   productId: string;

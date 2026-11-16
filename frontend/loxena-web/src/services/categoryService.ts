@@ -1,7 +1,8 @@
 import type { Category } from "../types/Category";
+import { API_BASE_URL } from './apiConfig';
 import { tratarErro } from "../utils/apiUtils";
 
-const API_URL = "https://localhost:7175/Categories";
+const API_URL = `${API_BASE_URL}/Categories`;
 
 export type CategoryPayload = {
     name: string;

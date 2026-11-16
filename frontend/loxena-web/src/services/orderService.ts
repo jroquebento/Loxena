@@ -1,7 +1,8 @@
 import type { Order, OrderSummary } from '../types/Order';
+import { API_BASE_URL } from './apiConfig';
 import { tratarErro } from '../utils/apiUtils';
 
-const API_URL = "https://localhost:7175/Orders"; 
+const API_URL = `${API_BASE_URL}/Orders`;
 
 export type CreateOrderItemPayload = {
   productId: string;
