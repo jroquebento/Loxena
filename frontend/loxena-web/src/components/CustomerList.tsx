@@ -16,7 +16,7 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
         </span>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full table-fixed divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -58,6 +58,46 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {customers.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-500">Nenhum cliente cadastrado.</p>
+        ) : (
+          customers.map((customer) => (
+            <article key={customer.id} className="rounded-lg border border-gray-200 p-3">
+              <h3 className="break-words font-semibold text-gray-900">{customer.name}</h3>
+              <dl className="mt-2 space-y-1 text-sm">
+                <div>
+                  <dt className="inline font-medium text-gray-700">E-mail: </dt>
+                  <dd className="inline break-words text-gray-600">{customer.email}</dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-gray-700">Doc: </dt>
+                  <dd className="inline break-words text-gray-600">{customer.document}</dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-gray-700">Tel: </dt>
+                  <dd className="inline break-words text-gray-600">{customer.phone}</dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex flex-row gap-2">
+                <button
+                  onClick={() => onEdit(customer)}
+                  className="flex-1 whitespace-nowrap rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => onDelete(customer.id)}
+                  className="flex-1 whitespace-nowrap rounded-md bg-red-50 px-3 py-2 text-sm text-red-700"
+                >
+                  Excluir
+                </button>
+              </div>
+            </article>
+          ))
+        )}
       </div>
     </div>
   );

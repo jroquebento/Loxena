@@ -28,7 +28,7 @@ export function ProductList({ produtos, categorias, onExcluir, onEditar }: Produ
         {produtos.map((produto) => (
           <div 
             key={produto.id} 
-            className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-4 transition hover:shadow-lg sm:flex-row sm:items-start"
+            className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-start sm:p-4"
             title={produto.description}
           >
             
@@ -46,10 +46,10 @@ export function ProductList({ produtos, categorias, onExcluir, onEditar }: Produ
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 self-end sm:flex-row sm:self-auto">
+            <div className="flex flex-row gap-2 self-end sm:self-auto">
               <button 
                 onClick={() => onEditar(produto)}
-                className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-md transition cursor-pointer"
+                className="shrink-0 rounded-md p-2 text-blue-500 transition hover:bg-blue-50 hover:text-blue-700"
                 title="Editar Produto"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -60,7 +60,7 @@ export function ProductList({ produtos, categorias, onExcluir, onEditar }: Produ
 
               <button 
                 onClick={() => onExcluir(produto.id)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-md transition cursor-pointer"
+                className="shrink-0 rounded-md p-2 text-red-500 transition hover:bg-red-50 hover:text-red-700"
                 title="Excluir Produto"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

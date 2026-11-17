@@ -24,7 +24,7 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
         </span>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -53,6 +53,7 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
                       onClick={() => {
                         onSelecionarParaMovimento(stock.productId, stock.locationId);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
                       }} 
                       className="w-full rounded-md bg-blue-50 px-3 py-1 text-blue-600 hover:text-blue-900 sm:w-auto"
                     >
@@ -74,6 +75,53 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {stocksComSaldo.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-500">Nenhum estoque com saldo físico.</p>
+        ) : (
+          stocksComSaldo.map((stock) => (
+            <article key={stock.id} className="rounded-lg border border-gray-200 p-3">
+              <h3 className="break-words font-semibold text-gray-900">{getProdutoNome(stock.productId)}</h3>
+              <p className="mt-1 break-words text-sm text-gray-600">
+                <span className="font-medium">Local:</span> {getLocalizacaoCodigo(stock.locationId)}
+              </p>
+              <dl className="mt-3 grid grid-cols-3 gap-2 text-center text-sm">
+                <div>
+                  <dt className="text-xs text-gray-500">Físico</dt>
+                  <dd className="font-medium text-gray-900">{stock.physicalQuantity}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500">Reservado</dt>
+                  <dd className="font-semibold text-orange-600">{stock.reservedQuantity}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500">Disponível</dt>
+                  <dd className="font-bold text-green-600">{stock.availableQuantity}</dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex flex-row gap-2">
+                <button
+                  onClick={() => {
+                    onSelecionarParaMovimento(stock.productId, stock.locationId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="flex-1 whitespace-nowrap rounded-md bg-blue-50 px-2 py-2 text-center text-sm text-blue-700"
+                >
+                  Movimentar
+                </button>
+                <button
+                  onClick={() => onSelecionarParaTransferencia(stock.productId, stock.locationId, stock.physicalQuantity)}
+                  className="flex-1 whitespace-nowrap rounded-md bg-purple-50 px-2 py-2 text-center text-sm text-purple-700"
+                >
+                  Transferir
+                </button>
+              </div>
+            </article>
+          ))
+        )}
       </div>
     </div>
   );

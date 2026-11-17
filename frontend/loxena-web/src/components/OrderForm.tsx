@@ -52,7 +52,7 @@ export function OrderForm({
 
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-700 mb-3">Itens no Carrinho</h3>
-          <div className="overflow-x-auto rounded-md border">
+          <div className="hidden overflow-x-auto rounded-md border md:block">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -97,7 +97,48 @@ export function OrderForm({
             </table>
           </div>
 
-          <div className="flex justify-end mt-4">
+          <div className="space-y-3 md:hidden">
+            {itensCarrinho.length === 0 ? (
+              <p className="rounded-md border border-gray-200 px-3 py-4 text-center text-sm text-gray-500">
+                Nenhum item adicionado ao carrinho ainda.
+              </p>
+            ) : (
+              itensCarrinho.map((item) => (
+                <article key={item.produtoId} className="rounded-md border border-gray-200 p-3">
+                  <h4 className="break-words font-medium text-gray-900">{item.nomeProduto}</h4>
+                  <dl className="mt-2 space-y-1 text-sm">
+                    <div className="flex justify-between gap-2">
+                      <dt className="text-gray-600">Quantidade</dt>
+                      <dd className="text-right text-gray-900">{item.quantidade}</dd>
+                    </div>
+                    <div className="flex justify-between gap-2">
+                      <dt className="text-gray-600">Preço unitário</dt>
+                      <dd className="text-right text-gray-900">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.precoUnitario)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-2 border-t border-gray-100 pt-1">
+                      <dt className="font-medium text-gray-700">Subtotal</dt>
+                      <dd className="text-right font-semibold text-gray-900">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.quantidade * item.precoUnitario)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="mt-3 flex flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={() => removerDoCarrinho(item.produtoId)}
+                      className="w-full whitespace-nowrap rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+
+          <div className="mt-4 flex justify-end">
             <div className="text-right">
               <span className="text-gray-600 text-sm mr-4">Total do Pedido:</span>
               <span className="text-2xl font-bold text-green-700">

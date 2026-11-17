@@ -45,7 +45,7 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
         </span>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -99,6 +99,49 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {orders.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-500">Nenhum pedido encontrado.</p>
+        ) : (
+          orders.map((order) => (
+            <article key={order.id} className="rounded-lg border border-gray-200 p-3">
+              <div className="flex items-start justify-between gap-2">
+                <h3 className="min-w-0 break-all text-sm font-semibold text-gray-900">Pedido {order.id}</h3>
+                {renderStatusBadge(order.status)}
+              </div>
+              <dl className="mt-3 space-y-2 text-sm">
+                <div>
+                  <dt className="font-medium text-gray-700">Cliente</dt>
+                  <dd className="break-words text-gray-600">{order.customerName}</dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="font-medium text-gray-700">Itens</dt>
+                  <dd className="text-right text-gray-600">{order.itemCount} SKUs ({order.totalUnits} un.)</dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="font-medium text-gray-700">Data</dt>
+                  <dd className="text-right text-gray-600">{formatDataBrasileira(order.createdAt)}</dd>
+                </div>
+                <div className="flex justify-between gap-2 border-t border-gray-100 pt-2">
+                  <dt className="font-medium text-gray-700">Total</dt>
+                  <dd className="text-right font-semibold text-gray-900">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(order.totalAmount)}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex flex-row gap-2">
+                <button
+                  onClick={() => onViewDetails(order.id)}
+                  className="w-full whitespace-nowrap rounded-md bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700"
+                >
+                  Operar / Detalhes
+                </button>
+              </div>
+            </article>
+          ))
+        )}
       </div>
     </div>
   );

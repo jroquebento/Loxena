@@ -18,14 +18,14 @@ export function CategoryList({ categorias, onExcluir, onEditar }: CategoryListPr
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categorias.map((categoria) => (
-          <div key={categoria.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-4 transition hover:shadow-lg sm:flex-row sm:items-center">
+          <div key={categoria.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-center sm:p-4">
             
             <h3 className="min-w-0 break-words text-lg font-bold text-gray-800">{categoria.name}</h3>
 
-            <div className="flex flex-col gap-2 self-end sm:flex-row sm:self-auto">
+            <div className="flex flex-row gap-2 self-end sm:self-auto">
               <button 
                 onClick={() => onEditar(categoria)}
-                className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-md transition cursor-pointer"
+                className="shrink-0 rounded-md p-2 text-blue-500 transition hover:bg-blue-50 hover:text-blue-700"
                 title="Editar Categoria"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -36,7 +36,7 @@ export function CategoryList({ categorias, onExcluir, onEditar }: CategoryListPr
 
               <button 
                 onClick={() => onExcluir(categoria.id)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-md transition cursor-pointer"
+                className="shrink-0 rounded-md p-2 text-red-500 transition hover:bg-red-50 hover:text-red-700"
                 title="Excluir Categoria"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

@@ -21,17 +21,17 @@ export function LocationList({ locations, onExcluir, onEditar }: LocationListPro
           <p className="text-gray-500 col-span-2 text-center py-4">Nenhuma localização cadastrada.</p>
         ) : (
           locations.map((loc) => (
-            <div key={loc.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-4 transition hover:shadow-lg sm:flex-row sm:items-center">
+            <div key={loc.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-center sm:p-4">
             
               <div>
                 <h3 className="break-words text-lg font-bold text-gray-800">{loc.code}</h3>
                 <p className="break-words text-sm text-gray-500">{loc.description}</p>
               </div>
 
-              <div className="flex flex-col gap-2 self-end sm:flex-row sm:self-auto">
+              <div className="flex flex-row gap-2 self-end sm:self-auto">
                 <button 
                   onClick={() => onEditar(loc)}
-                  className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-md transition cursor-pointer"
+                  className="shrink-0 rounded-md p-2 text-blue-500 transition hover:bg-blue-50 hover:text-blue-700"
                   title="Editar Localização"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -42,7 +42,7 @@ export function LocationList({ locations, onExcluir, onEditar }: LocationListPro
 
                 <button 
                   onClick={() => onExcluir(loc.id)}
-                  className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-md transition cursor-pointer"
+                  className="shrink-0 rounded-md p-2 text-red-500 transition hover:bg-red-50 hover:text-red-700"
                   title="Excluir Localização"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

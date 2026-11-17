@@ -18,7 +18,7 @@ export function OrderItemList({
   return (
     <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-4">Itens do Pedido & Separação</h3>
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -83,6 +83,56 @@ export function OrderItemList({
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {pedido.items.map(itemPedido => (
+          <article key={itemPedido.id} className="rounded-lg border border-gray-200 p-3">
+            <h4 className="break-words font-semibold text-gray-900">{itemPedido.productName}</h4>
+            <dl className="mt-2 space-y-1 text-sm">
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-600">Solicitado</dt>
+                <dd className="text-right text-gray-900">{itemPedido.quantity}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-600">Separado</dt>
+                <dd className="text-right font-semibold text-blue-600">{itemPedido.pickedQuantity} / {itemPedido.quantity}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-600">Preço unitário</dt>
+                <dd className="text-right text-gray-700">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(itemPedido.unitPrice)}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2 border-t border-gray-100 pt-1">
+                <dt className="font-medium text-gray-700">Subtotal</dt>
+                <dd className="text-right font-semibold text-gray-900">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(itemPedido.quantity * itemPedido.unitPrice)}
+                </dd>
+              </div>
+            </dl>
+            {pedido.status === 'Picking' && itemPedido.pickedQuantity < itemPedido.quantity && (
+              <div className="mt-3 flex flex-row items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max={itemPedido.quantity - itemPedido.pickedQuantity}
+                  value={quantidadesSeparacao[itemPedido.id] || ''}
+                  onChange={(evento) => alterarQuantidadeSeparacao(itemPedido.id, Number(evento.target.value))}
+                  className="w-20 shrink-0 rounded border border-gray-300 px-2 py-2 text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Qtd"
+                />
+                <button
+                  disabled={processandoAcao}
+                  onClick={() => separarItem(itemPedido.id)}
+                  className="flex-1 whitespace-nowrap rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                >
+                  Separar
+                </button>
+              </div>
+            )}
+          </article>
+        ))}
       </div>
     </div>
   );
