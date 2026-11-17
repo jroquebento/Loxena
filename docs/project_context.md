@@ -1,6 +1,6 @@
 # Loxena — Contexto Técnico do Projeto
 
-> Documento de referência para desenvolvedores e IAs continuarem o projeto com base no código atual. Quando houver divergência, considerar os controllers, casos de uso, entidades e frontend presentes no repositório como fonte de verdade; usar `contexto_do_projeto_loxena_frontend_e_backend.md` como complemento recente e este documento como contexto consolidado.
+> Documento de referência para desenvolvedores e IAs continuarem o projeto com base no código atual. Quando houver divergência, considerar os controllers, casos de uso, entidades e frontend presentes no repositório como fonte de verdade; este documento serve como contexto complementar.
 
 ## 1. Identidade e objetivo
 

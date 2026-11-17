@@ -1,106 +1,223 @@
-# Loxena
+# WMS Loxena
 
-<p align="right"><a href="README.md">🇧🇷 Leia em português</a></p>
+<p align="right"><a href="README.md">🇧🇷 Português</a></p>
 
-## Full-Stack Logistics Operations and WMS System
+![GitHub Actions CI](https://github.com/jroquebento/Loxena/actions/workflows/ci.yml/badge.svg?branch=main)
+![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![SQL Server 2025](https://img.shields.io/badge/SQL_Server-2025-CC2927?logo=microsoftsqlserver&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
-**Loxena** is a portfolio web application representing essential distribution-center operations: product and warehouse-location management, stock and reservation control, order fulfillment, and execution of the steps from picking through delivery.
+**Loxena** is a portfolio Warehouse Management System (WMS) inspired by real logistics operations. It models location-based inventory and order fulfillment, connecting an ASP.NET Core API to a responsive React interface.
 
-The MVP focuses on concrete operational rules and frontend/API integration. It is intentionally not a complete enterprise WMS.
+## Overview and business context
 
-> **Status:** in development. The API and frontend currently cover catalogs, stock, customers, and the order workflow described below.
+The system covers product, category, location, and customer records; inventory lookup and movements; and order creation and fulfillment. The goal is to demonstrate practical logistics rules in an MVP, not to claim a complete enterprise WMS.
 
-## Implemented operational workflow
+- **Location-based inventory:** each `Stock` record associates a product with a location and calculates available quantity as `PhysicalQuantity - ReservedQuantity`. The application validates reservations, removals, and shipment fulfillment to preserve committed stock.
+- **Occupied locations:** a location with physical stock cannot be inactivated. A filtered index also prevents more than one product with positive physical stock from occupying the same location.
+- **Orders and picking:** creating an order reserves stock. The workflow requires all items to be picked before checking, then advances through packing, shipment, and delivery. Shipment consumes physical stock and its reservation.
+- **Customer protection:** a customer with active orders cannot be inactivated.
 
-```text
-Simplified receiving
-(manual stock entry)
-			↓
-Storage by location
-(stock and transfer operations)
-			↓
-Physical and available stock
-			↓
-Order creation: Pending
-(immediate stock reservation)
-		  ↓
-Picking → Checking → Packing
-		  ↓
-Shipped
-(physical stock deducted and reservation released)
-		  ↓
-Delivered
+An order moves through `Pending → Picking → Checking → Packing → Shipped → Delivered`; it can also be canceled before shipment. Formal receiving, payment confirmation, authentication, and a dedicated pickup workflow are not implemented in this MVP.
+
+## Architecture and technical decisions
+
+### Docker topology
+
+In Compose, Nginx serves the frontend on port `3000` and forwards `/api/` to the API over the internal Docker network. The API connects to SQL Server 2025 through the `sqlserver` service.
+
+```mermaid
+flowchart LR
+    Browser[Browser]
+    Nginx[Nginx Reverse Proxy<br/>Frontend container :80<br/>host :3000]
+    Api[ASP.NET Core Web API<br/>.NET 10 :8080]
+    Db[(SQL Server 2025<br/>LoxenaDb :1433)]
+
+    Browser -->|HTTP :3000| Nginx
+    Nginx -->|SPA assets| Browser
+    Nginx -->|/api/* → API routes| Api
+    Api -->|EF Core| Db
 ```
 
-Receiving has no dedicated module or record: incoming quantities are entered directly into stock. There is no payment-confirmation step; stock is reserved when an order is created. Customer pickup is not represented as a separate state or workflow in the current implementation.
+### Domain model
 
-## Features
+The diagram represents the entities registered in `LoxenaDbContext`. `OrderItem.StockId` identifies the stock record associated with an item; the entity has no explicit EF navigation to `Stock`.
 
-- **Products and categories:** create, retrieve, update, and inactivate.
-- **Locations:** create and maintain warehouse locations; inactivation is blocked while physical stock remains at a location.
-- **Stock:** retrieve stock by product and add, remove, or transfer quantities between locations.
-- **Customers:** create, retrieve, update, and inactivate.
-- **Orders:** create orders with items, retrieve orders, cancel, and track operational progress.
-- **Warehouse operations:** start picking, record picked quantities per item, start checking and packing, ship, and confirm delivery.
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PRODUCT : categorizes
+    PRODUCT ||--o{ STOCK : stored_as
+    LOCATION ||--o{ STOCK : contains
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT ||--o{ ORDER_ITEM : references
+    STOCK ||..o{ ORDER_ITEM : "StockId reference"
 
-Order items are managed within an order rather than as a separate module. Catalog entities are inactivated instead of physically deleted.
-
-## Key business rules
-
-### Stock balance
-
-Each stock record associates a product with a location and tracks physical and reserved quantities:
-
-```text
-Available quantity = PhysicalQuantity - ReservedQuantity
+    CATEGORY {
+        Guid Id PK
+        string Name
+        bool IsActive
+    }
+    PRODUCT {
+        Guid Id PK
+        string Name
+        decimal Price
+        Guid CategoryId FK
+        bool IsActive
+    }
+    LOCATION {
+        Guid Id PK
+        string Code
+        string Description
+        bool IsActive
+    }
+    STOCK {
+        Guid Id PK
+        Guid ProductId FK
+        Guid LocationId FK
+        int PhysicalQuantity
+        int ReservedQuantity
+    }
+    CUSTOMER {
+        Guid Id PK
+        string Name
+        string Email
+        string Document
+        string Phone
+        bool IsActive
+    }
+    ORDER {
+        Guid Id PK
+        Guid CustomerId FK
+        datetime CreatedAt
+        OrderStatus Status
+    }
+    ORDER_ITEM {
+        Guid Id PK
+        Guid OrderId FK
+        Guid ProductId FK
+        Guid StockId
+        int Quantity
+        decimal UnitPrice
+        int PickedQuantity
+    }
 ```
 
-A reservation requires sufficient available quantity. Manual stock removal cannot reduce physical stock below reserved quantities. When an order is shipped, its reservation is fulfilled: physical stock decreases and the corresponding reserved quantity is released.
+### Clean Architecture and frontend
 
-### Order lifecycle
+The backend separates responsibilities into `Loxena.Domain` (entities and rules), `Loxena.Application` (use cases and contracts), `Loxena.Infrastructure` (EF Core and persistence), and `Loxena.Api` (controllers, HTTP configuration, and global error handling). Test projects are in `tests/UnitTests` and `tests/IntegrationTests`.
 
-```text
-Pending → Picking → Checking → Packing → Shipped → Delivered
-     └──────────── Canceled before shipment ────────────────┘
+The frontend uses React 19, TypeScript, Vite, and Tailwind CSS 4. Operational lists combine desktop tables with mobile cards and instant client-side search; navigation and controls adapt to smaller screens.
+
+Key API routes include `/Orders`, `/Stocks`, `/Customers`, `/Products`, `/Categories`, and `/Locations`. Through Nginx, they are available under `/api/` (for example, `/api/Orders`).
+
+## Visual demo
+
+Screenshots and GIFs will be added later. Place them in `docs/images/` and remove the corresponding HTML comments to display them:
+
+<!-- ![Desktop order management](docs/images/orders-desktop.png) -->
+<!-- ![Order picking workflow](docs/images/order-picking.gif) -->
+<!-- ![Responsive mobile interface](docs/images/mobile-responsive.png) -->
+
+## Getting started
+
+### Docker Compose (recommended)
+
+Requirements: Docker Engine or Docker Desktop with the `docker compose` plugin.
+
+From the repository root, run:
+
+```bash
+docker compose up --build -d
 ```
 
-- An order starts as `Pending` and reserves stock immediately.
-- Checking can begin only after every order item has been fully picked.
-- Shipping requires the `Packing` state and fulfills the reserved stock.
-- Cancellation releases reservations and is not allowed after `Shipped` or `Delivered`.
+Open **http://localhost:3000**. Compose starts SQL Server 2025, the API, and the frontend; the API applies EF Core migrations at startup.
 
-## Technology and architecture
-
-**Backend:** C#, .NET 10, ASP.NET Core Web API, Entity Framework Core, SQL Server, Mapster, and built-in dependency injection.
-
-**Frontend:** React, TypeScript, Vite, Tailwind CSS, React Router, Fetch API, React-Toastify, and SweetAlert2.
-
-```text
-React + TypeScript
-        │ HTTP/JSON
-        ▼
-Loxena.Api → Loxena.Application → Loxena.Domain
-        │              ▲
-        └── Loxena.Infrastructure
-                       │ EF Core
-                       ▼
-                   SQL Server
+```bash
+docker compose ps
+docker compose down
 ```
 
-The backend separates API, use-case, domain, and persistence responsibilities. API exceptions are returned as `ProblemDetails`; the frontend displays user-facing error messages. The configured database is `LoxenaDb`.
+`docker compose down` preserves the database volume. Use `docker compose down -v` only if you also intend to delete persisted data.
 
-## MVP scope
+### Local development (optional)
 
-**Implemented:** products, categories, locations, stock, customers, orders, and picking, checking, packing, shipping, and delivery operations.
+Requirements: .NET 10 SDK, Node.js 22+, and Docker to provide SQL Server. `appsettings.Development.json` expects SQL Server at `localhost:1433` with the `LoxenaDb` database; start only the database service from Compose:
 
-**Simplified or currently out of scope:** authentication/JWT and user roles; suppliers and formal receiving records; payment confirmation; formal inventory counting; dashboards and metrics; and a dedicated pickup workflow. These should not be presented as currently available features.
+```bash
+docker compose up -d sqlserver
+```
 
-For demonstration data, the latest project context describes straightforward categories (such as Ferramentas and Eletrônicos), everyday products, and short location codes such as `A1`, `B1`, and `EXP`.
+In one terminal, from the repository root, run the API on port `8080`, which is the Vite proxy target:
 
-## Run locally
+```bash
+dotnet run --project backend/Loxena.Api/Loxena.Api.csproj --urls http://localhost:8080
+```
 
-The backend requires the .NET 10 SDK and a SQL Server instance configured through the `DefaultConnection` connection string. The frontend uses Vite; from `frontend/loxena-web`, install dependencies with `npm install` and start the development server with `npm run dev`. The frontend is configured to use the local API at `https://localhost:7175`.
+In a second terminal:
 
-## Project goal
+```bash
+cd frontend/loxena-web
+npm ci
+npm run dev
+```
 
-Demonstrate full-stack development skills through a coherent logistics domain: stock rules, state transitions, a REST API, relational persistence, and an integrated React interface. The priority is to keep the MVP understandable, testable, and evolvable.
+Open **http://localhost:5173**. Vite forwards `/api` requests to `http://localhost:8080`.
+
+### Temporary access with Cloudflare Tunnel
+
+To expose the Docker Compose version, use port `3000`:
+
+```bash
+cloudflared tunnel --url http://localhost:3000
+```
+
+If you are using the Vite development server, expose port `5173`:
+
+```bash
+cloudflared tunnel --url http://localhost:5173
+```
+
+Use the temporary HTTPS URL printed by `cloudflared`. The tunnel makes the app publicly accessible; do not expose real data, credentials, or environments that should remain private.
+
+## Tests and CI
+
+Run the .NET tests from the repository root:
+
+```bash
+dotnet test backend/Loxena.slnx
+```
+
+The `UnitTests` and `IntegrationTests` projects use xUnit; integration tests require Docker/Testcontainers for SQL Server.
+
+The [GitHub Actions CI workflow](.github/workflows/ci.yml) runs on `push` and `pull_request` and has two jobs:
+
+- **Backend (.NET 10):** restore, Release build, and tests for `backend/Loxena.slnx`.
+- **Frontend (Node.js 22):** `npm ci` and `npm run build` in `frontend/loxena-web`.
+
+The frontend also provides `npm run lint` for local static analysis.
+
+## Repository structure
+
+```text
+backend/
+  Loxena.Api/
+  Loxena.Application/
+  Loxena.Domain/
+  Loxena.Infrastructure/
+  Loxena.slnx
+tests/
+  UnitTests/
+  IntegrationTests/
+frontend/
+  loxena-web/
+docker-compose.yml
+README.md
+README-en.md
+```
+
+See also the [project technical context](docs/project_context.md).
