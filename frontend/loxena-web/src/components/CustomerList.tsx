@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import type { Customer } from '../types/Customer';
+import { SearchInput } from './SearchInput';
+import { normalizeSearchText } from '../utils/searchUtils';
 
 interface CustomerListProps {
   customers: Customer[];
@@ -7,14 +10,28 @@ interface CustomerListProps {
 }
 
 export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps) {
+  const [valorBusca, definirValorBusca] = useState('');
+  const buscaNormalizada = normalizeSearchText(valorBusca);
+  const clientesFiltrados = customers.filter((cliente) =>
+    normalizeSearchText(cliente.name).includes(buscaNormalizada) ||
+    normalizeSearchText(cliente.email).includes(buscaNormalizada) ||
+    normalizeSearchText(cliente.document).includes(buscaNormalizada)
+  );
+
   return (
     <div className="overflow-hidden rounded-lg bg-white p-4 shadow-md sm:p-6">
       <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Lista de Clientes</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {customers.length} registros
+          {clientesFiltrados.length} registros
         </span>
       </div>
+
+      <SearchInput
+        valor={valorBusca}
+        aoAlterar={definirValorBusca}
+        placeholder="Buscar por nome, e-mail ou documento..."
+      />
 
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full table-fixed divide-y divide-gray-200">
@@ -28,10 +45,14 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {customers.length === 0 ? (
-              <tr><td colSpan={5} className="px-6 py-4 text-center text-gray-500">Nenhum cliente cadastrado.</td></tr>
+            {clientesFiltrados.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                  {customers.length === 0 ? 'Nenhum cliente cadastrado.' : 'Nenhum cliente corresponde à busca.'}
+                </td>
+              </tr>
             ) : (
-              customers.map((customer) => (
+              clientesFiltrados.map((customer) => (
                 <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-3 py-4 text-sm font-medium text-gray-900 break-words">{customer.name}</td>
                   <td className="px-3 py-4 text-sm text-gray-500 truncate" title={customer.email}>{customer.email}</td>
@@ -61,10 +82,12 @@ export function CustomerList({ customers, onEdit, onDelete }: CustomerListProps)
       </div>
 
       <div className="space-y-3 md:hidden">
-        {customers.length === 0 ? (
-          <p className="py-4 text-center text-sm text-gray-500">Nenhum cliente cadastrado.</p>
+        {clientesFiltrados.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-500">
+            {customers.length === 0 ? 'Nenhum cliente cadastrado.' : 'Nenhum cliente corresponde à busca.'}
+          </p>
         ) : (
-          customers.map((customer) => (
+          clientesFiltrados.map((customer) => (
             <article key={customer.id} className="rounded-lg border border-gray-200 p-3">
               <h3 className="break-words font-semibold text-gray-900">{customer.name}</h3>
               <dl className="mt-2 space-y-1 text-sm">

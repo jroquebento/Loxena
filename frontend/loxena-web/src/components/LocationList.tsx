@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import type { Location } from '../types/Location';
+import { SearchInput } from './SearchInput';
+import { normalizeSearchText } from '../utils/searchUtils';
 
 interface LocationListProps {
   locations: Location[];
@@ -7,20 +10,37 @@ interface LocationListProps {
 }
 
 export function LocationList({ locations, onExcluir, onEditar }: LocationListProps) {
+  const [valorBusca, definirValorBusca] = useState('');
+  const buscaNormalizada = normalizeSearchText(valorBusca);
+  const localizacoesFiltradas = locations.filter((localizacao) =>
+    normalizeSearchText(localizacao.code).includes(buscaNormalizada) ||
+    normalizeSearchText(localizacao.description).includes(buscaNormalizada)
+  );
+
   return (
     <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
       <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Localizações Cadastradas</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {locations.length} itens
+          {localizacoesFiltradas.length} itens
         </span>
       </div>
 
+      <SearchInput
+        valor={valorBusca}
+        aoAlterar={definirValorBusca}
+        placeholder="Buscar por código ou descrição..."
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {locations.length === 0 ? (
+        {locations.length > 0 && localizacoesFiltradas.length === 0 ? (
+          <p className="col-span-2 py-4 text-center text-sm text-gray-500">
+            Nenhuma localização corresponde à busca.
+          </p>
+        ) : locations.length === 0 ? (
           <p className="text-gray-500 col-span-2 text-center py-4">Nenhuma localização cadastrada.</p>
         ) : (
-          locations.map((loc) => (
+          localizacoesFiltradas.map((loc) => (
             <div key={loc.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-center sm:p-4">
             
               <div>

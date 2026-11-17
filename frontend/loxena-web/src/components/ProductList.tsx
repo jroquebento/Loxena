@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import type { Product } from '../types/Product';
 import type { Category } from '../types/Category';
+import { SearchInput } from './SearchInput';
+import { normalizeSearchText } from '../utils/searchUtils';
 
 interface ProductListProps {
   produtos: Product[];
@@ -9,6 +12,12 @@ interface ProductListProps {
 }
 
 export function ProductList({ produtos, categorias, onExcluir, onEditar }: ProductListProps) {
+  const [valorBusca, definirValorBusca] = useState('');
+  const buscaNormalizada = normalizeSearchText(valorBusca);
+  const produtosFiltrados = produtos.filter((produto) =>
+    normalizeSearchText(produto.name).includes(buscaNormalizada) ||
+    normalizeSearchText(produto.id).includes(buscaNormalizada)
+  );
   
   const getCategoryName = (categoryId: string) => {
     const category = categorias.find(cat => cat.id === categoryId);
@@ -20,12 +29,26 @@ export function ProductList({ produtos, categorias, onExcluir, onEditar }: Produ
       <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Produtos Cadastrados</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {produtos.length} itens
+          {produtosFiltrados.length} itens
         </span>
       </div>
 
+      <SearchInput
+        valor={valorBusca}
+        aoAlterar={definirValorBusca}
+        placeholder="Buscar por nome ou código..."
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {produtos.map((produto) => (
+        {produtos.length > 0 && produtosFiltrados.length === 0 ? (
+          <p className="col-span-full py-4 text-center text-sm text-gray-500">
+            Nenhum produto corresponde à busca.
+          </p>
+        ) : produtos.length === 0 ? (
+          <p className="col-span-full py-4 text-center text-sm text-gray-500">
+            Nenhum produto cadastrado.
+          </p>
+        ) : produtosFiltrados.map((produto) => (
           <div 
             key={produto.id} 
             className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-start sm:p-4"

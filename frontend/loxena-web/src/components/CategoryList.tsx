@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import type { Category } from '../types/Category';
+import { SearchInput } from './SearchInput';
+import { normalizeSearchText } from '../utils/searchUtils';
 
 interface CategoryListProps {
   categorias: Category[];
@@ -7,17 +10,37 @@ interface CategoryListProps {
 }
 
 export function CategoryList({ categorias, onExcluir, onEditar }: CategoryListProps) {
+  const [valorBusca, definirValorBusca] = useState('');
+  const buscaNormalizada = normalizeSearchText(valorBusca);
+  const categoriasFiltradas = categorias.filter((categoria) =>
+    normalizeSearchText(categoria.name).includes(buscaNormalizada)
+  );
+
   return (
     <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
       <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Categorias Cadastradas</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {categorias.length} itens
+          {categoriasFiltradas.length} itens
         </span>
       </div>
 
+      <SearchInput
+        valor={valorBusca}
+        aoAlterar={definirValorBusca}
+        placeholder="Buscar categoria por nome..."
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {categorias.map((categoria) => (
+        {categorias.length > 0 && categoriasFiltradas.length === 0 ? (
+          <p className="col-span-full py-4 text-center text-sm text-gray-500">
+            Nenhuma categoria corresponde à busca.
+          </p>
+        ) : categorias.length === 0 ? (
+          <p className="col-span-full py-4 text-center text-sm text-gray-500">
+            Nenhuma categoria cadastrada.
+          </p>
+        ) : categoriasFiltradas.map((categoria) => (
           <div key={categoria.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-3 transition hover:shadow-lg sm:flex-row sm:items-center sm:p-4">
             
             <h3 className="min-w-0 break-words text-lg font-bold text-gray-800">{categoria.name}</h3>

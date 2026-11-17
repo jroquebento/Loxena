@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import type { OrderStatus, OrderSummary } from '../types/Order';
+import { SearchInput } from './SearchInput';
 import { formatDataBrasileira } from '../utils/dateUtils';
+import { normalizeSearchText } from '../utils/searchUtils';
 
 interface OrderListProps {
   orders: OrderSummary[];
@@ -8,25 +11,30 @@ interface OrderListProps {
 }
 
 export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) {
-  
+  const [valorBusca, definirValorBusca] = useState('');
+  const buscaNormalizada = normalizeSearchText(valorBusca);
+  const estilosStatus: Record<OrderStatus, { text: string; css: string }> = {
+    Pending: { text: 'Pendente', css: 'bg-yellow-100 text-yellow-800' },
+    Picking: { text: 'Em Separação', css: 'bg-blue-100 text-blue-800' },
+    Checking: { text: 'Em Conferência', css: 'bg-indigo-100 text-indigo-800' },
+    Packing: { text: 'Em Embalagem', css: 'bg-purple-100 text-purple-800' },
+    Shipped: { text: 'Expedido', css: 'bg-teal-100 text-teal-800' },
+    Delivered: { text: 'Entregue', css: 'bg-green-100 text-green-800' },
+    Canceled: { text: 'Cancelado', css: 'bg-red-100 text-red-800' }
+  };
   const renderStatusBadge = (status: OrderStatus) => {
-    const badges: Record<OrderStatus, { text: string; css: string }> = {
-      Pending: { text: 'Pendente', css: 'bg-yellow-100 text-yellow-800' },
-      Picking: { text: 'Em Separação', css: 'bg-blue-100 text-blue-800' },
-      Checking: { text: 'Em Conferência', css: 'bg-indigo-100 text-indigo-800' },
-      Packing: { text: 'Em Embalagem', css: 'bg-purple-100 text-purple-800' },
-      Shipped: { text: 'Expedido', css: 'bg-teal-100 text-teal-800' },
-      Delivered: { text: 'Entregue', css: 'bg-green-100 text-green-800' },
-      Canceled: { text: 'Cancelado', css: 'bg-red-100 text-red-800' }
-    };
-
-    const badge = badges[status];
+    const badge = estilosStatus[status];
     return (
       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${badge.css}`}>
         {badge.text}
       </span>
     );
   };
+  const pedidosFiltrados = orders.filter((pedido) =>
+    normalizeSearchText(pedido.customerName).includes(buscaNormalizada) ||
+    normalizeSearchText(pedido.id).includes(buscaNormalizada) ||
+    normalizeSearchText(`${pedido.status} ${estilosStatus[pedido.status].text}`).includes(buscaNormalizada)
+  );
 
   if (isLoading) {
     return (
@@ -41,9 +49,15 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
       <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Lista de Pedidos</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-          {orders.length} pedidos
+          {pedidosFiltrados.length} pedidos
         </span>
       </div>
+
+      <SearchInput
+        valor={valorBusca}
+        aoAlterar={definirValorBusca}
+        placeholder="Buscar por cliente, pedido ou status..."
+      />
 
       <div className="hidden overflow-x-auto md:block">
         <table className="min-w-full divide-y divide-gray-200">
@@ -59,14 +73,14 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {orders.length === 0 ? (
+            {pedidosFiltrados.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                  Nenhum pedido encontrado.
+                  {orders.length === 0 ? 'Nenhum pedido encontrado.' : 'Nenhum pedido corresponde à busca.'}
                 </td>
               </tr>
             ) : (
-              orders.map((order) => (
+              pedidosFiltrados.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 uppercase">
                     <span title={order.id}>{order.id.substring(0, 8)}...</span>
@@ -102,10 +116,12 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
       </div>
 
       <div className="space-y-3 md:hidden">
-        {orders.length === 0 ? (
-          <p className="py-4 text-center text-sm text-gray-500">Nenhum pedido encontrado.</p>
+        {pedidosFiltrados.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-500">
+            {orders.length === 0 ? 'Nenhum pedido encontrado.' : 'Nenhum pedido corresponde à busca.'}
+          </p>
         ) : (
-          orders.map((order) => (
+          pedidosFiltrados.map((order) => (
             <article key={order.id} className="rounded-lg border border-gray-200 p-3">
               <div className="flex items-start justify-between gap-2">
                 <h3 className="min-w-0 break-all text-sm font-semibold text-gray-900">Pedido {order.id}</h3>
