@@ -15,10 +15,10 @@ export function CustomersPage() {
   } = useCrud<Customer, CustomerPayload>(customerService, 'Cliente');
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         
-        <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
+        <h1 id="topo-pagina" className="mb-8 text-2xl font-bold text-blue-800 text-center sm:text-3xl lg:text-4xl">
           Cadastro de Clientes
         </h1>
         

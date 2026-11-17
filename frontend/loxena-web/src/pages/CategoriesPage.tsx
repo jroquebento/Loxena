@@ -19,8 +19,8 @@ export function CategoriesPage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
+    <div className="mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
+      <h1 id="topo-pagina" className="mb-8 text-2xl font-bold text-blue-800 text-center sm:text-3xl lg:text-4xl">
         Categorias de Produtos
       </h1>
       

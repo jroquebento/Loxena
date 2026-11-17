@@ -37,8 +37,8 @@ export function OrderList({ orders, isLoading, onViewDetails }: OrderListProps) 
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md overflow-hidden mt-6">
-      <div className="flex justify-between items-center mb-4">
+    <div className="mt-6 overflow-hidden rounded-lg bg-white p-4 shadow-md sm:p-6">
+      <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Lista de Pedidos</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
           {orders.length} pedidos

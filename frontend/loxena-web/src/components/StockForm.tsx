@@ -48,7 +48,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+    <div className="mb-8 rounded-lg bg-white p-4 shadow-md sm:p-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-700">Movimentação de Estoque</h2>
       <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
       
@@ -58,7 +58,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
           <select 
             value={productId} 
             onChange={(e) => setProductId(e.target.value)} 
-            className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>Selecione um Produto...</option>
             {produtos.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -70,7 +70,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
           <select 
             value={locationId} 
             onChange={(e) => setLocationId(e.target.value)} 
-            className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>Selecione uma Localização...</option>
             {localizacoes.map(l => <option key={l.id} value={l.id}>{l.code} - {l.description}</option>)}
@@ -85,21 +85,21 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
             step="1"
             value={amount} 
             onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))} 
-            className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
             placeholder="Ex: 10"
           />
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <button type="button" onClick={handleEntrada} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition flex-1">
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <button type="button" onClick={handleEntrada} className="w-full flex-1 rounded-md bg-green-600 px-4 py-2 font-semibold text-white transition hover:bg-green-700 sm:w-auto">
           + Dar Entrada
         </button>
-        <button type="button" onClick={handleSaida} className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-700 transition flex-1">
+        <button type="button" onClick={handleSaida} className="w-full flex-1 rounded-md bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700 sm:w-auto">
           - Dar Baixa
         </button>
         {(productId || locationId || amount !== '') && (
-          <button type="button" onClick={handleCancelar} className="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md hover:bg-gray-400 transition w-1/4">
+          <button type="button" onClick={handleCancelar} className="w-full rounded-md bg-gray-300 px-4 py-2 font-semibold text-gray-700 transition hover:bg-gray-400 sm:w-1/4">
             Limpar
           </button>
         )}

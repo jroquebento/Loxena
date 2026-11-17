@@ -15,8 +15,8 @@ export function StocksPage() {
   } = useStockMovements();
 
   return (
-    <div className="p-8 max-w-6xl mx-auto"> 
-      <h1 id="topo-pagina" className="text-4xl font-bold text-blue-800 text-center mb-8">
+    <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+      <h1 id="topo-pagina" className="mb-8 text-2xl font-bold text-blue-800 text-center sm:text-3xl lg:text-4xl">
         Controle de Estoque
       </h1>
       

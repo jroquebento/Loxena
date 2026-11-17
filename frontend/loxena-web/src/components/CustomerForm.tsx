@@ -67,7 +67,7 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+    <div className="mb-8 rounded-lg bg-white p-4 shadow-md sm:p-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-700">
         {customerToEdit ? 'Editar Cliente' : 'Novo Cliente'}
       </h2>
@@ -77,36 +77,36 @@ export function CustomerForm({ onSave, customerToEdit, onCancelEdit }: CustomerF
         <input 
           type="text" placeholder="Nome da empresa ou pessoa *" required maxLength={200}
           value={name} onChange={(e) => setName(e.target.value)} 
-          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <input 
           type="email" placeholder="email@exemplo.com *" required maxLength={150}
           value={email} onChange={(e) => setEmail(e.target.value)} 
-          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <input 
             type="text" placeholder="Documento (CPF/CNPJ) *" required maxLength={20}
             value={document} onChange={(e) => setDocument(e.target.value)} 
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input 
             type="text" placeholder="Telefone (ex: 11 99999-9999) *" required maxLength={20}
             value={phone} onChange={(e) => setPhone(e.target.value)} 
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full rounded-md border border-gray-300 bg-white p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="flex gap-2 mt-2">
-          <button type="submit" className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition flex-1">
+        <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+          <button type="submit" className="w-full flex-1 rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700 sm:w-auto">
             {customerToEdit ? 'Atualizar Cliente' : 'Cadastrar Cliente'}
           </button>
           
           {customerToEdit && onCancelEdit && (
-            <button type="button" onClick={onCancelEdit} className="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md hover:bg-gray-400 transition w-1/3">
+            <button type="button" onClick={onCancelEdit} className="w-full rounded-md bg-gray-300 px-4 py-2 font-semibold text-gray-700 transition hover:bg-gray-400 sm:w-1/3">
               Cancelar
             </button>
           )}

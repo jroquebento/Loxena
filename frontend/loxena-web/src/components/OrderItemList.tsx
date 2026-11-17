@@ -16,7 +16,7 @@ export function OrderItemList({
   separarItem
 }: OrderItemListProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-4">Itens do Pedido & Separação</h3>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -54,20 +54,20 @@ export function OrderItemList({
                 {pedido.status === 'Picking' && (
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     {itemPedido.pickedQuantity < itemPedido.quantity ? (
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center">
                         <input
                           type="number"
                           min="1"
                           max={itemPedido.quantity - itemPedido.pickedQuantity}
                           value={quantidadesSeparacao[itemPedido.id] || ''}
                           onChange={(evento) => alterarQuantidadeSeparacao(itemPedido.id, Number(evento.target.value))}
-                          className="w-20 border border-gray-300 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded border border-gray-300 px-2 py-1 text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-20"
                           placeholder="Qtd"
                         />
                         <button
                           disabled={processandoAcao}
                           onClick={() => separarItem(itemPedido.id)}
-                          className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-3 py-1.5 rounded transition disabled:opacity-50"
+                          className="w-full rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:opacity-50 sm:w-auto"
                         >
                           Separar
                         </button>

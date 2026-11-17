@@ -16,8 +16,8 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
   const stocksComSaldo = stocks.filter(stock => stock.physicalQuantity > 0);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md overflow-hidden">
-      <div className="flex justify-between items-center mb-4">
+    <div className="overflow-hidden rounded-lg bg-white p-4 shadow-md sm:p-6">
+      <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Saldo de Estoque</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
           {stocksComSaldo.length} registros
@@ -48,12 +48,13 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-orange-600 font-semibold">{stock.reservedQuantity}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-green-600 font-bold">{stock.availableQuantity}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                    <div className="flex flex-col gap-2 sm:flex-row">
                     <button 
                       onClick={() => {
                         onSelecionarParaMovimento(stock.productId, stock.locationId);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }} 
-                      className="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md"
+                      className="w-full rounded-md bg-blue-50 px-3 py-1 text-blue-600 hover:text-blue-900 sm:w-auto"
                     >
                       Movimentar
                     </button>
@@ -62,10 +63,11 @@ export function StockList({ stocks, produtos, localizacoes, onSelecionarParaMovi
                         onSelecionarParaTransferencia(stock.productId, stock.locationId, stock.physicalQuantity);
 
                       }}
-                      className="text-purple-600 hover:text-purple-900 bg-purple-50 px-3 py-1 rounded-md"
+                      className="w-full rounded-md bg-purple-50 px-3 py-1 text-purple-600 hover:text-purple-900 sm:w-auto"
                     >
                       Transferir
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))

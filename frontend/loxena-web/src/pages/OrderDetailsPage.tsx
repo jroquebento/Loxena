@@ -21,11 +21,11 @@ export function OrderDetailsPage() {
   } = useOrderDetails();
 
   if (carregando) {
-    return <div className="p-8 text-center text-gray-500">Carregando detalhes...</div>;
+    return <div className="p-4 text-center text-gray-500 sm:p-6 lg:p-8">Carregando detalhes...</div>;
   }
 
   if (!pedido) {
-    return <div className="p-8 text-center text-red-500">Pedido não encontrado.</div>;
+    return <div className="p-4 text-center text-red-500 sm:p-6 lg:p-8">Pedido não encontrado.</div>;
   }
 
   const existemAcoesVisiveis =
@@ -36,7 +36,7 @@ export function OrderDetailsPage() {
     pedido.status === 'Shipped';
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <button
           onClick={voltarParaPedidos}

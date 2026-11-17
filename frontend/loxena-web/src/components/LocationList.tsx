@@ -8,8 +8,8 @@ interface LocationListProps {
 
 export function LocationList({ locations, onExcluir, onEditar }: LocationListProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-4">
+    <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
+      <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Localizações Cadastradas</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
           {locations.length} itens
@@ -21,14 +21,14 @@ export function LocationList({ locations, onExcluir, onEditar }: LocationListPro
           <p className="text-gray-500 col-span-2 text-center py-4">Nenhuma localização cadastrada.</p>
         ) : (
           locations.map((loc) => (
-            <div key={loc.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition flex justify-between items-center">
+            <div key={loc.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-4 transition hover:shadow-lg sm:flex-row sm:items-center">
             
               <div>
-                <h3 className="font-bold text-lg text-gray-800">{loc.code}</h3>
-                <p className="text-sm text-gray-500">{loc.description}</p>
+                <h3 className="break-words text-lg font-bold text-gray-800">{loc.code}</h3>
+                <p className="break-words text-sm text-gray-500">{loc.description}</p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 self-end sm:flex-row sm:self-auto">
                 <button 
                   onClick={() => onEditar(loc)}
                   className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-md transition cursor-pointer"

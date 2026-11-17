@@ -28,8 +28,8 @@ export function OrderForm({
   children
 }: OrderFormProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Novo Pedido (Carrinho WMS)</h2>
+    <div className="mb-6 rounded-lg bg-white p-4 shadow-md sm:p-6">
+      <h2 className="mb-6 text-xl font-bold text-gray-800 sm:text-2xl">Novo Pedido (Carrinho WMS)</h2>
       <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
 
       <form onSubmit={finalizarPedido} noValidate>
@@ -52,7 +52,7 @@ export function OrderForm({
 
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-700 mb-3">Itens no Carrinho</h3>
-          <div className="border rounded-md overflow-hidden">
+          <div className="overflow-x-auto rounded-md border">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -107,18 +107,18 @@ export function OrderForm({
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 border-t pt-6">
+        <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row sm:justify-end">
           <button
             type="button"
             onClick={aoCancelar}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium px-5 py-2 rounded-md transition"
+            className="w-full rounded-md bg-gray-300 px-5 py-2 font-medium text-gray-800 transition hover:bg-gray-400 sm:w-auto"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={enviandoPedido || itensCarrinho.length === 0}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-md transition shadow-md disabled:opacity-50"
+            className="w-full rounded-md bg-green-600 px-6 py-2 font-medium text-white shadow-md transition hover:bg-green-700 disabled:opacity-50 sm:w-auto"
           >
             {enviandoPedido ? 'Salvando...' : 'Finalizar Pedido'}
           </button>

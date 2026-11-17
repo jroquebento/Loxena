@@ -8,8 +8,8 @@ interface CategoryListProps {
 
 export function CategoryList({ categorias, onExcluir, onEditar }: CategoryListProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-4">
+    <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
+      <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-gray-700">Categorias Cadastradas</h2>
         <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
           {categorias.length} itens
@@ -18,11 +18,11 @@ export function CategoryList({ categorias, onExcluir, onEditar }: CategoryListPr
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categorias.map((categoria) => (
-          <div key={categoria.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition flex justify-between items-center">
+          <div key={categoria.id} className="flex flex-col items-start justify-between gap-3 rounded-lg border border-gray-200 p-4 transition hover:shadow-lg sm:flex-row sm:items-center">
             
-            <h3 className="font-bold text-lg text-gray-800">{categoria.name}</h3>
+            <h3 className="min-w-0 break-words text-lg font-bold text-gray-800">{categoria.name}</h3>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 self-end sm:flex-row sm:self-auto">
               <button 
                 onClick={() => onEditar(categoria)}
                 className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-md transition cursor-pointer"

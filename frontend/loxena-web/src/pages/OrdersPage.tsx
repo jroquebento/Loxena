@@ -16,9 +16,9 @@ export function OrdersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-blue-800 text-center mb-8">
+        <h1 className="mb-8 text-2xl font-bold text-blue-800 text-center sm:text-3xl lg:text-4xl">
           Gestão de Pedidos
         </h1>
 

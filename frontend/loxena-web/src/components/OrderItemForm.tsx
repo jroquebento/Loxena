@@ -27,8 +27,8 @@ export function OrderItemForm({
       <p className="text-xs text-gray-500 mb-4">Apenas produtos com saldo físico disponível em estoque são exibidos.</p>
       <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
 
-      <div className="flex gap-4 items-end">
-        <div className="flex-1">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end">
+        <div className="w-full min-w-0 sm:flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Produto (Disponível) <span className="text-red-500">*</span></label>
           <select
             value={produtoAtualId}
@@ -47,7 +47,7 @@ export function OrderItemForm({
           </select>
         </div>
 
-        <div className="w-36">
+        <div className="w-full sm:w-36">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Quantidade <span className="text-red-500">*</span> {produtoAtualId && <span className="text-xs text-green-600 font-bold">(Máx: {estoqueProdutoSelecionado})</span>}
           </label>
@@ -64,7 +64,7 @@ export function OrderItemForm({
         <button
           type="button"
           onClick={adicionarAoCarrinho}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition h-10"
+          className="h-10 w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 sm:w-auto"
         >
           Adicionar
         </button>

@@ -22,15 +22,15 @@ export function OrderActions({
   cancelarPedido
 }: OrderActionsProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div className="mb-6 rounded-lg bg-white p-4 shadow-md sm:p-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-4">Ações Operacionais</h3>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         {pedido.status === 'Pending' && (
           <button
             disabled={processandoAcao}
             onClick={iniciarPicking}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm disabled:opacity-50"
+            className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50 sm:w-auto"
           >
             Iniciar Separação (Picking)
           </button>
@@ -40,7 +40,7 @@ export function OrderActions({
           <button
             disabled={processandoAcao}
             onClick={iniciarConferencia}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm disabled:opacity-50"
+            className="w-full rounded-md bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50 sm:w-auto"
           >
             Iniciar Conferência (Checking)
           </button>
@@ -50,7 +50,7 @@ export function OrderActions({
           <button
             disabled={processandoAcao}
             onClick={iniciarEmbalagem}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm disabled:opacity-50"
+            className="w-full rounded-md bg-purple-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-purple-700 disabled:opacity-50 sm:w-auto"
           >
             Iniciar Embalagem (Packing)
           </button>
@@ -60,7 +60,7 @@ export function OrderActions({
           <button
             disabled={processandoAcao}
             onClick={expedirPedido}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm disabled:opacity-50"
+            className="w-full rounded-md bg-teal-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-teal-700 disabled:opacity-50 sm:w-auto"
           >
             Expedir Pedido (Ship)
           </button>
@@ -70,7 +70,7 @@ export function OrderActions({
           <button
             disabled={processandoAcao}
             onClick={registrarEntrega}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm disabled:opacity-50"
+            className="w-full rounded-md bg-green-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-green-700 disabled:opacity-50 sm:w-auto"
           >
             Registrar Entrega (Deliver)
           </button>
@@ -80,7 +80,7 @@ export function OrderActions({
           <button
             disabled={processandoAcao}
             onClick={cancelarPedido}
-            className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-md transition shadow-sm ml-auto disabled:opacity-50"
+            className="ml-0 w-full rounded-md bg-red-600 px-4 py-2 font-medium text-white shadow-sm transition hover:bg-red-700 disabled:opacity-50 sm:ml-auto sm:w-auto"
           >
             Cancelar Pedido
           </button>

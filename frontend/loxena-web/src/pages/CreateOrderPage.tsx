@@ -25,11 +25,11 @@ export function CreateOrderPage() {
   } = useCreateOrder();
 
   if (carregandoDados) {
-    return <div className="p-8 text-center text-gray-500">Carregando formulário e saldos de estoque...</div>;
+    return <div className="p-4 text-center text-gray-500 sm:p-6 lg:p-8">Carregando formulário e saldos de estoque...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         <button
           onClick={() => navegar('/pedidos')}

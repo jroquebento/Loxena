@@ -23,12 +23,12 @@ export function OrderSummary({ pedido }: OrderSummaryProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6 flex justify-between items-center">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-800">Pedido {pedido.id.substring(0, 8)}...</h2>
+    <div className="mb-6 flex flex-col items-start gap-4 rounded-lg bg-white p-4 shadow-md sm:flex-row sm:items-center sm:justify-between sm:p-6">
+      <div className="min-w-0">
+        <h2 className="break-words text-xl font-bold text-gray-800 sm:text-2xl">Pedido {pedido.id.substring(0, 8)}...</h2>
         <p className="text-gray-500 text-sm mt-1">Data: {formatDataBrasileira(pedido.createdAt)}</p>
       </div>
-      <div className="text-right">
+      <div className="w-full text-left sm:w-auto sm:text-right">
         <div className="mb-2">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${seloStatus.classeCss}`}>
             {seloStatus.texto}
