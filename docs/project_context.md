@@ -109,6 +109,18 @@ Para acesso remoto temporário, o Cloudflare Tunnel pode expor o frontend/Nginx 
 
 A API aplica migrações EF Core ao iniciar em banco relacional. A connection string é lida por `ConnectionStrings:DefaultConnection`.
 
+### Seed de demonstração
+
+Após aplicar as migrações, `backend/Loxena.Api/Program.cs` chama `LoxenaDbSeeder.SeedAsync` somente quando `Database:SeedData` está habilitado. O seeder, em `backend/Loxena.Infrastructure/Data/LoxenaDbSeeder.cs`, verifica `Categories.AnyAsync()` e retorna se já houver alguma categoria; assim, não repete a carga completa em um banco já inicializado. A carga inicial cria categorias, localizações, produtos, estoques, clientes e pedidos em diferentes etapas do fluxo.
+
+O controle é configurado por ambiente:
+
+- `backend/Loxena.Api/appsettings.json`: `Database:SeedData` é `false` por padrão, para não interferir nos `IntegrationTests`.
+- `backend/Loxena.Api/appsettings.Development.json`: `Database:SeedData` é `true` para facilitar a demonstração durante o desenvolvimento.
+- `docker-compose.yml`: a API recebe `Database__SeedData: "true"`, habilitando a carga no Compose.
+
+O seeder cria as entidades pelos construtores de domínio (`Category`, `Location`, `Product`, `Stock` e `Customer`) e constrói os pedidos com operações do domínio, como `AddItem`, `StartPicking`, `ReserveQuantity`, `Pick`, `StartChecking`, `StartPacking`, `Ship`, `FulfillReservation` e `Deliver`. Assim, os dados de exemplo percorrem as regras e transições válidas do domínio em vez de atribuírem diretamente estados finais.
+
 ## 5. Testes e pipeline de CI
 
 - **`tests/UnitTests`**: xUnit e Moq; referencia `Loxena.Application`.

@@ -130,13 +130,16 @@ Os arquivos de imagem ainda serão adicionados. Coloque os prints e GIFs em `doc
 
 Requisitos: Docker Engine ou Docker Desktop com o plugin `docker compose`.
 
-Na raiz do repositório, execute:
+Clone o repositório e entre na pasta do projeto:
 
 ```bash
+git clone https://github.com/jroquebento/Loxena.git
+cd Loxena
 docker compose up --build -d
 ```
 
 Acesse **http://localhost:3000**. O Compose inicia SQL Server 2025, API e frontend; a API aplica as migrações do EF Core ao iniciar.
+Na primeira inicialização, a API também popula automaticamente o banco com dados de demonstração — categorias, localizações, produtos, clientes e pedidos — para facilitar o teste imediato.
 
 ```bash
 docker compose ps
