@@ -45,6 +45,11 @@ if (context.Database.IsRelational())
     await context.Database.MigrateAsync();
 }
 
+if (builder.Configuration.GetValue<bool>("Database:SeedData"))
+{
+    await LoxenaDbSeeder.SeedAsync(context);
+}
+
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
