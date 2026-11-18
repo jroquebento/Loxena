@@ -21,6 +21,8 @@ export function OrderItemForm({
   obterEstoqueRestante,
   adicionarAoCarrinho
 }: OrderItemFormProps) {
+  const produtoSelecionado = produtosComEstoque.find(produto => produto.id === produtoAtualId);
+
   return (
     <div className="border-t pt-6 mb-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Adicionar Produtos</h3>
@@ -40,11 +42,12 @@ export function OrderItemForm({
               const estoqueRestante = obterEstoqueRestante(produto.id);
               return (
                 <option key={produto.id} value={produto.id}>
-                  {produto.name} - {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(produto.price)} (Disponível: {estoqueRestante})
+                  {produto.name} • {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(produto.price)} (Disp: {estoqueRestante})
                 </option>
               );
             })}
           </select>
+          {produtoSelecionado?.description && <p className="mt-1 break-words text-xs text-slate-500">{produtoSelecionado.description}</p>}
         </div>
 
         <div className="w-full sm:w-36">

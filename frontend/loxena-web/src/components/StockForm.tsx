@@ -11,10 +11,18 @@ interface StockFormProps {
   onLimparSelecao: () => void;
 }
 
+const resumirDescricaoLocalizacao = (descricao: string) => {
+  const separador = descricao.indexOf('-');
+  const resumo = (separador >= 0 ? descricao.slice(separador + 1) : descricao).trim();
+  return resumo.length > 40 ? `${resumo.slice(0, 37).trimEnd()}...` : resumo;
+};
+
 export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, onLimparSelecao }: StockFormProps) {
   const [productId, setProductId] = useState(preSelecao?.productId || '');
   const [locationId, setLocationId] = useState(preSelecao?.locationId || '');
   const [amount, setAmount] = useState<number | ''>('');
+  const produtoSelecionado = produtos.find(produto => produto.id === productId);
+  const localizacaoSelecionada = localizacoes.find(localizacao => localizacao.id === locationId);
 
   const validar = () => {
     if (!productId) {
@@ -63,6 +71,7 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
             <option value="" disabled>Selecione um Produto...</option>
             {produtos.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
+          {produtoSelecionado?.description && <p className="mt-1 break-words text-xs text-slate-500">{produtoSelecionado.description}</p>}
         </div>
 
         <div className="flex flex-col">
@@ -73,8 +82,9 @@ export function StockForm({ onMovimentar, produtos, localizacoes, preSelecao, on
             className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>Selecione uma Localização...</option>
-            {localizacoes.map(l => <option key={l.id} value={l.id}>{l.code} - {l.description}</option>)}
+            {localizacoes.map(l => <option key={l.id} value={l.id}>{l.code} • {resumirDescricaoLocalizacao(l.description)}</option>)}
           </select>
+          {localizacaoSelecionada?.description && <p className="mt-1 break-words text-xs text-slate-500">{localizacaoSelecionada.description}</p>}
         </div>
 
         <div className="flex flex-col">
