@@ -18,6 +18,7 @@
 The system covers product, category, location, and customer records; inventory lookup and movements; and order creation and fulfillment. The goal is to demonstrate practical logistics rules in an MVP, not to claim a complete enterprise WMS.
 
 - **Location-based inventory:** each `Stock` record associates a product with a location and calculates available quantity as `PhysicalQuantity - ReservedQuantity`. The application validates reservations, removals, and shipment fulfillment to preserve committed stock.
+- **Optimistic concurrency:** EF Core `RowVersion` detects conflicting simultaneous stock reservations and returns HTTP `409 Conflict` to prevent inconsistencies.
 - **Occupied locations:** a location with physical stock cannot be inactivated. A filtered index also prevents more than one product with positive physical stock from occupying the same location.
 - **Orders and picking:** creating an order reserves stock. The workflow requires all items to be picked before checking, then advances through packing, shipment, and delivery. Shipment consumes physical stock and its reservation.
 - **Customer protection:** a customer with active orders cannot be inactivated.

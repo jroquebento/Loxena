@@ -18,6 +18,7 @@ O **Loxena** é um Sistema de Gerenciamento de Armazém (WMS) de portfólio insp
 O sistema cobre cadastros de produtos, categorias, localizações e clientes; consulta e movimentação de estoque; criação e acompanhamento de pedidos. O foco é demonstrar regras logísticas concretas em um MVP, sem afirmar que seja um WMS empresarial completo.
 
 - **Saldo por localização:** cada registro de `Stock` associa um produto a uma localização e calcula o disponível como `PhysicalQuantity - ReservedQuantity`. A aplicação valida reservas, baixas e expedições para preservar o saldo comprometido.
+- **Concorrência otimista:** `RowVersion` no EF Core detecta conflitos em reservas simultâneas de estoque, retornando HTTP `409 Conflict` para evitar inconsistências.
 - **Localizações ocupadas:** uma localização com quantidade física em estoque não pode ser inativada. Um índice filtrado também impede mais de um produto com saldo físico positivo na mesma localização.
 - **Pedido com picking:** ao criar pedido, o estoque é reservado. O fluxo exige separação completa antes da conferência e então avança por embalagem, expedição e entrega. A expedição consome físico e reserva.
 - **Proteção de clientes:** não é permitido inativar um cliente que possua pedidos ativos.
