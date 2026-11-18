@@ -29,7 +29,7 @@ export function OrderItemForm({
       <p className="text-xs text-gray-500 mb-4">Apenas produtos com saldo físico disponível em estoque são exibidos.</p>
       <p className="text-sm text-gray-500 mb-4">* Campos obrigatórios</p>
 
-      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-start">
         <div className="w-full min-w-0 sm:flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Produto (Disponível) <span className="text-red-500">*</span></label>
           <select

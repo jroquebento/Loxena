@@ -48,9 +48,9 @@ public static class LoxenaDbSeeder
 
         var customers = new[]
         {
-            new Customer("Cliente Demonstração Um", "cliente1@example.com", "12345678909", "+55 11 90000-0001"),
-            new Customer("Cliente Demonstração Dois", "cliente2@example.com", "98765432100", "+55 21 90000-0002"),
-            new Customer("Cliente Demonstração Três", "cliente3@example.com", "31415926590", "+55 31 90000-0003")
+            new Customer("Cliente Demonstração Um", "cliente1@example.com", "12345678909", "(11) 90000-0001"),
+            new Customer("Cliente Demonstração Dois", "cliente2@example.com", "98765432100", "(21) 90000-0002"),
+            new Customer("Cliente Demonstração Três", "cliente3@example.com", "31415926590", "(31) 90000-0003")
         };
 
         context.Categories.AddRange(categories);
