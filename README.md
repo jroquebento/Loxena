@@ -25,6 +25,38 @@ O sistema cobre cadastros de produtos, categorias, localizações e clientes; co
 
 O pedido percorre `Pending → Picking → Checking → Packing → Shipped → Delivered`; também pode ser cancelado antes da expedição. Não há recebimento formal, confirmação de pagamento, autenticação ou fluxo dedicado de retirada implementados no MVP.
 
+## Demonstração / Screenshots
+
+### Catálogo e navegação
+
+![Visão inicial do catálogo de produtos e navegação do sistema](docs/images/01-products-overview.png)
+
+Visão inicial do catálogo de produtos e navegação do sistema.
+
+### Movimentações de estoque
+
+![Entrada e transferência de estoque entre localizações](docs/images/02-stock-movement.gif)
+
+Entrada e transferência entre localizações, com atualização imediata do saldo.
+
+### Atendimento de pedidos
+
+![Criação, separação e expedição de pedidos](docs/images/03-order-fulfillment.gif)
+
+Ciclo completo de pedidos: criação, separação e expedição, com baixa automática no estoque físico.
+
+### Validações de domínio
+
+![Bloqueio de saldo insuficiente e prevenção de duplicidades](docs/images/04-domain-validations.gif)
+
+Bloqueio de saldo insuficiente e prevenção de duplicidades, com feedback visual.
+
+### API RESTful via Swagger
+
+![Documentação da API via Swagger e OpenAPI](docs/images/05-swagger-api.png)
+
+Documentação RESTful da API via Swagger / OpenAPI.
+
 ## Arquitetura e decisões técnicas
 
 ### Topologia em Docker
@@ -115,14 +147,6 @@ O backend separa responsabilidades em `Loxena.Domain` (entidades e regras), `Lox
 O frontend usa React 19, TypeScript, Vite e Tailwind CSS 4. As listas de operação combinam tabelas no desktop e cards no mobile, com busca instantânea filtrada no cliente; a navegação e os controles se adaptam a telas menores.
 
 Principais rotas da API incluem `/Orders`, `/Stocks`, `/Customers`, `/Products`, `/Categories` e `/Locations`. Em execução via Nginx, elas ficam disponíveis sob `/api/` (por exemplo, `/api/Orders`).
-
-## Demonstração visual
-
-Os arquivos de imagem ainda serão adicionados. Coloque os prints e GIFs em `docs/images/` e remova os comentários HTML correspondentes para exibi-los:
-
-<!-- ![Gestão de pedidos no desktop](docs/images/orders-desktop.png) -->
-<!-- ![Separação e picking de pedidos](docs/images/order-picking.gif) -->
-<!-- ![Interface responsiva no mobile](docs/images/mobile-responsive.png) -->
 
 ## Como executar
 

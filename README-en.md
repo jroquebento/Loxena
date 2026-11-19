@@ -25,6 +25,38 @@ The system covers product, category, location, and customer records; inventory l
 
 An order moves through `Pending → Picking → Checking → Packing → Shipped → Delivered`; it can also be canceled before shipment. Formal receiving, payment confirmation, authentication, and a dedicated pickup workflow are not implemented in this MVP.
 
+## Demonstration / Screenshots
+
+### Product catalog and navigation
+
+![Initial product catalog and system navigation](docs/images/01-products-overview.png)
+
+Initial view of the product catalog and system navigation.
+
+### Stock movements
+
+![Stock receipt and transfer between locations](docs/images/02-stock-movement.gif)
+
+Stock receipt and transfer between locations, with immediate balance updates.
+
+### Order fulfillment
+
+![Order creation, picking, and shipment](docs/images/03-order-fulfillment.gif)
+
+Complete order cycle: creation, picking, and shipment, with automatic deduction from physical stock.
+
+### Domain validations
+
+![Insufficient stock blocking and duplicate prevention](docs/images/04-domain-validations.gif)
+
+Insufficient stock is blocked and duplicates are prevented, with visual feedback.
+
+### REST API with Swagger
+
+![REST API documentation through Swagger and OpenAPI](docs/images/05-swagger-api.png)
+
+RESTful API documentation through Swagger / OpenAPI.
+
 ## Architecture and technical decisions
 
 ### Docker topology
@@ -115,14 +147,6 @@ The backend separates responsibilities into `Loxena.Domain` (entities and rules)
 The frontend uses React 19, TypeScript, Vite, and Tailwind CSS 4. Operational lists combine desktop tables with mobile cards and instant client-side search; navigation and controls adapt to smaller screens.
 
 Key API routes include `/Orders`, `/Stocks`, `/Customers`, `/Products`, `/Categories`, and `/Locations`. Through Nginx, they are available under `/api/` (for example, `/api/Orders`).
-
-## Visual demo
-
-Screenshots and GIFs will be added later. Place them in `docs/images/` and remove the corresponding HTML comments to display them:
-
-<!-- ![Desktop order management](docs/images/orders-desktop.png) -->
-<!-- ![Order picking workflow](docs/images/order-picking.gif) -->
-<!-- ![Responsive mobile interface](docs/images/mobile-responsive.png) -->
 
 ## Getting started
 
